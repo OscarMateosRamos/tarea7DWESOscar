@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css"
+	href="/CSS/estiloslistadoEjemplaresTipoPlanta.css">
+<title>Listado de Ejemplares por Tipo de Planta</title>
+</head>
+<body>
+
+	<header>
+		<h1>*Listado de Ejemplares por Tipo de Planta*</h1>
+	</header>
+
+	<div class="container">
+
+
+		<form th:action="@{/ejemplares/ejemplaresTipoPlanta}" method="get">
+			<div>
+				<label for="codigoPlanta">Filtrar por código de planta:</label> <select
+					id="codigoPlanta" name="codigo">
+
+					<option value="" th:selected="${codigoPlanta == null}">Seleccionar
+						código</option>
+
+					<option th:each="planta : ${plantas}" th:value="${planta.codigo}"
+						th:text="${planta.codigo}"></option>
+				</select>
+				<button type="submit">Filtrar</button>
+			</div>
+		</form>
+
+
+		<table>
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Nombre</th>
+					<th>Planta</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="ejemplar : ${ejemplares}">
+					<td th:text="${ejemplar.id}"></td>
+					<td th:text="${ejemplar.nombre}"></td>
+					<td th:text="${ejemplar.planta.codigo}"></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="boton-container">
+			<a href="/ejemplares/GestiondeEjemplares" class="boton">Volver a Gestion de
+				Ejemplares</a>
+		</div>
+	</div>
+</body>
+</html>

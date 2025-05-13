@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cesta de Compra</title>
+<link rel="stylesheet" type="text/css"
+	th:href="@{/CSS/estilosCestaCompra.css}">
+</head>
+<body>
+	<header>
+		<h1>Cesta de Compra</h1>
+	</header>
+
+	<div class="container">
+
+
+		<div th:if="${mensaje}">
+			<p th:text="${mensaje}"></p>
+		</div>
+
+
+
+		<div th:unless="${lista == null or lista.isEmpty()}">
+			<table>
+				<thead>
+					<tr>
+						<th>Planta</th>
+						<th>Cantidad</th>
+						<th>Acción</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item : ${lista}">
+						<td th:text="${item.codigoPlanta}"></td>
+						<td th:text="${item.cantidad}"></td>
+						<td><a
+							th:href="@{/retirarDeCesta/{id}(id=${item.codigoPlanta})}"
+							class="boton">Retirar</a></td>
+					</tr>
+				</tbody>
+			</table>
+
+
+			<div class="boton-container">
+				<a href="/ConfirmarPedido" class="boton">Realizar Pedido</a>
+			</div>
+		</div>
+
+		<div class="boton-container">
+			<a href="/RealizarPedido" class="boton">Seguir Comprando</a>
+		</div>
+
+
+
+		<div th:if="${lista == null or lista.isEmpty()}">
+			<p>No tienes productos en la cesta. ¡Añade algo!</p>
+		</div>
+
+	</div>
+</body>
+</html>

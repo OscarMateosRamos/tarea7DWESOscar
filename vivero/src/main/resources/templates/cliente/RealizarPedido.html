@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/CSS/RealizarPedido.css">
+    <title>Realizar Pedido</title>
+</head>
+<body>
+
+    <h1>-Realizar Pedido-</h1>
+
+    <div th:if="${success}">
+        <p>Producto añadido con éxito a la cesta.</p>
+    </div>
+    <div th:if="${error}">
+        <p>Error al añadir el producto a la cesta.</p>
+    </div>
+    
+    <h1 th:text="${usuario}"></h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Planta</th>
+                <th>Cantidad Disponible</th>
+                 <th> Cesta</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="planta : ${plantas}">
+                <td th:text="${planta.nombrecomun}"></td>
+                <td th:text="${planta.cantidadDisponible}"></td>
+                
+                <td>
+                    <form th:action="@{/añadirACesta}" method="POST">
+                        <input type="hidden" name="codigo" th:value="${planta.codigo}"/>
+                        <label for="cantidad">Cantidad a Comprar</label>
+                        <input type="number" name="cantidad" min="0" th:max="${planta.cantidadDisponible}" step="1" value="0" id="cantidad" />
+                        <button type="submit">Añadir a la Cesta</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div>
+        <a th:href="@{/MenuCliente}">Volver al menú</a>
+    </div>
+    
+    <div>
+        <a href="/CestaCompra">Ir a la Cesta</a>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/CSS/RealizarPedido.css">
+<title>Realizar Pedido</title>
+</head>
+<body>
+
+	<h1>-Menu Cliente-</h1>
+
+	<div class="boton-container">
+		<a href="/RealizarPedido" class="boton">Realizar el Pedido</a>
+	</div>
+
+
+
+	<div>
+		<a href="/CestaCompra">Ir a la Cesta</a>
+	</div>
+
+	<div>
+		<a th:href="@{/auth/logout}">Salir</a>
+	</div>
+
+
+</body>
+</html>

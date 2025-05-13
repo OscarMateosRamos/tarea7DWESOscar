@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Pedido</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/CSS/estilosCestaCompra.css}">
+</head>
+<body>
+    <header>
+        <h1>Confirmación de Pedido</h1>
+    </header>
+
+    <div class="container">
+
+        <div th:if="${mensaje}">
+            <p th:text="${mensaje}" class="success-message"></p>
+        </div>
+
+        <div th:unless="${lista == null or lista.isEmpty()}">
+            <h2>Resumen del Pedido</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Planta</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${lista}">
+                        <td th:text="${item.codigoPlanta}"></td>
+                        <td th:text="${item.cantidad}"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="boton-container">
+                <form th:action="@{/HacerPedido}" method="post">
+                    <button type="submit" class="boton">Confirmar Pedido</button>
+                </form>
+            </div>
+            
+             <div class="boton-container">
+                <a href="/CestaCompra" class="boton">Volver a la Cesta</a>
+            </div>
+            
+        </div>
+
+        <div th:if="${lista == null or lista.isEmpty()}">
+            <p class="error-message">No tienes productos en la cesta para confirmar.</p>
+            <div class="boton-container">
+                <a href="/RealizarPedido" class="boton">Volver a Comprar</a>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

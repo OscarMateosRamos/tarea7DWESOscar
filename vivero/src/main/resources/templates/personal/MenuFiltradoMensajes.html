@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menú Filtrado de Mensajes</title>
+<link rel="stylesheet" th:href="@{/CSS/estilosMenuInvitado.css}">
+</head>
+<body>
+	<header>
+		<h1>Menú de Filtrado de Mensajes</h1>
+	</header>
+
+	<div class="menu-container">
+		<ul class="menu">
+			
+			<li><a th:href="@{/mensajes/filtrarMensajesPorFecha}">Filtrar Mensajes Por Fechas</a></li>
+			<li><a th:href="@{/mensajes/filtrarMensajesCodigoPlanta}">Filtrar Mensajes Por Codigo de Planta</a></li>
+			<li><a th:href="@{/mensajes/GestiondeMensajes}"> Salir</a></li>
+		</ul>
+	</div>
+</body>
+</html>

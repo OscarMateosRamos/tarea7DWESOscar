@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" th:href="@{/CSS/estilosCreaciondeEjemplar.css}" />
+<title>Crear Ejemplar</title>
+</head>
+<body>
+	<header>
+		<h1>*Creación de Ejemplar*</h1>
+	</header>
+
+	<div th:if="${exito}"
+		style="color: green; background-color: #d4edda; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: center; font-weight: bold;">
+		<p th:text="${exito}"></p>
+	</div>
+
+	<div th:if="${error}"
+		style="color: red; background-color: #f8d7da; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: center; font-weight: bold;">
+		<p th:text="${error}"></p>
+	</div>
+
+	<div class="container">
+
+		<form class="formulario" th:action="@{/ejemplares/CamposEjemplar}"
+			th:object="${ejemplar}" method="post">
+
+
+			<label for="codigoPlanta">Código de la Planta:</label> <input
+				type="text" id="codigoPlanta" name="planta.codigo"
+				th:field="*{planta.codigo}" required />
+
+
+			<button type="submit" class="boton">Crear Ejemplar</button>
+		</form>
+
+		<br>
+		<div class="contenedor-boton">
+			<a href="/ejemplares/GestiondeEjemplares" class="boton"> Volver a Gestión de
+				Ejemplares</a>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/CSS/estilosGestiondeMensajes.css">
+    <title>Creación de Mensajes</title>
+</head>
+<body>
+
+	<h2>*Creacion de Mensajes*</h2>
+
+<form th:action="@{/mensajes/CamposMensaje}" method="post">
+    <label for="fechahora">Fecha y Hora:</label>
+    <input type="date" id="fechahora" name="fechahora" required>
+     <label for="mensaje">Mensaje:</label>
+     <textarea id="mensaje" rows="4" name="mensaje" required></textarea>
+     <label for="ejemplar">Ejemplar (ID):</label>
+     <select id="id" name="id" required>
+         <option value="">Selecciona un ejemplar</option>
+         <option th:each="ejemplar : ${ejemplares}" th:value="${ejemplar.id}" th:text="${ejemplar.id} + ' - ' + ${ejemplar.nombre}"></option>
+     </select>
+     <button class="boton" type="submit">Crear Mensaje</button>
+     <br><br>
+      <div class="contenedor-boton">
+        <a href="/GestiondeMensajes" class="boton">Volver a Gestión de Mensajes</a>
+    </div>
+  </form>
+
+</body>
+</html>

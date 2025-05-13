@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css"
+	href="/CSS/estilosFormularioLogIn.css">
+<title>Formulario de Inicio de Sesión</title>
+</head>
+<body>
+	<h2>Inicio de Sesión</h2>
+
+
+	<div th:if="${error}" style="color: red;">
+		<p th:text="${error}"></p>
+	</div>
+
+
+	<form th:action="@{/auth/login}" method="post">
+
+		<div class="form-floating mb-3">
+			<input type="text" class="form-control" id="floatingInput"
+				name="username" placeholder="Introduce tu usuario" required>
+			<label for="floatingInput"></label>
+		</div>
+		<div class="form-floating">
+			<input type="password" class="form-control" id="floatingPassword"
+				name="password" placeholder="Introduce tu contraseña" required>
+			<label for="floatingPassword"></label>
+		</div>
+
+
+		<div>
+			<div>
+				<button type="submit" class="btn color-boton">INICIAR
+					SESIÓN</button>
+
+			</div>
+
+
+
+			<div class="boton-container">
+				<a href="/inicio" class="boton">Volver</a>
+			</div>
+	</form>
+
+</body>
+</html>

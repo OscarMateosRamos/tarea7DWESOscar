@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" th:href="@{/CSS/estiloslistadoMensajes.css}">
+<title>Listado de Mensajes</title>
+</head>
+<body>
+
+	<header>
+		<h1>*Listado de Mensajes*</h1>
+	</header>
+
+	<div class="container">
+		<table>
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Fechahora</th>
+                    <th>Mensaje</th>
+					<th> Ejemplar</th>
+                    <th> Persona</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="mensaje : ${mensajes}">
+					<td th:text="${mensaje.id}"></td>
+					<td th:text="${mensaje.fechahora}"></td>
+                    <td th:text="${mensaje.mensaje}"></td>
+					<td th:text="${mensaje.ejemplar.nombre}"></td>
+                    <td th:text="${mensaje.persona.email}"></td>
+
+				</tr>
+				</tbody>
+		</table>
+		 
+	</div>	
+	 <div class="contenedor-boton">
+        <a href="/mensajes/GestiondeMensajes" class="boton">Volver a Gestion de Mensajes</a>
+       </div>
+</body>
+</html>

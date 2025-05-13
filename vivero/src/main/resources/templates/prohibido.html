@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prohibido</title>
+<link rel="stylesheet" th:href="@{/CSS/prohibido.css}">
+
+</head>
+<body>
+	<header>
+		<h1>¡¡¡¡Prohibido!!!!</h1>
+	</header>
+
+	<div class="container">
+		<p> No tiene suficientes permisios para acceder<p>
+		<a th:href="@{/auth/redireccionar}">Volver</a>
+	</div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es"  xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Ejemplares</title>
+    <link rel="stylesheet" href="/CSS/estilosGestiondeEjemplares.css" />
+  </head>
+  <body>
+    <header>
+      <h1>*Gestión de Ejemplares*</h1>
+    </header>
+
+    <div class="menu-container">
+      <ul class="menu">
+        <li><a th:href="@{/ejemplares/mostrarCrearEjemplar}">Crear Ejemplares</a></li>
+        <li><a th:href="@{/ejemplares/ejemplaresTipoPlanta}">Ver ejemplares por tipo de Planta</a></li>
+        <li><a th:href="@{/ejemplares/GestionStock}">Gestión de STOCK</a></li>
+        <li><a th:href="@{/ejemplares/verMensajesEjemplar}">Ver mensajes de un Ejemplar</a></li>
+        <li><a th:href="@{/ejemplares/GestiondeEjemplaresMenuAdmin}">Volver</a></li>
+      </ul>
+    </div>
+  </body>
+</html>

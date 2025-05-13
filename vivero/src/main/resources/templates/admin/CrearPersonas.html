@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/CSS/estilosCreacionPersona.css}" />
+    <title>Crear Persona</title>
+</head>
+<body>
+    <header>
+        <h1> Admin Creación de Persona</h1>
+    </header>
+
+   
+    <div th:if="${exito}" class="mensaje-exito">
+        <p th:text="${exito}"></p>
+    </div>
+
+    
+    <div th:if="${error}" class="mensaje-error">
+        <p th:text="${error}"></p>
+    </div>
+
+    <div class="container">
+        <form class="formulario" th:action="@{/CamposPersona}" th:object="${persona}" method="post">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" th:field="*{nombre}" required />
+
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" th:field="*{email}" required />
+
+            <label for="usuario">Usuario:</label>
+            <input type="text" id="usuario" name="usuario" th:field="*{credencial.usuario}" required />
+          
+            <label for="password">Password:</label>
+            <input type="text" id="password" name="password" th:field="*{credencial.password}" required />
+  
+            <button type="submit" class="boton">Crear Persona</button>
+        </form>
+
+        <br>
+        <div class="contenedor-boton">
+            <a href="/GestiondePersonas" class="boton"> Volver a Gestion de Personas</a>
+        </div>
+    </div>
+</body>
+</html>

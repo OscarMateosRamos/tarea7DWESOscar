@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/CSS/estilosCreacionPlantas.css">
+    <title>Crear Plantas</title>
+</head>
+<body>
+    <header>
+        <h1>Admin Creación de Planta</h1>
+      </header>
+  <div class="container">
+       
+        <form class="formulario" th:action="@{/CamposPlanta}" th:object="${planta}" method="post">     
+           
+            <label for="codigo">Código:</label>
+            <input type="text" id="codigo" name="codigo" th:field="*{codigo}" required />
+            
+           
+            <label for="nombrecomun">Nombre Común:</label>
+            <input type="text" id="nombrecomun" name="nombrecomun" th:field="*{nombrecomun}" required />
+            
+    
+            <label for="nombrecientifico">Nombre Científico:</label>
+            <input type="text" id="nombrecientifico" name="nombrecientifico" th:field="*{nombrecientifico}" required />
+            
+          
+            <button type="submit" class="boton">Crear Planta</button>
+        </form>
+       <div class="contenedor-boton">
+        <a href="/GestiondePlantas" class="boton"> Volver a Gestion de Plantas</a>
+    </div>
+    </div>
+</body>
+</html>

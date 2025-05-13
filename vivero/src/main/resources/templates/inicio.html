@@ -1,0 +1,26 @@
+
+	<!DOCTYPE html>
+	<html lang="es" xmlns:th="http://www.thymeleaf.org">
+	<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Menú Invitado</title>
+	<link rel="stylesheet" th:href="@{/CSS/estilosMenuInvitado.css}">
+
+	</head>
+	<body>
+		<header>
+			<h1>Menú Invitado</h1>
+		</header>
+
+		<div class="menu-container">
+			<ul class="menu">
+				<li><a th:href="@{/plantas/plantasInvitado}">Listar Plantas</a></li>
+
+				<li><a th:href="@{/login}">Iniciar Sesión</a></li>
+				
+				<li><a th:href="@{/cliente/Registro}">Alta Cliente</a></li>
+			</ul>
+		</div>
+	</body>
+	</html>

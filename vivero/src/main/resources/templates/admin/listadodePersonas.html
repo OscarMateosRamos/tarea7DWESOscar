@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css"
+	href="/CSS/estiloslistadoPersonas.css">
+<title>Listado de Personas</title>
+</head>
+<body>
+
+	<header>
+		<h1> Admin Listado de Personas</h1>
+	</header>
+
+	<div class="container">
+		<table>
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Email</th>
+					<th>Nombre</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="persona : ${personas}">
+					<td th:text="${persona.id}"></td>
+					<td th:text="${persona.nombre}"></td>
+					<td th:text="${persona.email}"></td>
+				</tr>
+				</tbody>
+		</table>
+		  <div class="contenedor-boton">
+        <a href="/GestiondePersonas" class="boton">Volver a Gestion de Personas</a>
+        </div>
+	</div>	
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/CSS/estilosGestiondePlantas.css" />
+    <title> Gestión de Plantas</title>
+  </head>
+  <body>
+    <header>
+      <h1> Admin Gestión de Plantas</h1>
+    </header>
+
+    <div class="menu-container">
+      <ul class="menu">
+        <li><a th:href="@{/plantas/plantasAdmin}">Listar Plantas</a></li>
+        <li><a  th:href="@{/plantas/CrearPlantas}">Crear una Planta</a></li>
+        <li><a th:href="@{/plantas/ModificarPlantas}">Modificar una Planta</a></li>
+        <li><a th:href="@{/GestionPlantasMenuAdmin}">Volver</a></li>
+      </ul>
+    </div>
+  </body>
+</html>

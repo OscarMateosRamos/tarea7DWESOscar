@@ -1,0 +1,60 @@
+!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" th:href="@{/CSS/estiloslistadoMensajes.css}">
+<title>Filtrar Mensajes por Tipo de Planta</title>
+</head>
+<body>
+	<header>
+		<h1>*Filtrar Mensajes Por tipo de Planta*</h1>
+	</header>
+	<div class="container">
+		<form action="/filtrarMensajesCodigoPlanta" method="get">
+			<label for="tipoPlanta">Tipo de Planta:</label> <select
+				id="tipoPlanta" name="tipoPlanta">
+				<option value="">Seleccione un tipo de planta</option>
+				<option th:each="codigo : ${tiposPlantas}" th:value="${codigo}"
+					th:text="${codigo}"></option>
+			</select>
+
+
+			<button type="submit">Filtrar</button>
+		</form>
+
+		<div th:if="${error}">
+			<p th:text="${error}" style="color: red;"></p>
+		</div>
+
+		<div th:if="${mensajes != null}">
+			<table>
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Fecha y Hora</th>
+						<th>Mensaje</th>
+						<th>Ejemplar</th>
+						<th>Persona</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="mensaje : ${mensajes}">
+						<td th:text="${mensaje.id}"></td>
+						<td
+							th:text="${#dates.format(mensaje.fechahora, 'yyyy-MM-dd HH:mm:ss')}"></td>
+						<td th:text="${mensaje.mensaje}"></td>
+						<td th:text="${mensaje.ejemplar.nombre}"></td>
+						<td th:text="${mensaje.persona.email}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="menu-container">
+			<ul class="menu">
+				<li><a th:href="@{/mensajes/MenuFiltradoMensajes}"> Salir</a></li>
+			</ul>
+		</div>
+	</div>
+</body>
+</html>

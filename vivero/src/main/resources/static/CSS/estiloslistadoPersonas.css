@@ -1,0 +1,92 @@
+html, body {
+	height: 100%;
+	margin: 0; /
+	padding: 0;
+}
+
+body {
+	font-family: Arial, sans-serif;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	background-color: #f4f4f4;
+	background-image: url(../Imagenes/crocus-2107024_1280.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	height: 100vh;
+}
+
+header {
+	background-color: #333;
+	color: white;
+	text-align: center;
+	padding: 20px;
+	width: 100%;
+	box-sizing: border-box;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+}
+
+table {
+	width: 80%;
+	margin: 20px auto;
+	border-collapse: collapse;
+}
+
+thead {
+	background-color: black;
+}
+
+th {
+	color: white;
+	padding: 12px;
+	text-align: left;
+	border: 1px solid #ddd;
+}
+
+td {
+	padding: 12px;
+	text-align: left;
+	border: 1px solid #ddd;
+	background-color: white;
+	color: red;
+}
+
+tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+.container {
+	text-align: center;
+	margin: 20px;
+	margin-top: 200px;
+}
+
+.contenedor-boton {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	background-color: transparent;
+}
+
+.boton {
+	display: inline-block;
+	padding: 10px 20px;
+	background-color: black;
+	color: white;
+	text-decoration: none;
+	font-size: 16px;
+	text-align: center;
+	border-radius: 5px;
+	transition: background-color 0.3s, transform 0.3s;
+}
+
+.boton:hover {
+	background-color: #444;
+	transform: scale(1.05);
+}

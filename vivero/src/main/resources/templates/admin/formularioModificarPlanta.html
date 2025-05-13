@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/CSS/estilosModificaciondePlanta.css">
+    <title>Formulario Modificar Planta</title>
+</head>
+<body>
+    <header>
+        <h1> Admin Formulario Modificación de Planta</h1>
+    </header>
+  
+    <div class="container">
+        <form class="formulario" th:action="@{/CamposModificarPlanta/{id}(id=${planta.id})}" method="post">
+            <input type="hidden" th:value="${planta.id}" name="id" />
+
+            <label for="nombrecomun">Nombre Común:</label>
+            <input type="text" id="nombrecomun" name="nombrecomun" th:value="${planta.nombrecomun}" required />
+  
+            <label for="nombrecientifico">Nombre Científico:</label>
+            <input type="text" id="nombrecientifico" name="nombrecientifico" th:value="${planta.nombrecientifico}" required />
+  
+            <button type="submit" class="boton">Modificar Planta</button>
+        </form>
+		
+		<div th:if="${exito}" class="mensaje-exito">
+            <p th:text="${exito}"></p>
+        </div>
+        
+      
+        <div th:if="${error}" class="mensaje-error">
+            <p th:text="${error}"></p>
+        </div>
+        
+    </div>
+</body>
+</html>
