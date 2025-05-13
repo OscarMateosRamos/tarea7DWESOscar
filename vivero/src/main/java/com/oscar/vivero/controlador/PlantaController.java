@@ -27,15 +27,14 @@ public class PlantaController {
 		model.addAttribute("plantas", p);
 		return "/admin/listadodePlantasAdmin";
 	}
-	
+
 	@GetMapping("/plantasInvitado")
 	public String listarPlantasInv(Model model) {
 		List<Planta> p = servPlanta.vertodasPlantas();
 		model.addAttribute("plantas", p);
 		return "/listadodePlantas";
 	}
-	
-	
+
 	@GetMapping("/plantasPersonal")
 	public String listarPlantasPer(Model model) {
 		List<Planta> p = servPlanta.vertodasPlantas();
@@ -73,29 +72,29 @@ public class PlantaController {
 	}
 
 	@PostMapping("/CamposModificarPlanta/{id}")
-	public String ModificarPlanta(@PathVariable Long id, @ModelAttribute Planta modificarPlanta, RedirectAttributes redirectAttributes) {
+	public String ModificarPlanta(@PathVariable("id") Long id,
+	                              @ModelAttribute Planta modificarPlanta,
+	                              RedirectAttributes redirectAttributes) {
 	    Planta existePlanta = servPlanta.buscarPlantaPorId(id);
 
 	    if (existePlanta == null) {
 	        redirectAttributes.addFlashAttribute("error", "Planta no encontrada.");
-	        return "/admin/ModificarPlantas";
+	        return "redirect:/plantas/ModificarPlantas";
 	    }
 
-	    
 	    existePlanta.setNombrecomun(modificarPlanta.getNombrecomun());
-	    
 	    existePlanta.setNombrecientifico(modificarPlanta.getNombrecientifico());
 
 	    boolean credValidas = servPlanta.validarPlantaSinCodigo(existePlanta);
 	    if (!credValidas) {
 	        redirectAttributes.addFlashAttribute("error", "Campos de la Planta inválidos.");
-	        return "/admin/ModificarPlantas";
+	        return "redirect:/plantas/ModificarPlantas";
 	    }
 
 	    servPlanta.modificarPlanta(existePlanta);
-	    redirectAttributes.addFlashAttribute("exito", "Planta modificada correctamente.");
+	    redirectAttributes.addFlashAttribute("exito", "Planta modificada correctamente."); // ✅
 
-	    return "/admin/GestiondePlantas";
+	    return "redirect:/plantas/ModificarPlantas";
 	}
 
 	@GetMapping("/CrearPlantas")
@@ -112,17 +111,18 @@ public class PlantaController {
 	}
 
 	@GetMapping("/formularioModificarPlanta/{id}")
-	public String mostrarFormularioModificarPlanta(@PathVariable Long id, Model model) {
+	public String mostrarFormularioModificarPlanta(@PathVariable("id") Long id, Model model) {
 
 		Planta p = servPlanta.buscarPlantaPorId(id);
 
 		if (p == null) {
 			model.addAttribute("error", "Planta no encontrada");
-			return "ModificarPlanta";
+			return "redirect:/admin/ModificarPlantas";
+		} else {
+			model.addAttribute("planta", p);
+			return "/admin/formularioModificarPlanta";
 		}
 
-		model.addAttribute("planta", p);
-		return "/admin/formularioModificarPlanta";
 	}
 
 }

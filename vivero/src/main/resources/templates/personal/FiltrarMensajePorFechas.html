@@ -12,8 +12,13 @@
         <h1>*Filtrar Mensajes por Fecha*</h1>
     </header>
 
+	 <div class="container">
+            <p th:if="${error}" th:text="${error}" style="color: red;"></p>
+	 </div>
+
+
     <div class="container">
-        <form action="/filtrarMensajesPorFecha" method="get">
+        <form action="/mensajes/filtrarMensajesPorFecha" method="get">
             <label for="fechaInicio">Fecha Inicio:</label>
             <input type="text" id="fechaInicio" name="fechaInicio" placeholder="yyyy-MM-dd" required />
             
@@ -24,10 +29,7 @@
         </form>
 
      
-        <div th:if="${error}">
-            <p th:text="${error}" style="color: red;"></p>
-        </div>
-
+        
        
         <div th:if="${mensajes != null}">
             <table>

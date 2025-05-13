@@ -16,6 +16,7 @@ import com.oscar.vivero.modelo.Planta;
 import com.oscar.vivero.repository.EjemplarRepository;
 import com.oscar.vivero.repository.PlantaRepository;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -39,41 +40,47 @@ public class ServiciosEjemplar {
 	@Autowired
 	Controlador controlador;
 
-	@Transactional
-	public void insertarEjemplar(Ejemplar ej) {
-		ejemplarrepo.saveAndFlush(ej);
+//	public void insertarEjemplar(Ejemplar ej) {
+//
+//		List<Ejemplar> ejemplares = ejemplarrepo.findAll();
+//
+//		for (Ejemplar e : ejemplares) {
+//			if (e.getNombre().equals(ej.getNombre())) {
+//				String nuevoNombre = ej.getNombre() + "_" + e.getId();
+//				ej.setNombre(nuevoNombre);
+//				ejemplarrepo.saveAndFlush(ej);
+//
+//				Mensaje m = new Mensaje();
+//
+//				LocalDate fechahora = LocalDate.now();
+//				Date date = Date.valueOf(fechahora);
+//
+//				Optional<Persona> p = Optional.ofNullable(servPersona.buscarPorUsuarioCredencial(usuario));
+//
+//				String mensaje = "Añadido nuevo ejemplar " + ej.getNombre() + " por " + p.get().getNombre() + " ("
+//						+ fechahora + " ).";
+//				m.setEjemplar(ej);
+//
+//				m.setFechahora(date);
+//
+//				m.setMensaje(mensaje);
+//
+//				Optional<Persona> personas = servPersona.buscarPorId(Long.valueOf(1));
+//				m.setPersona(personas.get());
+//				servMensaje.insertar(m);
+//			}
+//		}
+//
+//	}
 
-		Optional<Ejemplar> existenteEjemplar = ejemplarrepo.findByNombre(ej.getNombre());
-
-		if (existenteEjemplar.isPresent()) {
-
-			Ejemplar existing = existenteEjemplar.get();
-			String nuevoNombre = ej.getNombre() + "_" + existing.getId();
-			ej.setNombre(nuevoNombre);
-			ejemplarrepo.saveAndFlush(ej);
+	public boolean insertarEjemplar(Ejemplar ej) {
+		if (servPlanta.validarPlanta(ej.getPlanta())) {
+			if (ejemplarrepo.saveAndFlush(ej) != null) {
+				return true;
+			}
 		}
+		return false;
 
-		Mensaje m = new Mensaje();
-		LocalDate fechahora = LocalDate.now();
-		Date date = Date.valueOf(fechahora);
-
-		Optional<Persona> p = servPersona.buscarPorId(1L);
-		if (p.isPresent()) {
-			m.setPersona(p.get());
-		}
-
-		String mensaje = "Añadido nuevo ejemplar " + ej.getNombre() + " por " + controlador.getUsername() + " ("
-				+ fechahora + " ).";
-		m.setEjemplar(ej);
-		m.setFechahora(date);
-		m.setMensaje(mensaje);
-
-		Planta planta = ej.getPlanta();
-		planta.setCantidadDisponible(planta.getCantidadDisponible() + 1);
-
-		servPlanta.modificarPlanta(planta);
-
-		servMensaje.insertar(m);
 	}
 
 	@Transactional

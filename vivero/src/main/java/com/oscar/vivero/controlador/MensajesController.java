@@ -44,8 +44,21 @@ public class MensajesController {
 	@Autowired
 	Controlador controlador;
 
+	@GetMapping("/mostrarCrearMensajes")
+	public String mostrarCrearMensajeFormulario(Model model) {
+
+		model.addAttribute("mensaje", new Mensaje());
+
+		List<Ejemplar> ejemplares = servEjemplar.vertodosEjemplares();
+
+		model.addAttribute("ejemplares", ejemplares);
+
+		return "/personal/CrearMensaje";
+
+	}
+
 	@PostMapping("/CamposMensaje")
-	public String InsertarMensaje(@RequestParam Long id, @RequestParam String mensaje, @RequestParam String fechahora,
+	public String InsertarMensaje(@RequestParam("id") Long id, @RequestParam("mensaje") String mensaje, @RequestParam("fechahora") String fechahora,
 			Model model, HttpSession session) {
 
 		String usuario = (String) session.getAttribute("usuario");
@@ -98,19 +111,6 @@ public class MensajesController {
 		return "/personal/CrearMensaje";
 	}
 
-	@GetMapping("/mostrarCrearMensajes")
-	public String mostrarCrearMensajeFormulario(Model model) {
-
-		model.addAttribute("mensaje", new Mensaje());
-
-		List<Ejemplar> ejemplares = servEjemplar.vertodosEjemplares();
-
-		model.addAttribute("ejemplares", ejemplares);
-
-		return "/personal/CrearMensaje";
-
-	}
-
 	@GetMapping("/mensajes")
 	public String listarMensajes(Model model) {
 		List<Mensaje> m = servMensaje.verTodosMensajes();
@@ -119,12 +119,12 @@ public class MensajesController {
 	}
 
 	@GetMapping("/filtrarMensajesPorFecha")
-	public String filtrarMensajesPorFecha(@RequestParam(value = "fechaInicio", required = false) String fechaInicio,
+	public String filtrarMensajesPorFecha(@RequestParam(required = false) String fechaInicio,
 			@RequestParam(value = "fechaFin", required = false) String fechaFin, Model model) {
 
 		if (fechaInicio == null || fechaFin == null || fechaInicio.isEmpty() || fechaFin.isEmpty()) {
 			model.addAttribute("error", "Por favor, ingrese ambas fechas.");
-			return "FiltrarMensajePorFechas";
+			return "/personal/FiltrarMensajePorFechas";
 		}
 
 		try {
@@ -145,15 +145,15 @@ public class MensajesController {
 				model.addAttribute("mensajes", mensajesFiltrados);
 			}
 
-			return "FiltrarMensajePorFechas";
+			return "/personal/FiltrarMensajePorFechas";
 
 		} catch (DateTimeParseException e) {
 			model.addAttribute("error",
 					"Las fechas proporcionadas no tienen el formato correcto. Use el formato yyyy-MM-dd.");
-			return "FiltrarMensajePorFechas";
+			return "/personal/FiltrarMensajePorFechas";
 		} catch (Exception e) {
 			model.addAttribute("error", "Ocurrió un error al procesar las fechas.");
-			return "FiltrarMensajePorFechas";
+			return "/personal/FiltrarMensajePorFechas";
 		}
 	}
 
@@ -167,7 +167,7 @@ public class MensajesController {
 
 			if (tipoPlanta == null || tipoPlanta.isEmpty()) {
 				model.addAttribute("error", "Por favor, seleccione un tipo de planta.");
-				return "FiltrarMensajeTipoPlanta";
+				return "/personal/FiltrarMensajeTipoPlanta";
 			}
 
 			List<Mensaje> mensajesFiltrados = servMensaje.listamensajesPorCodigoPlanta(tipoPlanta);
@@ -178,17 +178,17 @@ public class MensajesController {
 				model.addAttribute("mensajes", mensajesFiltrados);
 			}
 
-			return "FiltrarMensajeTipoPlanta";
+			return "/pesonal/FiltrarMensajeTipoPlanta";
 
 		} catch (Exception e) {
 
 			model.addAttribute("error", "Ocurrió un error al filtrar los mensajes.");
-			return "FiltrarMensajeTipoPlanta";
+			return "/personal/FiltrarMensajeTipoPlanta";
 		}
 
 	}
-	
-	@GetMapping( "GestiondeMensajes" )
+
+	@GetMapping("GestiondeMensajes")
 	public String GestiondePlantas() {
 		return "/personal/GestiondeMensajes";
 
@@ -199,10 +199,10 @@ public class MensajesController {
 		String rol = (String) session.getAttribute("rol");
 		System.out.println("ROL: " + rol);
 
-		if (rol.equalsIgnoreCase("admin")) {
+		if (rol.equalsIgnoreCase("ADMIN")) {
 			return "/admin/MenuAdmin";
 		} else {
-			if (rol.equalsIgnoreCase("personal")) {
+			if (rol.equalsIgnoreCase("PERSONAL")) {
 				return "/personal/MenuPersonal";
 			} else {
 				return "/inicio";

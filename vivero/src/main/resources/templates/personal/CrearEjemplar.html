@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" th:href="@{/CSS/estilosCreaciondeEjemplar.css}" />
+<link rel="stylesheet" th:href="@{/CSS/estilosFormularioCreacion.css}" />
 <title>Crear Ejemplar</title>
 </head>
 <body>
@@ -11,18 +11,9 @@
 		<h1>*Creación de Ejemplar*</h1>
 	</header>
 
-	<div th:if="${exito}"
-		style="color: green; background-color: #d4edda; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: center; font-weight: bold;">
-		<p th:text="${exito}"></p>
-	</div>
-
-	<div th:if="${error}"
-		style="color: red; background-color: #f8d7da; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: center; font-weight: bold;">
-		<p th:text="${error}"></p>
-	</div>
-
 	<div class="container">
-
+		 <p th:if="${exito}" th:text="${exito}" class="exito"></p>
+		  <p th:if="${error}" th:text="${error}" class="error"></p>
 		<form class="formulario" th:action="@{/ejemplares/CamposEjemplar}"
 			th:object="${ejemplar}" method="post">
 

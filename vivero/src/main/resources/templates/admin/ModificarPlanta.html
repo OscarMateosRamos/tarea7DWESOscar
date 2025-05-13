@@ -10,6 +10,9 @@
     <header>
         <h1>Admin Modificación de Planta</h1>
     </header>
+    
+    <p th:if="${exito}" th:text="${exito}" class="mensaje-exito"></p>
+    <p th:if="${error}" th:text="${error}" class="mensaje-error"></p>
 
     <div class="container">
         <table>
@@ -29,14 +32,13 @@
                     <td th:text="${planta.nombrecomun}"></td>
                     <td th:text="${planta.nombrecientifico}"></td>
                     <td>
-                   
-                        <a th:href="@{/formularioModificarPlanta/{id}(id=${planta.id})}" class="boton">Modificar</a>
+                        <a th:href="@{/plantas/formularioModificarPlanta/{id}(id=${planta.id})}" class="boton">Modificar</a>
                     </td>
                 </tr>
             </tbody>
         </table>
+
         <div class="boton-container">
-        
             <a href="/GestiondePlantas" class="boton">Volver a Gestión de Plantas</a>
         </div>
     </div>

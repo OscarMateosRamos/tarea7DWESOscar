@@ -9,68 +9,62 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.oscar.vivero.modelo.Credenciales;
 import com.oscar.vivero.modelo.Persona;
 import com.oscar.vivero.repository.PersonaRepository;
 
-
-
-
-
 @Service
 public class ServiciosPersona {
-	
+
 	@Autowired
-	SessionFactory  sessionFactory;
+	SessionFactory sessionFactory;
 	@Autowired
 	PersonaRepository personarepo;
 
-	public boolean validarPersona(String nombre, String email, String password,String usuario) {
+	@Autowired
+	ServiciosCredenciales servCred;
 
-	    
-	    if (usuario.contains(" ")) {
-	        System.out.println("Nombre no puede contener espacios en blanco");
-	        return false;
-	    }
+	public boolean validarPersona(String nombre, String email, String password, String usuario) {
 
-	   
-	    if (password.contains(" ")) {
-	        System.out.println("La contraseña no puede contener espacios en blanco");
-	        return false;
-	    }
+		if (usuario.contains(" ")) {
+			System.out.println("Nombre no puede contener espacios en blanco");
+			return false;
+		}
 
-	    
-	    if (nombre.length() > 255) {
-	        System.out.println("Nombre invalido");
-	        return false;
-	    }
+		if (password.contains(" ")) {
+			System.out.println("La contraseña no puede contener espacios en blanco");
+			return false;
+		}
 
-	   
-	    if (email.length() > 255) {
-	        System.out.println("Email invalido");
-	        return false;
-	    }
+		if (nombre.length() > 255) {
+			System.out.println("Nombre invalido");
+			return false;
+		}
 
-	  
-	    String patron = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
-	    Pattern pattern = Pattern.compile(patron);
-	    Matcher matcher = pattern.matcher(email);
-	    if (!matcher.matches()) {
-	        System.out.println("Formato de email invalido..." + email);
-	        return false;
-	    }
+		if (email.length() > 255) {
+			System.out.println("Email invalido");
+			return false;
+		}
 
-	    	    List<Persona> personas = personarepo.findAll();
-	    for (Persona p : personas) {
-	        if (p.getEmail().equals(email)) {
-	            System.out.println(p.getEmail());
-	            System.out.println("El email ya existe...." + email);
-	            return false;
-	        }
-	    }
+		String patron = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+		Pattern pattern = Pattern.compile(patron);
+		Matcher matcher = pattern.matcher(email);
+		if (!matcher.matches()) {
+			System.out.println("Formato de email invalido..." + email);
+			return false;
+		}
 
-	    return true;
+		List<Persona> personas = personarepo.findAll();
+		for (Persona p : personas) {
+			if (p.getEmail().equals(email)) {
+				System.out.println(p.getEmail());
+				System.out.println("El email ya existe...." + email);
+				return false;
+			}
+		}
+
+		return true;
 	}
-
 
 	public List<Persona> vertodasPersonas() {
 		List<Persona> plantas = personarepo.findAll();
@@ -123,9 +117,29 @@ public class ServiciosPersona {
 		}
 		return false;
 	}
-	
+
 	public void guardarOActualizarPersona(Persona p) {
-	    sessionFactory.getCurrentSession().saveOrUpdate(p); // Asegúrate de que este método maneje tanto la inserción como la actualización
+		sessionFactory.getCurrentSession().saveOrUpdate(p); // Asegúrate de que este método maneje tanto la inserción
+															// como la actualización
+	}
+
+	public Persona buscarPersonaPorUsuarioCredencial(String usuario) {
+
+		Persona per = new Persona();
+
+		Optional<Credenciales> c = servCred.buscarCredencialPorUsuario(usuario);
+		
+		Long idCred = c.get().getId();
+		List<Persona> personas = personarepo.findAll();
+
+		for (Persona p : personas) {
+			if (p.getCredencial().getId()==idCred) {
+				System.out.println("Existe persona con el id");
+				per = p;
+			}
+		}
+
+		return per;
 	}
 
 }

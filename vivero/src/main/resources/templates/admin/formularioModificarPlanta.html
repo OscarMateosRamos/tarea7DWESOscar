@@ -12,7 +12,7 @@
     </header>
   
     <div class="container">
-        <form class="formulario" th:action="@{/CamposModificarPlanta/{id}(id=${planta.id})}" method="post">
+        <form class="formulario" th:action="@{/plantas/CamposModificarPlanta/{id}(id=${planta.id})}" method="post">
             <input type="hidden" th:value="${planta.id}" name="id" />
 
             <label for="nombrecomun">Nombre Común:</label>

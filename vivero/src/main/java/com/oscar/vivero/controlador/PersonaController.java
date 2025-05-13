@@ -42,13 +42,13 @@ public class PersonaController {
 
 		if (servCredenciales.existeCredencial(usuario)) {
 			model.addAttribute("error", "Ya existe el usuario: " + usuario);
-			return "CrearPersonas";
+			return "/admin/CrearPersonas";
 		} else {
 
 			boolean personaValida = servPersona.validarPersona(nombre, email, password, password);
 			if (!personaValida) {
 				model.addAttribute("error", "Datos no válidos para la persona.");
-				return "CrearPersonas";
+				return "/admin/CrearPersonas";
 			} else {
 
 				Credenciales c = new Credenciales();
@@ -67,6 +67,7 @@ public class PersonaController {
 				p.setCredencial(c);
 
 				servPersona.insertarPersona(p);
+				model.addAttribute("exito", "Persona insertada con exito");
 
 				return "/admin/GestiondePersonas";
 			}

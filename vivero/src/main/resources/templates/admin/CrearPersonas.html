@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/CSS/estilosCreacionPersona.css}" />
+    <link rel="stylesheet" th:href="@{/CSS/estilosFormularioCreacion.css}" />
     <title>Crear Persona</title>
 </head>
 <body>
@@ -11,18 +11,12 @@
         <h1> Admin Creación de Persona</h1>
     </header>
 
-   
-    <div th:if="${exito}" class="mensaje-exito">
-        <p th:text="${exito}"></p>
-    </div>
-
-    
-    <div th:if="${error}" class="mensaje-error">
-        <p th:text="${error}"></p>
-    </div>
-
+  
     <div class="container">
-        <form class="formulario" th:action="@{/CamposPersona}" th:object="${persona}" method="post">
+    <p th:if="${exito}" th:text="${exito}" class="exito"></p>
+	
+		 <p th:if="${error}" th:text="${error}" class="error"></p>       
+        <form class="formulario" th:action="@{/admin/CamposPersona}" th:object="${persona}" method="post">
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" name="nombre" th:field="*{nombre}" required />
 
