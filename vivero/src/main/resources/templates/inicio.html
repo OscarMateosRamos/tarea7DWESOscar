@@ -12,7 +12,8 @@
 		<header>
 			<h1>Menú Invitado</h1>
 		</header>
-
+		    <p th:if="${param.error}" style="color:red">Credenciales incorrectas, por favor intente nuevamente.</p>
+		
 		<div class="menu-container">
 			<ul class="menu">
 				<li><a th:href="@{/plantas/plantasInvitado}">Listar Plantas</a></li>

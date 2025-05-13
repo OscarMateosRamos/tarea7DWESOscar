@@ -1,12 +1,16 @@
 package com.oscar.vivero.controlador;
 
+import java.util.Optional;
+
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.oscar.vivero.modelo.Credenciales;
 import com.oscar.vivero.servicio.ServiciosCredenciales;
@@ -36,7 +40,7 @@ public class MainController {
 		log.info("*Usuario" + session.getAttribute("usuario") + "*");
 
 		model.addAttribute("usuario", session.getAttribute("usuario"));
-
+		
 		String usuario = (String) session.getAttribute("usuario");
 		if (usuario == null) {
 			return "inicio";
@@ -77,8 +81,11 @@ public class MainController {
 	@GetMapping("/login")
 	public String login(Model model) {
 		model.addAttribute("credenciales", new Credenciales());
+	
 		return "/log/formularioLogin";
 	}
+
+	
 
 //	@PostMapping("/Sesion")
 //	public String logInSubmit(@ModelAttribute Credenciales formularioLogin, Model model, HttpSession session) {

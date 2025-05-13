@@ -10,9 +10,19 @@
     <header>
         <h1>Admin Creación de Planta</h1>
       </header>
-  <div class="container">
-       
-        <form class="formulario" th:action="@{/CamposPlanta}" th:object="${planta}" method="post">     
+  	
+<p th:if="${exito}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <span th:text="${exito}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+</p>
+
+
+<p th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span th:text="${error}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+</p>
+  	
+        <form class="formulario" th:action="@{/plantas/CamposPlanta}" th:object="${planta}" method="post">     
            
             <label for="codigo">Código:</label>
             <input type="text" id="codigo" name="codigo" th:field="*{codigo}" required />
@@ -30,7 +40,6 @@
         </form>
        <div class="contenedor-boton">
         <a href="/GestiondePlantas" class="boton"> Volver a Gestion de Plantas</a>
-    </div>
     </div>
 </body>
 </html>

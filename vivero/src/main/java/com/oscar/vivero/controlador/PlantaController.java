@@ -68,7 +68,7 @@ public class PlantaController {
 		}
 
 		servPlanta.insertarPlanta(p);
-
+		model.addAttribute("exito", " Planta Creada Correctamente.");
 		return "/admin/CrearPlantas";
 	}
 

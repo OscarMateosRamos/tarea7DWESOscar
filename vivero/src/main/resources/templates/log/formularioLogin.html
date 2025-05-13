@@ -11,26 +11,28 @@
 	<h2>Inicio de Sesión</h2>
 
 
-	<div th:if="${error}" style="color: red;">
-		<p th:text="${error}"></p>
-	</div>
+	 <p th:if="${param.error}" style="color:red" th:text="${param.error}"></p>
+	 
+	 
+
+	
 
 
-	<form th:action="@{/auth/login}" method="post">
+	<form th:action="@{/auth/leerlogin}" method="post">
 
 		<div class="form-floating mb-3">
-			<input type="text" class="form-control" id="floatingInput"
+			<input type="text" class="form-control" id="username"
 				name="username" placeholder="Introduce tu usuario" required>
 			<label for="floatingInput"></label>
 		</div>
 		<div class="form-floating">
-			<input type="password" class="form-control" id="floatingPassword"
+			<input type="password" class="form-control" id="pasword"
 				name="password" placeholder="Introduce tu contraseña" required>
 			<label for="floatingPassword"></label>
 		</div>
 
 
-		<div>
+		
 			<div>
 				<button type="submit" class="btn color-boton">INICIAR
 					SESIÓN</button>

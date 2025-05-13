@@ -33,9 +33,9 @@ public class SecurityConfig {
 	                )
 	                .formLogin(form -> form
 	                                .loginPage("/inicio")
-	                                .loginProcessingUrl("/auth/login")
+	                                .loginProcessingUrl("/auth/leerlogin")
 	                                .defaultSuccessUrl("/auth/redireccionar")
-	                                .failureUrl("/auth/error-login")
+	                                .failureUrl("/inicio?error=true")
 	                                .permitAll()
 	                )
 	                .logout(logout -> logout
