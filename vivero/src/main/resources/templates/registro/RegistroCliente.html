@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" th:href="@{/CSS/estilosFormularioCreacion.css}" />
+    <link rel="stylesheet" th:href="@{/CSS/estilosRegistroCliente.css}" />
     <title>Registrar Cliente</title>
   </head>
   <body>
@@ -12,17 +12,18 @@
     </header>
 
     <div class="container">
-     
-      <div th:if="${mensajeExito}" class="alert alert-success">
-        <p th:text="${mensajeExito}"></p>
-      </div>
+		<p th:if="${exito}" class="alert alert-success alert-dismissible fade show" role="alert">
+		  			    <span th:text="${exito}"></span>
+		  			    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+		  			</p>
 
-      <div th:if="${mensajeError}" class="alert alert-danger">
-        <p th:text="${mensajeError}"></p>
-      </div>
+
+		  			<p th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+		  			    <span th:text="${error}"></span>
+		  			    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+		  			</p>
 
       <form class="formulario" th:action="@{/cliente/CamposCliente}" th:object="${cliente}" method="post">
-      	  <h1>Registro de Cliente</h1>
         <label for="nombre">Nombre</label>
         <input type="text" id="nombre" name="nombre" required th:field="*{nombre}" />
         
@@ -47,8 +48,11 @@
         <label for="password">Contraseña:</label>
         <input type="password" id="password" name="credencial.password" required th:field="*{credencial.password}" />
 
-        <button type="submit" class="boton">Registrar Cliente</button>
+		<div>
+				<button type="submit" class="boton">Registrar Cliente</button>
+			</div>
       </form>
     </div>
+	
   </body>
 </html>

@@ -69,7 +69,7 @@ public class PersonaController {
 				servPersona.insertarPersona(p);
 				model.addAttribute("exito", "Persona insertada con exito");
 
-				return "/admin/GestiondePersonas";
+				return "/admin/CrearPersonas";
 			}
 		}
 	}

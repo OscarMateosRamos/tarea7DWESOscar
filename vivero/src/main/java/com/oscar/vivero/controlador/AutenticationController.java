@@ -71,18 +71,17 @@ public class AutenticationController {
 		// Verifica si los campos están vacíos
 		if (username == null || password == null || username.trim().isEmpty() || password.trim().isEmpty()) {
 			model.addAttribute("error", "Por favor, ingrese ambos campos.");
-			return "redirect:/inicio?error=Por%20favor,%20ingrese%20ambos%20campos.";
+			return "/log/formularioLogin";
 		}
 
 		// Verifica las credenciales
 		Optional<Credenciales> credencial = servCredenciales.buscarCredencialPorUsuario(username);
 		if (!credencial.isPresent() || !new BCryptPasswordEncoder().matches(password, credencial.get().getPassword())) {
 			model.addAttribute("error", "Credenciales incorrectas");
-			return "redirect:/inicio?error=Credenciales%20incorrectas";
+			return "/log/formularioLogin";
 		}
+		return "/log/formularioLogin";
 
-		// Si todo es correcto, redirige a la página de inicio (o el destino deseado)
-		return "redirect:/inicio";
 	}
 
 	@GetMapping("/logout")

@@ -107,7 +107,7 @@ public class MensajesController {
 
 		servMensaje.insertar(m);
 
-		model.addAttribute("success", "Mensaje insertado exitosamente.");
+		model.addAttribute("exito", "Mensaje insertado exitosamente.");
 		return "/personal/CrearMensaje";
 	}
 

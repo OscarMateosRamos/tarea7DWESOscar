@@ -40,47 +40,8 @@ public class ServiciosEjemplar {
 	@Autowired
 	Controlador controlador;
 
-//	public void insertarEjemplar(Ejemplar ej) {
-//
-//		List<Ejemplar> ejemplares = ejemplarrepo.findAll();
-//
-//		for (Ejemplar e : ejemplares) {
-//			if (e.getNombre().equals(ej.getNombre())) {
-//				String nuevoNombre = ej.getNombre() + "_" + e.getId();
-//				ej.setNombre(nuevoNombre);
-//				ejemplarrepo.saveAndFlush(ej);
-//
-//				Mensaje m = new Mensaje();
-//
-//				LocalDate fechahora = LocalDate.now();
-//				Date date = Date.valueOf(fechahora);
-//
-//				Optional<Persona> p = Optional.ofNullable(servPersona.buscarPorUsuarioCredencial(usuario));
-//
-//				String mensaje = "Añadido nuevo ejemplar " + ej.getNombre() + " por " + p.get().getNombre() + " ("
-//						+ fechahora + " ).";
-//				m.setEjemplar(ej);
-//
-//				m.setFechahora(date);
-//
-//				m.setMensaje(mensaje);
-//
-//				Optional<Persona> personas = servPersona.buscarPorId(Long.valueOf(1));
-//				m.setPersona(personas.get());
-//				servMensaje.insertar(m);
-//			}
-//		}
-//
-//	}
-
-	public boolean insertarEjemplar(Ejemplar ej) {
-		if (servPlanta.validarPlanta(ej.getPlanta())) {
-			if (ejemplarrepo.saveAndFlush(ej) != null) {
-				return true;
-			}
-		}
-		return false;
-
+	public void insertarEjemplar(Ejemplar ej) {
+		ejemplarrepo.saveAndFlush(ej);
 	}
 
 	@Transactional

@@ -1,7 +1,7 @@
 package com.oscar.vivero.controlador;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +20,10 @@ import com.oscar.vivero.modelo.Mensaje;
 import com.oscar.vivero.modelo.Persona;
 import com.oscar.vivero.modelo.Planta;
 import com.oscar.vivero.repository.EjemplarRepository;
+import com.oscar.vivero.repository.PersonaRepository;
+import com.oscar.vivero.repository.PlantaRepository;
 import com.oscar.vivero.servicio.Controlador;
+import com.oscar.vivero.servicio.ServiciosCredenciales;
 import com.oscar.vivero.servicio.ServiciosEjemplar;
 import com.oscar.vivero.servicio.ServiciosMensaje;
 import com.oscar.vivero.servicio.ServiciosPersona;
@@ -33,10 +36,18 @@ import jakarta.transaction.Transactional;
 @Controller
 @RequestMapping("/ejemplares")
 public class EjemplarController {
+
+	private final PersonaRepository personaRepository;
 	private final Logger log = (Logger) LoggerFactory.getLogger(MainController.class);
 
 	@Autowired
 	EjemplarRepository ejemplarrepo;
+
+	@Autowired
+	PersonaRepository personarepo;
+	
+	@Autowired
+	PlantaRepository plantarepo;
 
 	@Autowired
 	ServiciosPersona servPersona;
@@ -47,71 +58,114 @@ public class EjemplarController {
 	@Autowired
 	ServiciosPlanta servPlanta;
 	@Autowired
+	ServiciosCredenciales servCred;
+	@Autowired
 	Controlador controlador;
+
+	EjemplarController(PersonaRepository personaRepository) {
+		this.personaRepository = personaRepository;
+	}
 
 	@PostMapping("/CamposEjemplar")
 	public String InsertarEjemplar(@ModelAttribute Ejemplar CrearEjemplar, Model model, HttpSession session) {
-		log.info("****Usuario " + session.getAttribute("usuario") + "*");
-		
-		
-		
-	    String codigoPlanta = CrearEjemplar.getPlanta().getCodigo();
 
-	    if (!servPlanta.existeCodigoPlanta(codigoPlanta)) {
-	        model.addAttribute("error", "No existe el código de la planta.");
-	        return "/personal/CrearEjemplar";
-	    }
+		String codigoPlanta = CrearEjemplar.getPlanta().getCodigo();
 
-	    String nombreOriginal = CrearEjemplar.getNombre();
-	    List<Ejemplar> ejemplares = ejemplarrepo.findAll();
-	    for (Ejemplar e : ejemplares) {
-	        if (e.getNombre().equals(nombreOriginal)) {
-	            nombreOriginal = nombreOriginal + "_" + e.getId();
-	            break;
-	        }
-	    }
+		System.out.println("Codigo de Planta del ejemplar: " + codigoPlanta);
+		if (servPlanta.existeCodigoPlanta(codigoPlanta)) {
 
-	    
-	    List<Planta> plantas = servPlanta.encontrarPlantasPorCodigo(codigoPlanta);
-	    if (plantas.isEmpty()) {
-	        model.addAttribute("error", "La planta con el código " + codigoPlanta + " no fue encontrada.");
-	        return "/personal/CrearEjemplar";
-	    }
+			Ejemplar ej = new Ejemplar();
 
-	    Planta planta = plantas.get(0);
-	    CrearEjemplar.setPlanta(planta);
-	    CrearEjemplar.setNombre(nombreOriginal);
+			List<Planta> plantas = servPlanta.encontrarPlantasPorCodigo(codigoPlanta);
+			if (!plantas.isEmpty()) {
+				ej.setPlanta(plantas.get(0));
+			} else {
+				model.addAttribute("error", "La planta con el nombre " + codigoPlanta + " no fue encontrada.");
+				return "/personal/CrearEjemplar";
+			}
+			int numeroEjemplar =  ejemplarrepo.findAll().size()+1;
+			
+			String nuevoNombre = codigoPlanta.toUpperCase() + "_" +  numeroEjemplar;
+			ej.setNombre(nuevoNombre);
+			System.out.println("nombre del ejemplar" + nuevoNombre);
 
-	    
-	    String usuario = (String) session.getAttribute("usuario");
-	    if (usuario == null) {
-	        model.addAttribute("error", "No se encontró al usuario actual.");
-	        return "/personal/CrearEjemplar";
-	    }
+			Date fecha = Date.valueOf(LocalDate.now());
 
-	    
-	    String fechaHora = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
-	    String contenidoMensaje = "Añadido nuevo ejemplar " + CrearEjemplar.getNombre() +
-	                              " por " +  usuario + " (" + fechaHora + ").";
+			String usuario = (String) session.getAttribute("usuario");
 
-	    Mensaje mensaje = new Mensaje();
-	    mensaje.setMensaje(contenidoMensaje);
-	    mensaje.setPersona(servPersona.buscarPersonaPorUsuarioCredencial(usuario));
-	    mensaje.setEjemplar(CrearEjemplar);
+			System.out.println("Usuario en sesion: " + usuario);
 
-	  
-	    if (CrearEjemplar.getMensajes() == null) {
-	        CrearEjemplar.setMensajes(new ArrayList<>());
-	    }
-	    CrearEjemplar.getMensajes().add(mensaje);
+			String mensajeCadena = "Añadido nuevo ejemplar " + ej.getNombre() + " por " + usuario + " (" + fecha
+					+ " ).";
 
-	   
-	    servEjemplar.insertarEjemplar(CrearEjemplar);
+			Mensaje mensaje = new Mensaje();
+			mensaje.setMensaje(mensajeCadena);
+			mensaje.setFechahora(fecha);
 
-	    model.addAttribute("exito", "Ejemplar creado con éxito.");
-	    return "/personal/CrearEjemplar";
+			for (Persona p : personarepo.findAll()) {
+				if (p.getCredencial().getId().equals(servCred.buscarCredencialPorUsuario(usuario).get().getId())) {
+					System.out.println("Econtrado el id persona y el id Credencial");
+					mensaje.setPersona(p);
+				}
+			}
+
+			// servMensaje.insertar(mensaje);
+
+			if (ej.getMensajes() == null) {
+				ej.setMensajes(new ArrayList<>());
+			}
+
+			ej.getMensajes().add(mensaje);
+
+			servEjemplar.insertarEjemplar(ej);
+			
+			Planta pl = new Planta();
+			pl=  servPlanta.buscarPlantaPorCodigo(codigoPlanta);
+			
+			Long existencias =  pl.getCantidadDisponible();
+			
+			pl.setCantidadDisponible(existencias+1);
+			
+			servPlanta.modificarPlanta(pl);
+			model.addAttribute("exito", "Creado el Ejemplar: "+nuevoNombre);
+			return "/personal/CrearEjemplar";
+		} else {
+			model.addAttribute("error", "No existe el código de la planta.");
+			return "/personal/CrearEjemplar";
+
+		}
 	}
 
+//	
+//
+//	List<Ejemplar> ejemplares = ejemplarrepo.findAll();
+//
+//	for (Ejemplar e : ejemplares) {
+//		if (e.getNombre().equals(ej.getNombre())) {
+//			String nuevoNombre = ej.getNombre() + "_" + e.getId();
+//			ej.setNombre(nuevoNombre);
+//			ejemplarrepo.saveAndFlush(ej);
+//
+//			Mensaje m = new Mensaje();
+//
+//			LocalDate fechahora = LocalDate.now();
+//			Date date = Date.valueOf(fechahora);
+//
+//			
+//
+//			String mensaje = "Añadido nuevo ejemplar " + ej.getNombre() + " por " + p.get().getNombre() + " ("
+//					+ fechahora + " ).";
+//			m.setEjemplar(ej);
+//
+//			m.setFechahora(date);
+//
+//			m.setMensaje(mensaje);
+//
+//			Optional<Persona> personas = servPersona.buscarPorId(Long.valueOf(1));
+//			m.setPersona(personas.get());
+//			servMensaje.insertar(m);
+//		}
+//	}
 
 	@GetMapping("/mostrarCrearEjemplar")
 	public String mostrarCrearEjemplarFormulario(Model model) {
@@ -126,7 +180,8 @@ public class EjemplarController {
 	}
 
 	@GetMapping("/ejemplaresTipoPlanta")
-	public String listarEjemplaresTipoPlanta(@RequestParam(name="codigo",required = false) String codigo, Model model) {
+	public String listarEjemplaresTipoPlanta(@RequestParam(name = "codigo", required = false) String codigo,
+			Model model) {
 		List<Planta> plantas = servPlanta.vertodasPlantas();
 		model.addAttribute("plantas", plantas);
 
@@ -145,7 +200,8 @@ public class EjemplarController {
 
 	@GetMapping("/verMensajesEjemplar")
 	@Transactional
-	public String verMensajesDelEjemplar(@RequestParam(name = "ejemplarId", required = false) Long ejemplarId, Model model) {
+	public String verMensajesDelEjemplar(@RequestParam(name = "ejemplarId", required = false) Long ejemplarId,
+			Model model) {
 
 		List<Ejemplar> ejemplares = servEjemplar.vertodosEjemplares();
 		model.addAttribute("ejemplares", ejemplares);
@@ -179,7 +235,7 @@ public class EjemplarController {
 		model.addAttribute("plantas", plantas);
 		return "/personal/GestionStock";
 	}
-	
+
 	@GetMapping({ "GestiondeEjemplares" })
 	public String GestiondeEjemplares() {
 
@@ -203,7 +259,5 @@ public class EjemplarController {
 		}
 
 	}
-	
-	
 
 }

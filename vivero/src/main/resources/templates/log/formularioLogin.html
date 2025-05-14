@@ -10,16 +10,18 @@
 <body>
 	<h2>Inicio de Sesión</h2>
 
-
-	 <p th:if="${param.error}" style="color:red" th:text="${param.error}"></p>
-	 
-	 
-
 	
-
-
 	<form th:action="@{/auth/leerlogin}" method="post">
+		<p th:if="${exito}" class="alert alert-success alert-dismissible fade show" role="alert">
+				  			    <span th:text="${exito}"></span>
+				  			    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+				  			</p>
 
+
+				  			<p th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+				  			    <span th:text="${error}"></span>
+				  			    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+				  			</p>
 		<div class="form-floating mb-3">
 			<input type="text" class="form-control" id="username"
 				name="username" placeholder="Introduce tu usuario" required>

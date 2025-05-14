@@ -12,7 +12,10 @@
 		<header>
 			<h1>Menú Invitado</h1>
 		</header>
-		    <p th:if="${param.error}" style="color:red">Credenciales incorrectas, por favor intente nuevamente.</p>
+		<p th:if="${exitoCliente}" class="alert alert-success alert-dismissible fade show" role="alert">
+				  			    <span th:text="${exitoCliente}"></span>
+				  			    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+				  			</p>
 		
 		<div class="menu-container">
 			<ul class="menu">

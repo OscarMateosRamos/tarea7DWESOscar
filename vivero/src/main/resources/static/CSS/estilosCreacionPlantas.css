@@ -55,17 +55,27 @@ header {
     align-items: center;
 }
 
-/* Etiquetas e inputs */
+/* Contenedor para cada par de label/input */
+.formulario .form-group {
+    display: flex;
+    flex-direction: row;  /* Poner el label y el input en una fila */
+    gap: 0;  /* Eliminar espacio entre label e input */
+    width: 100%;
+    align-items: center;  /* Alinear verticalmente los elementos */
+}
+
+/* Etiquetas */
 label {
     font-size: 18px;
     color: red;  /* Color rojo para las etiquetas */
-    align-self: flex-start;
-    margin-left: 10%;
+    margin-right: 10px;  /* Dejar espacio a la derecha del label */
+    text-align: left;  /* Alinear el texto del label a la izquierda */
 }
 
+/* Inputs */
 input[type="text"] {
     width: 60%;  /* Ajusté el ancho de los inputs al 60% */
-    padding: 12px;  /* Ajusté el padding para dar más espacio */
+    padding: 12px;
     font-size: 16px;
     border-radius: 5px;
     border: 1px solid #ccc;

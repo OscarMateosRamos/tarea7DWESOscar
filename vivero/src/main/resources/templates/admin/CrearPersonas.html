@@ -13,9 +13,16 @@
 
   
     <div class="container">
-    <p th:if="${exito}" th:text="${exito}" class="exito"></p>
-	
-		 <p th:if="${error}" th:text="${error}" class="error"></p>       
+		<p th:if="${exito}" class="alert alert-success alert-dismissible fade show" role="alert">
+				  			    <span th:text="${exito}"></span>
+				  			    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+				  			</p>
+
+
+				  			<p th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+				  			    <span th:text="${error}"></span>
+				  			    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+				  			</p>
         <form class="formulario" th:action="@{/admin/CamposPersona}" th:object="${persona}" method="post">
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" name="nombre" th:field="*{nombre}" required />
