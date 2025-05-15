@@ -10,12 +10,11 @@
 
     <h1>-Realizar Pedido-</h1>
 
-    <div th:if="${success}">
-        <p>Producto añadido con éxito a la cesta.</p>
-    </div>
-    <div th:if="${error}">
-        <p>Error al añadir el producto a la cesta.</p>
-    </div>
+<div th:if="${mensaje}">
+    <p th:text="${mensaje}" 
+       th:classappend="${mensaje.contains('éxito') ? 'mensaje-exito' : 'mensaje-error'}"></p>
+</div>
+  
     
     <h1 th:text="${usuario}"></h1>
     <table>

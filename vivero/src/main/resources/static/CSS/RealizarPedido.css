@@ -166,3 +166,14 @@ h1{
         background-color: white;
         color: black;
     }
+    
+    .mensaje-exito {
+    color: green;
+    font-weight: bold;
+}
+
+.mensaje-error {
+    color: red;
+    font-weight: bold;
+}
+    

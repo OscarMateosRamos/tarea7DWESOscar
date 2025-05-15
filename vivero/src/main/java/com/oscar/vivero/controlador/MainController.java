@@ -40,7 +40,7 @@ public class MainController {
 		log.info("*Usuario" + session.getAttribute("usuario") + "*");
 
 		model.addAttribute("usuario", session.getAttribute("usuario"));
-		
+
 		String usuario = (String) session.getAttribute("usuario");
 		if (usuario == null) {
 			return "inicio";
@@ -79,13 +79,20 @@ public class MainController {
 	}
 
 	@GetMapping("/login")
-	public String login(Model model) {
+	public String login(@RequestParam(value = "error", required = false) String error,
+			@RequestParam(value = "logout", required = false) String logout, Model model) {
+
+		if (error != null) {
+			model.addAttribute("error", "Credenciales incorrectas. Intenta nuevamente.");
+		}
+
+		if (logout != null) {
+			model.addAttribute("exito", "Has cerrado sesión exitosamente.");
+		}
+
 		model.addAttribute("credenciales", new Credenciales());
-	
 		return "/log/formularioLogin";
 	}
-
-	
 
 //	@PostMapping("/Sesion")
 //	public String logInSubmit(@ModelAttribute Credenciales formularioLogin, Model model, HttpSession session) {

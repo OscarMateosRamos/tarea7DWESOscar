@@ -37,7 +37,6 @@ import jakarta.transaction.Transactional;
 @RequestMapping("/ejemplares")
 public class EjemplarController {
 
-	private final PersonaRepository personaRepository;
 	private final Logger log = (Logger) LoggerFactory.getLogger(MainController.class);
 
 	@Autowired
@@ -62,9 +61,6 @@ public class EjemplarController {
 	@Autowired
 	Controlador controlador;
 
-	EjemplarController(PersonaRepository personaRepository) {
-		this.personaRepository = personaRepository;
-	}
 
 	@PostMapping("/CamposEjemplar")
 	public String InsertarEjemplar(@ModelAttribute Ejemplar CrearEjemplar, Model model, HttpSession session) {

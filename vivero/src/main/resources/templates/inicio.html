@@ -16,6 +16,10 @@
 				  			    <span th:text="${exitoCliente}"></span>
 				  			    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
 				  			</p>
+		<p th:if="${error}" class="alert alert-error alert-dismissible fade show" role="alert">
+				  			    <span th:text="${error}"></span>
+				  			    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+				  			</p>
 		
 		<div class="menu-container">
 			<ul class="menu">

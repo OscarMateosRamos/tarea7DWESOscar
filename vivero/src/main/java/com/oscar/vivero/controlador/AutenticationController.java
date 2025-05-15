@@ -57,32 +57,14 @@ public class AutenticationController {
 				session.setAttribute("rol", "CLIENTE");
 				return "/cliente/Menucliente";
 			default:
-				return "inicio";
+				return "/log/formularioLogin";
 			}
 		}
 
 		return "inicio";
 	}
 
-	@PostMapping("/leerlogin")
-	public String login(@RequestParam("username") String username, @RequestParam("password") String password,
-			Model model) {
-
-		// Verifica si los campos están vacíos
-		if (username == null || password == null || username.trim().isEmpty() || password.trim().isEmpty()) {
-			model.addAttribute("error", "Por favor, ingrese ambos campos.");
-			return "/log/formularioLogin";
-		}
-
-		// Verifica las credenciales
-		Optional<Credenciales> credencial = servCredenciales.buscarCredencialPorUsuario(username);
-		if (!credencial.isPresent() || !new BCryptPasswordEncoder().matches(password, credencial.get().getPassword())) {
-			model.addAttribute("error", "Credenciales incorrectas");
-			return "/log/formularioLogin";
-		}
-		return "/log/formularioLogin";
-
-	}
+	
 
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
