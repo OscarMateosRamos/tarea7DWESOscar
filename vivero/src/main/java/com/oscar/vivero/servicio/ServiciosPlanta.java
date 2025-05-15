@@ -121,9 +121,7 @@ public class ServiciosPlanta {
 		plantarepo.save(planta);
 	}
 
-	public List<String> listarTiposDePlanta() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> listarCodigosDePlanta() {
+		return plantarepo.listarCodigosDePlanta();
 	}
-
 }

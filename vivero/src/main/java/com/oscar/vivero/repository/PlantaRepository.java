@@ -22,5 +22,6 @@ public interface PlantaRepository extends JpaRepository<Planta, Long> {
 	@Query("SELECT p FROM Planta p LEFT JOIN FETCH p.ejemplares")
     List<Planta> obtenerPlantasConEjemplares();
 	
-	
+	@Query("SELECT DISTINCT p.codigo FROM Planta p")
+	List<String> listarCodigosDePlanta();
 }

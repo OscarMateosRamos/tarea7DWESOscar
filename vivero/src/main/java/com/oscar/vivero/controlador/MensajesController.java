@@ -58,8 +58,8 @@ public class MensajesController {
 	}
 
 	@PostMapping("/CamposMensaje")
-	public String InsertarMensaje(@RequestParam("id") Long id, @RequestParam("mensaje") String mensaje, @RequestParam("fechahora") String fechahora,
-			Model model, HttpSession session) {
+	public String InsertarMensaje(@RequestParam("id") Long id, @RequestParam("mensaje") String mensaje,
+			@RequestParam("fechahora") String fechahora, Model model, HttpSession session) {
 
 		String usuario = (String) session.getAttribute("usuario");
 
@@ -159,34 +159,35 @@ public class MensajesController {
 
 	@GetMapping("/filtrarMensajesCodigoPlanta")
 	public String filtrarMensajesPorCodigoPlanta(
-			@RequestParam(value = "tipoPlanta", required = false) String tipoPlanta, Model model) {
-		try {
+	        @RequestParam(value = "tipoPlanta", required = false) String tipoPlanta, Model model) {
+	    try {
+	        
+	        List<String> codigosPlantas = servPlanta.listarCodigosDePlanta();
+	        model.addAttribute("tiposPlantas", codigosPlantas);
 
-			List<String> tiposPlantas = servPlanta.listarTiposDePlanta();
-			model.addAttribute("tiposPlantas", tiposPlantas);
+	        
+	        if (tipoPlanta == null || tipoPlanta.isEmpty()) {
+	            model.addAttribute("error", "Por favor, seleccione un tipo de planta.");
+	            return "/personal/FiltrarMensajeTipoPlanta";
+	        }
 
-			if (tipoPlanta == null || tipoPlanta.isEmpty()) {
-				model.addAttribute("error", "Por favor, seleccione un tipo de planta.");
-				return "/personal/FiltrarMensajeTipoPlanta";
-			}
+	        
+	        List<Mensaje> mensajesFiltrados = servMensaje.listamensajesPorCodigoPlanta(tipoPlanta);
 
-			List<Mensaje> mensajesFiltrados = servMensaje.listamensajesPorCodigoPlanta(tipoPlanta);
+	        if (mensajesFiltrados.isEmpty()) {
+	            model.addAttribute("error", "No se encontraron mensajes para el tipo de planta seleccionado.");
+	        } else {
+	            model.addAttribute("mensajes", mensajesFiltrados);
+	        }
 
-			if (mensajesFiltrados.isEmpty()) {
-				model.addAttribute("error", "No se encontraron mensajes para el tipo de planta seleccionado.");
-			} else {
-				model.addAttribute("mensajes", mensajesFiltrados);
-			}
+	        return "/personal/FiltrarMensajeTipoPlanta"; 
 
-			return "/pesonal/FiltrarMensajeTipoPlanta";
-
-		} catch (Exception e) {
-
-			model.addAttribute("error", "Ocurrió un error al filtrar los mensajes.");
-			return "/personal/FiltrarMensajeTipoPlanta";
-		}
-
+	    } catch (Exception e) {
+	        model.addAttribute("error", "Ocurrió un error al filtrar los mensajes.");
+	        return "/personal/FiltrarMensajeTipoPlanta"; 
+	    }
 	}
+
 
 	@GetMapping("GestiondeMensajes")
 	public String GestiondePlantas() {

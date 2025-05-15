@@ -27,4 +27,6 @@ public interface MensajeRepository extends JpaRepository<Mensaje, Long> {
 //	@Query("SELECT m FROM Mensaje m WHERE m.fechahora BETWEEN fechaInicial and fechaFinal")
 //	List<Mensaje> mensajesPorFechas(String fechaInicial, String fechaFinal);
 
+	
+
 }
