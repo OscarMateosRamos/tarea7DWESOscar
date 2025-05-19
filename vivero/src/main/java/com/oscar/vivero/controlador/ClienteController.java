@@ -1,6 +1,8 @@
 package com.oscar.vivero.controlador;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,8 +30,10 @@ public class ClienteController {
 	@PostMapping("/CamposCliente")
 	public String RegistrarCliente(@ModelAttribute Cliente RegistroCliente, Model model) {
 
+		List<String> errores = new ArrayList<>();
+
 		String nombre = RegistroCliente.getNombre();
-		Date fechanac = (Date) RegistroCliente.getFechanac();
+		Date fechanac = RegistroCliente.getFechanac();
 		String nif = RegistroCliente.getNif();
 		String direccion = RegistroCliente.getDireccion();
 		String email = RegistroCliente.getEmail();
@@ -38,108 +42,80 @@ public class ClienteController {
 		String usuario = RegistroCliente.getCredencial().getUsuario();
 		String password = RegistroCliente.getCredencial().getPassword();
 
-		Cliente c = new Cliente();
-		c.setNombre(nombre);
-		c.setFechanac(fechanac);
-		c.setNif(nif);
-		c.setDireccion(direccion);
-		c.setEmail(email);
-		c.setTelefono(telefono);
-
-		Credenciales cr = new Credenciales();
-		cr.setUsuario(usuario);
-		cr.setPassword(password);
-		cr.setRol("CLIENTE");
-
-		c.setCredencial(cr);
-
-		boolean nombreValido = servcliente.validarNombre(nombre);
-
-		if (!nombreValido) {
-			model.addAttribute("error", "Nombre Invalido.");
-			model.addAttribute("cliente", RegistroCliente);
-			return "/registro/RegistroCliente";
+		if (!servcliente.validarNombre(nombre)) {
+			errores.add("Nombre inválido.");
 		}
 
-		boolean emailValido = servcliente.validarEmail(email);
-
-		if (!emailValido) {
-			model.addAttribute("error", "Email Invalido.");
-			model.addAttribute("cliente", RegistroCliente);
-			return "/registro/RegistroCliente";
+		if (!servcliente.validarEmail(email)) {
+			errores.add("Email inválido.");
 		}
 
-		boolean direccionValido = servcliente.validarDireccion(direccion);
-
-		if (!direccionValido) {
-			model.addAttribute("error", "Direccion Invalida.");
-			model.addAttribute("cliente", RegistroCliente);
-			return "/registro/RegistroCliente";
+		if (!servcliente.validarDireccion(direccion)) {
+			errores.add("Dirección inválida.");
 		}
 
-		boolean nifValido = servcliente.validarNIF(nif);
-
-		if (!nifValido) {
-			model.addAttribute("error", "Nif Invalido.");
-			model.addAttribute("cliente", RegistroCliente);
-			return "/registro/RegistroCliente";
+		if (!servcliente.validarNIF(nif)) {
+			errores.add("NIF inválido.");
 		}
 
-		boolean telefonoValido = servcliente.validarTelefono(telefono);
-
-		if (!telefonoValido) {
-			model.addAttribute("error", "Telefono Invalido.");
-			model.addAttribute("cliente", RegistroCliente);
-			return "/registro/RegistroCliente";
+		if (!servcliente.validarTelefono(telefono)) {
+			errores.add("Teléfono inválido.");
 		}
 
-		boolean usuarioValido = servcliente.validarUsuario(usuario);
-
-		if (!usuarioValido) {
-			model.addAttribute("error", "Usuario Invalido.");
-			model.addAttribute("cliente", RegistroCliente);
-			return "/registro/RegistroCliente";
+		if (!servcliente.validarUsuario(usuario)) {
+			errores.add("Usuario inválido.");
 		}
 
-		boolean passwordValido = servcliente.validarPassword(password);
-
-		if (!passwordValido) {
-			model.addAttribute("error", "Password Invalido.");
-			model.addAttribute("cliente", RegistroCliente);
-			return "/registro/RegistroCliente";
+		if (!servcliente.validarPassword(password)) {
+			errores.add("Password inválido.");
 		}
 
-		boolean emailExistente = servcliente.validarEmailUnico(email);
-
-		if (!emailExistente) {
-			model.addAttribute("error", "El email ya existe.");
-			model.addAttribute("cliente", RegistroCliente);
-			return "/registro/RegistroCliente";
+		if (!servcliente.validarEmailUnico(email)) {
+			errores.add("El email ya existe.");
 		}
 
-		boolean usuarioExistente = servcliente.validarUsuarioUnico(usuario);
+		if (!servcliente.validarUsuarioUnico(usuario)) {
+			errores.add("El usuario ya existe.");
+		}
 
-		if (!usuarioExistente) {
-			model.addAttribute("error", "El usuario ya existe.");
+		if (!errores.isEmpty()) {
+			model.addAttribute("errores", errores);
 			model.addAttribute("cliente", RegistroCliente);
 			return "/registro/RegistroCliente";
 		}
 
 		try {
-			servcliente.insertarCliente(c);
+
+			Credenciales cr = new Credenciales();
+			cr.setUsuario(usuario);
+			cr.setPassword(password);
+			cr.setRol("CLIENTE");
 			servCredenciales.insertarCredencial(cr);
 
+			Cliente c = new Cliente();
+			c.setNombre(nombre);
+			c.setFechanac(fechanac);
+			c.setNif(nif);
+			c.setDireccion(direccion);
+			c.setEmail(email);
+			c.setTelefono(telefono);
+
+			servcliente.insertarCliente(c);
+			
+			c.setCredencial(cr);
+			servcliente.insertarCliente(c);
+			
 			model.addAttribute("exitoCliente", "Cliente añadido correctamente.");
 			model.addAttribute("cliente", new Cliente());
 
-			return "/inicio";
+			return "/registro/RegistroCliente";
 		} catch (Exception e) {
-
-			model.addAttribute("error", "Hubo un error al registrar el cliente. Por favor, intente nuevamente.");
+			System.out.println("Excepcion al insertar cliente/credenciales: " + e.getLocalizedMessage());
+			e.printStackTrace();
+			model.addAttribute("error", "Hubo un errrrrrrrror al registrar el cliente. Por favor, intente nuevamente.");
 			model.addAttribute("cliente", RegistroCliente);
+			return "/registro/RegistroCliente";
 		}
-
-		return "/registro/RegistroCliente";
 	}
 
 	@GetMapping("/Registro")

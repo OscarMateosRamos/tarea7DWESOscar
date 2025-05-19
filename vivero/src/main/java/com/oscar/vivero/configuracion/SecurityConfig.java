@@ -18,16 +18,16 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-               
-                .requestMatchers("/CSS/**", "/imagenes/**").permitAll()
-                .requestMatchers("/auth/**", "/cliente/Registro", "/plantas/plantasInvitado").permitAll()
-                .requestMatchers("/inicio", "/auth/leerlogin").permitAll() 
-                .requestMatchers("/plantas/plantasPersonal").hasRole("PERSONAL")
-                .requestMatchers("/clientes/**").hasRole("CLIENTE")
-                .requestMatchers("/personas/**", "/plantas/**").hasRole("ADMIN")
-                .requestMatchers("/mensajes/**", "/ejemplares/**").hasAnyRole("ADMIN", "PERSONAL")
-                .anyRequest().authenticated()  
-            )
+            	    .requestMatchers("/CSS/**", "/imagenes/**").permitAll()
+            	    .requestMatchers("/auth/**", "/cliente/Registro", "/cliente/CamposCliente", "/plantas/plantasInvitado").permitAll()
+            	    .requestMatchers("/inicio", "/auth/leerlogin").permitAll()
+            	    .requestMatchers("/plantas/plantasPersonal").hasRole("PERSONAL")
+            	    .requestMatchers("/clientes/**").hasRole("CLIENTE")
+            	    .requestMatchers("/personas/**", "/plantas/**").hasRole("ADMIN")
+            	    .requestMatchers("/mensajes/**", "/ejemplares/**").hasAnyRole("ADMIN", "PERSONAL")
+            	    .anyRequest().authenticated()
+            	)
+
             .formLogin(form -> form
                 .loginPage("/login")  
                 .loginProcessingUrl("/auth/leerlogin")  
