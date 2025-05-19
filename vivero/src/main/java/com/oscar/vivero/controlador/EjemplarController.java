@@ -44,7 +44,7 @@ public class EjemplarController {
 
 	@Autowired
 	PersonaRepository personarepo;
-	
+
 	@Autowired
 	PlantaRepository plantarepo;
 
@@ -61,7 +61,7 @@ public class EjemplarController {
 	@Autowired
 	Controlador controlador;
 
-
+	@Transactional
 	@PostMapping("/CamposEjemplar")
 	public String InsertarEjemplar(@ModelAttribute Ejemplar CrearEjemplar, Model model, HttpSession session) {
 
@@ -79,9 +79,9 @@ public class EjemplarController {
 				model.addAttribute("error", "La planta con el nombre " + codigoPlanta + " no fue encontrada.");
 				return "/personal/CrearEjemplar";
 			}
-			int numeroEjemplar =  ejemplarrepo.findAll().size()+1;
-			
-			String nuevoNombre = codigoPlanta.toUpperCase() + "_" +  numeroEjemplar;
+			int numeroEjemplar = ejemplarrepo.findAll().size() + 1;
+
+			String nuevoNombre = codigoPlanta.toUpperCase() + "_" + numeroEjemplar;
 			ej.setNombre(nuevoNombre);
 			System.out.println("nombre del ejemplar" + nuevoNombre);
 
@@ -114,16 +114,16 @@ public class EjemplarController {
 			ej.getMensajes().add(mensaje);
 
 			servEjemplar.insertarEjemplar(ej);
-			
+
 			Planta pl = new Planta();
-			pl=  servPlanta.buscarPlantaPorCodigo(codigoPlanta);
-			
-			Long existencias =  pl.getCantidadDisponible();
-			
-			pl.setCantidadDisponible(existencias+1);
-			
+			pl = servPlanta.buscarPlantaPorCodigo(codigoPlanta);
+
+			Long existencias = pl.getCantidadDisponible();
+
+			pl.setCantidadDisponible(existencias + 1);
+
 			servPlanta.modificarPlanta(pl);
-			model.addAttribute("exito", "Creado el Ejemplar: "+nuevoNombre);
+			model.addAttribute("exito", "Creado el Ejemplar: " + nuevoNombre);
 			return "/personal/CrearEjemplar";
 		} else {
 			model.addAttribute("error", "No existe el código de la planta.");

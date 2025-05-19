@@ -168,12 +168,30 @@ h1{
     }
     
     .mensaje-exito {
-    color: green;
+    color: red;
     font-weight: bold;
+	padding: 15px 20px;
+	   border-radius: 5px;
+	   margin-bottom: 20px;
+	   font-weight: bold;
+	   text-align: center;
+	   width: 100%;
+	   max-width: 500px;
+	   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	   font-size: 18px;
 }
 
 .mensaje-error {
     color: red;
     font-weight: bold;
+	padding: 15px 20px;
+	   border-radius: 5px;
+	   margin-bottom: 20px;
+	   font-weight: bold;
+	   text-align: center;
+	   width: 100%;
+	   max-width: 500px;
+	   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	   font-size: 18px;
 }
     
