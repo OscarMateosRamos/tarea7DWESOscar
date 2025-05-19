@@ -4,21 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/CSS/estiloslistadoMensajes.css}">
-    <title>Filtrar Mensajes por Código de Planta</title>
+    <title>Filtrar Mensajes por Persona</title>
 </head>
 <body>
     <header>
-        <h1>Filtrar mensajes por Código de Planta</h1>
+        <h1>Filtrar mensajes por Persona</h1>
     </header>
 
     <div class="container">
-        <form action="/mensajes/filtrarMensajesCodigoPlanta" method="get">
-            <label for="tipoPlanta">Tipo de Planta:</label>
-            <select id="tipoPlanta" name="tipoPlanta">
-                <option value="">Seleccione un tipo de planta</option>
-                <th:block th:each="codigo : ${tiposPlantas}">
-                    <option th:value="${codigo}" th:text="${codigo}"></option>
-                </th:block>
+        <form action="/mensajes/filtrarMensajesPersona" method="get">
+            <label for="idPersona">Selecciona una persona:</label>
+            <select id="idPersona" name="idPersona" required>
+                <option value="">Seleccione una persona</option>
+                <option th:each="persona : ${personas}"
+                        th:value="${persona.id}"
+                        th:text="${persona.nombre}"
+                        th:selected="${persona.id == idPersonaSeleccionada}">
+                </option>
             </select>
             <button type="submit">Filtrar</button>
         </form>
@@ -44,14 +46,14 @@
                         <td th:text="${#dates.format(mensaje.fechahora, 'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td th:text="${mensaje.mensaje}"></td>
                         <td th:text="${mensaje.ejemplar.nombre}"></td>
-                        <td th:text="${mensaje.persona.email}"></td>
+                        <td th:text="${mensaje.persona.nombre}"></td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
         <div th:if="${mensajes != null and mensajes.size() == 0}">
-            <p>No se encontraron mensajes para el tipo de planta seleccionado.</p>
+            <p>No se encontraron mensajes para la persona seleccionada.</p>
         </div>
 
         <div class="menu-container">

@@ -70,6 +70,8 @@ public class ServiciosPedido {
 
 	private List<Ejemplar> ejemplaresEnPedido = new ArrayList<>();
 
+	
+
 	public List<Ejemplar> getEjemplaresEnPedido() {
 		return ejemplaresEnPedido;
 	}
@@ -77,5 +79,8 @@ public class ServiciosPedido {
 	public void insertar(Pedido p) {
 		pedidorepo.saveAndFlush(p);
 	}
+	
+	
+	
 	
 }

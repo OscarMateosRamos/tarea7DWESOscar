@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.oscar.vivero.modelo.Mensaje;
 import com.oscar.vivero.repository.MensajeRepository;
 
-
 @Service
 public class ServiciosMensaje {
 	@Autowired
@@ -87,8 +86,8 @@ public class ServiciosMensaje {
 	}
 
 	@Transactional
-	public List<Mensaje> listamensajesPorCodigoPlanta(String codigo) {
-		List<Mensaje> mensajes = mensajerepo.mensajesPorCodigoPlanta(codigo);
+	public List<Mensaje> listamensajesPorCodigoPlanta(String tipoPlanta) {
+		List<Mensaje> mensajes = mensajerepo.mensajesPorCodigoPlanta(tipoPlanta);
 		return mensajes;
 
 	}
@@ -96,9 +95,7 @@ public class ServiciosMensaje {
 	@Transactional
 	public List<Mensaje> verMensajesRangoFechas(Date fechaInicio, Date fechaFin) {
 
-		return mensajerepo.findByFechahoraBetween(fechaInicio, fechaFin);
+		return mensajerepo.filtrarMensajePorFechas(fechaInicio, fechaFin);
 	}
-	
-	
 
 }

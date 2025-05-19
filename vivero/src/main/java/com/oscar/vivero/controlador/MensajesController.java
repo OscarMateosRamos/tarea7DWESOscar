@@ -119,18 +119,18 @@ public class MensajesController {
 	}
 
 	@GetMapping("/filtrarMensajesPorFecha")
-	public String filtrarMensajesPorFecha(@RequestParam(required = false) String fechaInicio,
-			@RequestParam(value = "fechaFin", required = false) String fechaFin, Model model) {
+	public String filtrarMensajesPorFecha(@RequestParam(name = "fechaInicio", required = false) String fechaInicio,
+			@RequestParam(name = "fechaFin", required = false) String fechaFin, Model model) {
 
+		// Validar que ambas fechas estén presentes
 		if (fechaInicio == null || fechaFin == null || fechaInicio.isEmpty() || fechaFin.isEmpty()) {
 			model.addAttribute("error", "Por favor, ingrese ambas fechas.");
 			return "/personal/FiltrarMensajePorFechas";
 		}
 
 		try {
-
+			// Convertir las fechas a formato SQL
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
 			LocalDate fechaInicioParsed = LocalDate.parse(fechaInicio, formatter);
 			LocalDate fechaFinParsed = LocalDate.parse(fechaFin, formatter);
 
@@ -145,49 +145,106 @@ public class MensajesController {
 				model.addAttribute("mensajes", mensajesFiltrados);
 			}
 
-			return "/personal/FiltrarMensajePorFechas";
-
 		} catch (DateTimeParseException e) {
-			model.addAttribute("error",
-					"Las fechas proporcionadas no tienen el formato correcto. Use el formato yyyy-MM-dd.");
-			return "/personal/FiltrarMensajePorFechas";
+			model.addAttribute("error", "Las fechas deben tener el formato yyyy-MM-dd.");
 		} catch (Exception e) {
-			model.addAttribute("error", "Ocurrió un error al procesar las fechas.");
-			return "/personal/FiltrarMensajePorFechas";
+			model.addAttribute("error", "Error al filtrar mensajes por fecha.");
 		}
+
+		return "/personal/FiltrarMensajePorFechas";
 	}
+
+	@GetMapping("/filtrarMensajesPersona")
+	public String filtrarMensajesPorPersona(@RequestParam(name = "idPersona", required = false) Long idPersona,
+			Model model) {
+
+		List<Persona> personas = servPersona.vertodasPersonas();
+		model.addAttribute("personas", personas);
+
+		if (idPersona == null) {
+			model.addAttribute("error", "Por favor, seleccione una persona.");
+			return "/personal/filtrarMensajePersona";
+		}
+
+		List<Mensaje> mensajes = servMensaje.listamensajesPorIdPersona(idPersona);
+		model.addAttribute("mensajes", mensajes);
+		model.addAttribute("idPersonaSeleccionada", idPersona);
+
+		return "/personal/filtrarMensajePersona";
+	}
+
+//	@GetMapping("/filtrarMensajesPorFecha")
+//	public String filtrarMensajesPorFecha(@RequestParam(required = false) String fechaInicio,
+//			@RequestParam(value = "fechaFin", required = false)  fechaFin, Model model) {
+//			
+//		System.out.println("Fecha Inicio:"+fechaInicio);
+//		System.out.println("Fecha fin:"+fechaFin);
+//		if (fechaInicio == null || fechaFin == null || fechaInicio.isEmpty() || fechaFin.isEmpty()) {
+//			model.addAttribute("error", "Por favor, ingrese ambas fechas.");
+//			return "/personal/FiltrarMensajePorFechas";
+//		}
+//
+//		try {
+//
+//			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//
+//			LocalDate fechaInicioParsed = LocalDate.parse(fechaInicio, formatter);
+//			LocalDate fechaFinParsed = LocalDate.parse(fechaFin, formatter);
+//
+//			Date startDate = Date.valueOf(fechaInicioParsed);
+//			Date endDate = Date.valueOf(fechaFinParsed);
+//
+//			List<Mensaje> mensajesFiltrados = servMensaje.verMensajesRangoFechas(startDate, endDate);
+//
+//			if (mensajesFiltrados.isEmpty()) {
+//				model.addAttribute("error", "No se encontraron mensajes en el rango de fechas proporcionado.");
+//			} else {
+//				model.addAttribute("mensajes", mensajesFiltrados);
+//			}
+//
+//			return "/personal/FiltrarMensajePorFechas";
+//
+//		} catch (DateTimeParseException e) {
+//			model.addAttribute("error",
+//					"Las fechas proporcionadas no tienen el formato correcto. Use el formato yyyy-MM-dd.");
+//			return "/personal/FiltrarMensajePorFechas";
+//		} catch (Exception e) {
+//			model.addAttribute("error", "Ocurrió un error al procesar las fechas.");
+//			return "/personal/FiltrarMensajePorFechas";
+//		}
+//	}
 
 	@GetMapping("/filtrarMensajesCodigoPlanta")
 	public String filtrarMensajesPorCodigoPlanta(
-	        @RequestParam(value = "tipoPlanta", required = false) String tipoPlanta, Model model) {
-	    try {
-	        
-	        List<String> codigosPlantas = servPlanta.listarCodigosDePlanta();
-	        model.addAttribute("tiposPlantas", codigosPlantas);
+			@RequestParam(value = "tipoPlanta", required = false) String tipoPlanta, Model model) {
+		try {
 
-	        
-	        if (tipoPlanta == null || tipoPlanta.isEmpty()) {
-	            model.addAttribute("error", "Por favor, seleccione un tipo de planta.");
-	            return "/personal/FiltrarMensajeTipoPlanta";
-	        }
+			System.out.println("Tipo Planta: " + tipoPlanta);
+			List<String> codigosPlantas = servPlanta.listarCodigosDePlanta();
+			model.addAttribute("tiposPlantas", codigosPlantas);
 
-	        
-	        List<Mensaje> mensajesFiltrados = servMensaje.listamensajesPorCodigoPlanta(tipoPlanta);
+			if (tipoPlanta == null || tipoPlanta.isEmpty()) {
+				model.addAttribute("error", "Por favor, seleccione un tipo de planta.");
+				return "/personal/FiltrarMensajeTipoPlanta";
+			}
+			System.out.println("Tipo Planta: ****" + tipoPlanta);
+			List<Mensaje> mensajesFiltrados = servMensaje.listamensajesPorCodigoPlanta(tipoPlanta);
+			System.out.println("Tipo Planta: ************" + tipoPlanta);
+			if (mensajesFiltrados.isEmpty()) {
+				System.out.println("No hay mensajes");
+				model.addAttribute("error", "No se encontraron mensajes para el tipo de planta seleccionado.");
+			} else {
+				System.out.println("Si  hay mensajes");
+				model.addAttribute("mensajes", mensajesFiltrados);
+			}
 
-	        if (mensajesFiltrados.isEmpty()) {
-	            model.addAttribute("error", "No se encontraron mensajes para el tipo de planta seleccionado.");
-	        } else {
-	            model.addAttribute("mensajes", mensajesFiltrados);
-	        }
+			return "/personal/FiltrarMensajeTipoPlanta";
 
-	        return "/personal/FiltrarMensajeTipoPlanta"; 
-
-	    } catch (Exception e) {
-	        model.addAttribute("error", "Ocurrió un error al filtrar los mensajes.");
-	        return "/personal/FiltrarMensajeTipoPlanta"; 
-	    }
+		} catch (Exception e) {
+			model.addAttribute("error", "Ocurrió un error al filtrar los mensajes.");
+			return "/personal/FiltrarMensajeTipoPlanta";
+		}
 	}
-
 
 	@GetMapping("GestiondeMensajes")
 	public String GestiondePlantas() {
