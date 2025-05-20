@@ -29,7 +29,8 @@
 					<td th:text="${mensaje.fechahora}"></td>
                     <td th:text="${mensaje.mensaje}"></td>
 					<td th:text="${mensaje.ejemplar.nombre}"></td>
-                    <td th:text="${mensaje.persona.email}"></td>
+					<td th:if="${mensaje.persona != null}" th:text="${mensaje.persona.nombre}"></td>
+
 
 				</tr>
 				</tbody>

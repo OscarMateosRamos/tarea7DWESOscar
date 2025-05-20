@@ -38,7 +38,7 @@
                     <th>ID Ejemplar</th>
                     <th>Nombre Ejemplar</th>
                     <th>ID Persona</th>
-                    <th>Nombre Persona</th>
+                    <th>Persona</th>
                 </tr>
             </thead>
             <tbody>
@@ -49,7 +49,7 @@
                     <td th:text="${mensaje.ejemplar.id}"></td>
                     <td th:text="${mensaje.ejemplar.nombre}"></td>
                     <td th:text="${mensaje.persona.id}"></td>
-                    <td th:text="${mensaje.persona.email}"></td>
+					<td th:if="${mensaje.persona != null}" th:text="${mensaje.persona.nombre}"></td>
                 </tr>
             </tbody>
         </table>

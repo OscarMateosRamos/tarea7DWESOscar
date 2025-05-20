@@ -1,6 +1,5 @@
 package com.oscar.vivero.controlador;
 
-import java.security.Timestamp;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.oscar.vivero.modelo.Ejemplar;
 import com.oscar.vivero.modelo.Mensaje;
@@ -62,7 +62,7 @@ public class MensajesController {
 
 	@PostMapping("/CamposMensaje")
 	public String InsertarMensaje(@RequestParam("id") Long id, @RequestParam("mensaje") String mensaje, Model model,
-			HttpSession session) {
+			HttpSession session, RedirectAttributes redirectAttributes) {
 
 		String usuario = (String) session.getAttribute("usuario");
 
@@ -105,8 +105,9 @@ public class MensajesController {
 
 		servMensaje.insertar(m);
 
-		model.addAttribute("exito", "Mensaje insertado exitosamente.");
-		return "/personal/CrearMensaje";
+		redirectAttributes.addFlashAttribute("exito", "Mensaje insertado exitosamente.");
+
+		return "redirect:/mensajes/mostrarCrearMensajes";
 	}
 
 	@GetMapping("/mensajes")

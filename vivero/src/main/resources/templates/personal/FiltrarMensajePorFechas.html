@@ -48,7 +48,7 @@
                         <td th:text="${#dates.format(mensaje.fechahora, 'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td th:text="${mensaje.mensaje}"></td>
                         <td th:text="${mensaje.ejemplar.nombre}"></td>
-                        <td th:text="${mensaje.persona.nombre}"></td>
+						<td th:if="${mensaje.persona != null}" th:text="${mensaje.persona.nombre}"></td>
                     </tr>
                 </tbody>
             </table>
