@@ -182,24 +182,30 @@ public class EjemplarController {
 //	seguido del nº de mensajes asociados al mismo y la fecha/hora del último de éstos.
 
 	@GetMapping("/ejemplaresTipoPlanta")
-	public String listarEjemplaresTipoPlanta(@RequestParam(name = "codigo", required = false) List<String> codigo,
+	public String listarEjemplaresTipoPlanta(@RequestParam(name = "codigo[]", required = false) String[] codigo,
 	                                          Model model) {
 	    // Obtener todas las plantas disponibles
 	    List<Planta> plantas = servPlanta.vertodasPlantas();
 	    model.addAttribute("plantas", plantas);
 
-	    // Si se seleccionaron dos códigos de planta, filtramos los ejemplares por los dos códigos
-	    if (codigo != null && codigo.size() == 2) {
-	        // Filtrar los ejemplares por los dos códigos seleccionados
-	        List<Ejemplar> ejemplares = servEjemplar.listaejemplaresPorTipoPlanta(codigo);
-
-	        // Agregar los ejemplares filtrados al modelo
-	        model.addAttribute("ejemplares", ejemplares);
-	    } else {
-	        // Si no se seleccionaron exactamente dos códigos de planta, mostramos todos los ejemplares
-	        List<Ejemplar> ejemplares = servEjemplar.vertodosEjemplares();
-	        model.addAttribute("ejemplares", ejemplares);
+	 //   String[] codigos = codigo.toString().split(",");
+	    for(String c: codigo) {
+	    	
 	    }
+	    
+	    
+//	    // Si se seleccionaron dos códigos de planta, filtramos los ejemplares por los dos códigos
+//	    if (codigo != null && codigo.size() == 2) {
+//	        // Filtrar los ejemplares por los dos códigos seleccionados
+//	        List<Ejemplar> ejemplares = servEjemplar.listaejemplaresPorTipoPlanta(codigo);
+//
+//	        // Agregar los ejemplares filtrados al modelo
+//	        model.addAttribute("ejemplares", ejemplares);
+//	    } else {
+//	        // Si no se seleccionaron exactamente dos códigos de planta, mostramos todos los ejemplares
+//	        List<Ejemplar> ejemplares = servEjemplar.vertodosEjemplares();
+//	        model.addAttribute("ejemplares", ejemplares);
+//	    }
 
 	    model.addAttribute("codigoPlanta", codigo);
 	    return "/personal/listadoEjemplaresTipoPlanta";  

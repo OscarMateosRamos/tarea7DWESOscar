@@ -40,8 +40,8 @@ public class ServiciosEjemplar {
 	}
 
 	@Transactional
-	public List<Ejemplar> listaejemplaresPorTipoPlanta(List<String> codigos) {
-	    return ejemplarrepo.ejemplaresPorTiposPlanta(codigos);
+	public List<Ejemplar> listaejemplaresPorTipoPlanta(String codigo) {
+	    return ejemplarrepo.ejemplaresPorTipoPlanta(codigo);
 	}
 
 

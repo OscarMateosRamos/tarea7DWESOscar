@@ -19,7 +19,7 @@
         <div>
             <label for="codigoPlanta">Selecciona uno o dos códigos de planta:</label>
             <!-- Campo de selección múltiple para seleccionar 1 o más códigos -->
-            <select id="codigoPlanta" name="codigo" multiple size="6">
+            <select id="codigoPlanta" name="codigo[]" multiple size="6">
                 <option disabled>-- Selecciona códigos --</option>
                 <option th:each="planta : ${plantas}" 
                         th:value="${planta.codigo}" 
