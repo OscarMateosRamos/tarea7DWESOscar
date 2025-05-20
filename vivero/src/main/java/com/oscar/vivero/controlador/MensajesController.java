@@ -1,7 +1,10 @@
 package com.oscar.vivero.controlador;
 
+import java.security.Timestamp;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -58,8 +61,8 @@ public class MensajesController {
 	}
 
 	@PostMapping("/CamposMensaje")
-	public String InsertarMensaje(@RequestParam("id") Long id, @RequestParam("mensaje") String mensaje,
-			@RequestParam("fechahora") String fechahora, Model model, HttpSession session) {
+	public String InsertarMensaje(@RequestParam("id") Long id, @RequestParam("mensaje") String mensaje, Model model,
+			HttpSession session) {
 
 		String usuario = (String) session.getAttribute("usuario");
 
@@ -91,13 +94,8 @@ public class MensajesController {
 			return "/personal/CrearMensaje";
 		}
 
-		Date fechaHoraDate;
-		try {
-			fechaHoraDate = Date.valueOf(fechahora);
-		} catch (IllegalArgumentException e) {
-			model.addAttribute("error", "Fecha no válida, debe ser en formato yyyy-MM-dd.");
-			return "/personal/CrearMensaje";
-		}
+		LocalDateTime localDateTime = LocalDateTime.now();
+		java.util.Date fechaHoraDate = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
 
 		Mensaje m = new Mensaje();
 		m.setFechahora(fechaHoraDate);
@@ -122,14 +120,13 @@ public class MensajesController {
 	public String filtrarMensajesPorFecha(@RequestParam(name = "fechaInicio", required = false) String fechaInicio,
 			@RequestParam(name = "fechaFin", required = false) String fechaFin, Model model) {
 
-		// Validar que ambas fechas estén presentes
 		if (fechaInicio == null || fechaFin == null || fechaInicio.isEmpty() || fechaFin.isEmpty()) {
 			model.addAttribute("error", "Por favor, ingrese ambas fechas.");
 			return "/personal/FiltrarMensajePorFechas";
 		}
 
 		try {
-			// Convertir las fechas a formato SQL
+
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			LocalDate fechaInicioParsed = LocalDate.parse(fechaInicio, formatter);
 			LocalDate fechaFinParsed = LocalDate.parse(fechaFin, formatter);

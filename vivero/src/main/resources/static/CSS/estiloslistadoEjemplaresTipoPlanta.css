@@ -17,7 +17,7 @@ body {
 
 /* Estilos para el header */
 header {
-    background-color: rgba(51, 51, 51, 0.8); /* Agregado opacidad para un efecto más suave */
+    background-color: rgba(51, 51, 51, 0.8); /* Fondo con opacidad */
     color: white;
     text-align: center;
     padding: 20px;
@@ -27,43 +27,34 @@ header {
     top: 0; 
     left: 0;
     right: 0;
-    z-index: 1; /* Asegura que el header esté por encima de otros elementos */
+    z-index: 1;
 }
 
 h1 {
     margin: 0;
-    font-size: 28px; /* Aumentar tamaño de texto del header */
+    font-size: 28px;
 }
 
-/* Estilos para el contenedor principal */
+/* Contenedor principal */
 .container {
     text-align: center;
-    margin-top: 150px; /* Ajuste de margen para dejar espacio entre el header y el contenido */
+    margin-top: 150px;
     width: 80%;
 }
 
 /* Estilos para el formulario de filtro */
-.filter-form {
+form {
     margin-bottom: 30px;
 }
 
-.filter-form label {
+form label {
     margin-right: 10px;
     font-size: 18px;
     font-weight: bold;
     color: #333;
 }
 
-.filter-form select {
-    padding: 8px;
-    font-size: 16px;
-    margin-right: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    width: 200px; /* Ajustar el ancho */
-}
-
-.filter-form button {
+form button {
     padding: 10px 20px;
     font-size: 18px;
     background-color: #4CAF50;
@@ -71,11 +62,31 @@ h1 {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease; /* Transición para el cambio de color */
+    transition: background-color 0.3s ease;
 }
 
-.filter-form button:hover {
+form button:hover {
     background-color: #45a049;
+}
+
+/* Grupo de checkboxes (flexbox en columnas) */
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px 30px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+.checkbox-group div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 /* Estilos para la tabla */
@@ -85,8 +96,8 @@ table {
     border-collapse: collapse;
     background-color: #fff;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px; /* Bordes redondeados */
-    overflow: hidden; /* Asegura que los bordes redondeados sean visibles */
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 th, td {
@@ -112,10 +123,11 @@ tr:nth-child(even) {
 }
 
 tr:hover {
-    background-color: #e2e2e2;
+    background-color: #d0e6d0;
+    transition: background-color 0.3s ease;
 }
 
-/* Estilos para el botón de volver */
+/* Botón de volver */
 .boton-container {
     margin-top: 30px;
 }
@@ -133,4 +145,3 @@ tr:hover {
 .boton:hover {
     background-color: #444;
 }
-

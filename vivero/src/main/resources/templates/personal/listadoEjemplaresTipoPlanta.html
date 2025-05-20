@@ -2,7 +2,6 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listado de Ejemplares por Tipo de Planta</title>
     <link rel="stylesheet" type="text/css" href="/CSS/estiloslistadoEjemplaresTipoPlanta.css">
 </head>
@@ -14,37 +13,35 @@
 
 <div class="container">
 
-    <!-- Formulario para Filtrar por Código de Planta -->
     <form th:action="@{/ejemplares/ejemplaresTipoPlanta}" method="get">
-        <div>
-            <label for="codigoPlanta">Selecciona uno o dos códigos de planta:</label>
-            <!-- Campo de selección múltiple para seleccionar 1 o más códigos -->
-            <select id="codigoPlanta" name="codigo[]" multiple size="6">
-                <option disabled>-- Selecciona códigos --</option>
-                <option th:each="planta : ${plantas}" 
-                        th:value="${planta.codigo}" 
-                        th:text="${planta.codigo}"
-                        th:selected="${codigoPlanta != null and #lists.contains(codigoPlanta, planta.codigo)}">
-                </option>
-            </select>
-            
-            <!-- Mostrar el botón de filtrado -->
-            <button type="submit">Filtrar</button>
+        <label>Selecciona uno o más tipos de planta:</label>
+
+        <div class="checkbox-group">
+            <div th:each="planta : ${plantas}">
+                <input type="checkbox"
+                       name="codigo"
+                       th:id="'codigo_' + ${planta.codigo}"
+                       th:value="${planta.codigo}"
+                       th:checked="${codigoSeleccionado != null and codigoSeleccionado.contains(planta.codigo)}" />
+                <label th:for="'codigo_' + ${planta.codigo}" th:text="${planta.codigo}"></label>
+            </div>
         </div>
+
+        <button type="submit">Filtrar</button>
     </form>
 
-    <!-- Mensaje de filtro -->
-    <div th:if="${mensajeFiltro != null}" style="margin-top: 1rem; font-weight: bold;">
+    <div th:if="${mensajeFiltro != null}" class="mensaje-filtro">
         <p th:text="${mensajeFiltro}"></p>
     </div>
 
-    <!-- Tabla de Ejemplares -->
-    <table>
+    <table th:if="${ejemplares != null and !ejemplares.isEmpty()}">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
                 <th>Código de Planta</th>
+                <th>Número de Mensajes</th> 
+                <th>Última Fecha de Mensaje</th> 
             </tr>
         </thead>
         <tbody>
@@ -52,11 +49,16 @@
                 <td th:text="${ejemplar.id}">ID</td>
                 <td th:text="${ejemplar.nombre}">Nombre</td>
                 <td th:text="${ejemplar.planta.codigo}">Código</td>
+                
+               
+                <td th:text="${mensajeCounts[ejemplar.id]}">Número de Mensajes</td>
+
+               
+                <td th:text="${#dates.format(ultimaFechaMensaje[ejemplar.id], 'yyyy-MM-dd HH:mm:ss')}">Última Fecha de Mensaje</td>
             </tr>
         </tbody>
     </table>
 
-    <!-- Botón para volver a la gestión de ejemplares -->
     <div class="boton-container">
         <a href="/ejemplares/GestiondeEjemplares" class="boton">Volver a Gestión de Ejemplares</a>
     </div>

@@ -13,6 +13,8 @@ import com.oscar.vivero.modelo.Planta;
 
 @Repository
 public interface EjemplarRepository extends JpaRepository<Ejemplar, Long> {
+	
+	List<Ejemplar> findByPlantaCodigoIn(List<String> codigos);
 
 	@Query("SELECT e FROM Ejemplar e WHERE e.planta.codigo = :codigo")
 	List<Ejemplar> ejemplaresPorTipoPlanta(@Param("codigo") String codigo);
@@ -32,4 +34,5 @@ public interface EjemplarRepository extends JpaRepository<Ejemplar, Long> {
 
 	long countByPlantaAndDisponible(Planta planta, boolean b);
 
+	List<Ejemplar> findByPlantaCodigo(String codigo);
 }

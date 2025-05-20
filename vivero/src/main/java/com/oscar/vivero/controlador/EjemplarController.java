@@ -3,7 +3,10 @@ package com.oscar.vivero.controlador;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -175,43 +178,80 @@ public class EjemplarController {
 		return "/personal/CrearEjemplar";
 	}
 
-///CORREGIR
-//	Se ha implementado el CU5B: Filtrar ejemplares por tipo de planta. Un usuario 
-//	autenticado podrá filtrar los datos de los ejemplares de uno o de varios tipos de plantas elegidos. Se le 
-//	mostrarán todos los ejemplares de esos tipos mostrados en una tabla con el nombre del ejemplar 
-//	seguido del nº de mensajes asociados al mismo y la fecha/hora del último de éstos.
-
 	@GetMapping("/ejemplaresTipoPlanta")
-	public String listarEjemplaresTipoPlanta(@RequestParam(name = "codigo[]", required = false) String[] codigo,
-	                                          Model model) {
-	    // Obtener todas las plantas disponibles
+	public String listarEjemplaresTipoPlanta(@RequestParam(name = "codigo", required = false) List<String> codigos,
+	                                         Model model) {
 	    List<Planta> plantas = servPlanta.vertodasPlantas();
 	    model.addAttribute("plantas", plantas);
+	    model.addAttribute("codigoSeleccionado", codigos);
 
-	 //   String[] codigos = codigo.toString().split(",");
-	    for(String c: codigo) {
-	    	
+	    List<Ejemplar> ejemplaresFiltrados = new ArrayList<>();
+	    Map<Long, Integer> mensajeCounts = new HashMap<>();
+	    Map<Long, Date> ultimaFechaMensaje = new HashMap<>();
+
+	    if (codigos != null && !codigos.isEmpty()) {
+	        ejemplaresFiltrados = servEjemplar.findByPlantaCodigos(codigos);
+
+	        for (Ejemplar ej : ejemplaresFiltrados) {
+	            List<Mensaje> mensajes = servMensaje.verPorIdEjemplar(ej.getId());
+	            mensajeCounts.put(ej.getId(), mensajes.size());
+
+	            // Convertir Timestamp a Date y obtener la última fecha de mensaje
+	            mensajes.stream()
+	                    .map(Mensaje::getFechahora)  // Esto devuelve un Timestamp
+	                    .map(timestamp -> new Date(timestamp.getTime()))  // Convertir a Date
+	                    .max(Date::compareTo)  // Comparar las fechas
+	                    .ifPresent(fecha -> ultimaFechaMensaje.put(ej.getId(), fecha));
+	        }
 	    }
-	    
-	    
-//	    // Si se seleccionaron dos códigos de planta, filtramos los ejemplares por los dos códigos
-//	    if (codigo != null && codigo.size() == 2) {
-//	        // Filtrar los ejemplares por los dos códigos seleccionados
-//	        List<Ejemplar> ejemplares = servEjemplar.listaejemplaresPorTipoPlanta(codigo);
-//
-//	        // Agregar los ejemplares filtrados al modelo
-//	        model.addAttribute("ejemplares", ejemplares);
-//	    } else {
-//	        // Si no se seleccionaron exactamente dos códigos de planta, mostramos todos los ejemplares
-//	        List<Ejemplar> ejemplares = servEjemplar.vertodosEjemplares();
-//	        model.addAttribute("ejemplares", ejemplares);
-//	    }
 
-	    model.addAttribute("codigoPlanta", codigo);
-	    return "/personal/listadoEjemplaresTipoPlanta";  
+	    model.addAttribute("ejemplares", ejemplaresFiltrados);
+	    model.addAttribute("mensajeCounts", mensajeCounts);
+	    model.addAttribute("ultimaFechaMensaje", ultimaFechaMensaje);
+
+	    if (ejemplaresFiltrados.isEmpty() && codigos != null && !codigos.isEmpty()) {
+	        model.addAttribute("mensajeFiltro", "No se encontraron ejemplares para los tipos de planta seleccionados.");
+	    }
+
+	    return "/personal/listadoEjemplaresTipoPlanta";
 	}
 
 
+/////CORREGIR
+////	Se ha implementado el CU5B: Filtrar ejemplares por tipo de planta. Un usuario 
+////	autenticado podrá filtrar los datos de los ejemplares de uno o de varios tipos de plantas elegidos. Se le 
+////	mostrarán todos los ejemplares de esos tipos mostrados en una tabla con el nombre del ejemplar 
+////	seguido del nº de mensajes asociados al mismo y la fecha/hora del último de éstos.
+//
+//	@GetMapping("/ejemplaresTipoPlanta")
+//	public String listarEjemplaresTipoPlanta(@RequestParam(name = "codigo[]", required = false) String[] codigo,
+//	                                          Model model) {
+//	    // Obtener todas las plantas disponibles
+//	    List<Planta> plantas = servPlanta.vertodasPlantas();
+//	    model.addAttribute("plantas", plantas);
+//
+//	 //   String[] codigos = codigo.toString().split(",");
+//	    for(String c: codigo) {
+//	    	
+//	    }
+//	    
+//	    
+////	    // Si se seleccionaron dos códigos de planta, filtramos los ejemplares por los dos códigos
+////	    if (codigo != null && codigo.size() == 2) {
+////	        // Filtrar los ejemplares por los dos códigos seleccionados
+////	        List<Ejemplar> ejemplares = servEjemplar.listaejemplaresPorTipoPlanta(codigo);
+////
+////	        // Agregar los ejemplares filtrados al modelo
+////	        model.addAttribute("ejemplares", ejemplares);
+////	    } else {
+////	        // Si no se seleccionaron exactamente dos códigos de planta, mostramos todos los ejemplares
+////	        List<Ejemplar> ejemplares = servEjemplar.vertodosEjemplares();
+////	        model.addAttribute("ejemplares", ejemplares);
+////	    }
+//
+//	    model.addAttribute("codigoPlanta", codigo);
+//	    return "/personal/listadoEjemplaresTipoPlanta";  
+//	}
 
 	@GetMapping("/verMensajesEjemplar")
 	@Transactional

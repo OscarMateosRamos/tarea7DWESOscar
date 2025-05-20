@@ -98,4 +98,9 @@ public class ServiciosMensaje {
 		return mensajerepo.findByFechahoraBetween(fechaInicio, fechaFin);
 	}
 
+	public List<Mensaje> verPorIdEjemplar(Long id) {
+
+		return mensajerepo.findByEjemplarId(id);
+	}
+
 }

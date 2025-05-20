@@ -1,6 +1,5 @@
 package com.oscar.vivero.servicio;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,9 +40,8 @@ public class ServiciosEjemplar {
 
 	@Transactional
 	public List<Ejemplar> listaejemplaresPorTipoPlanta(String codigo) {
-	    return ejemplarrepo.ejemplaresPorTipoPlanta(codigo);
+		return ejemplarrepo.ejemplaresPorTipoPlanta(codigo);
 	}
-
 
 	@Transactional
 	public void modificarEjemplar(Ejemplar ej) {
@@ -109,5 +107,12 @@ public class ServiciosEjemplar {
 		return ejemplarrepo.findAll();
 	}
 
-	
+//	public List<Ejemplar> BuscarPorCodigoPlanta(String codigo) {
+//		return ejemplarrepo.findByPlantaCodigo(codigo);
+//	}
+
+	public List<Ejemplar> findByPlantaCodigos(List<String> codigos) {
+        return ejemplarrepo.findByPlantaCodigoIn(codigos);
+    }
+
 }
