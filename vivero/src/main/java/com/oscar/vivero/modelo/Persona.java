@@ -21,7 +21,8 @@ public class Persona {
 	@Column(name = "email")
 	private String email;
 
-	@OneToMany(mappedBy = "persona", cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "idpersona")
 	private List<Mensaje> mensajes;
 
 	@OneToOne(cascade = CascadeType.ALL)

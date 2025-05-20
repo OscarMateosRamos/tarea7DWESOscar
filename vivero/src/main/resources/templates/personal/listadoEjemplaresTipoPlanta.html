@@ -1,58 +1,66 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" type="text/css"
-	href="/CSS/estiloslistadoEjemplaresTipoPlanta.css">
-<title>Listado de Ejemplares por Tipo de Planta</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Ejemplares por Tipo de Planta</title>
+    <link rel="stylesheet" type="text/css" href="/CSS/estiloslistadoEjemplaresTipoPlanta.css">
 </head>
 <body>
 
-	<header>
-		<h1>*Listado de Ejemplares por Tipo de Planta*</h1>
-	</header>
+<header>
+    <h1>Listado de Ejemplares por Tipo de Planta</h1>
+</header>
 
-	<div class="container">
+<div class="container">
 
+    <!-- Formulario para Filtrar por Código de Planta -->
+    <form th:action="@{/ejemplares/ejemplaresTipoPlanta}" method="get">
+        <div>
+            <label for="codigoPlanta">Selecciona uno o dos códigos de planta:</label>
+            <!-- Campo de selección múltiple para seleccionar 1 o más códigos -->
+            <select id="codigoPlanta" name="codigo" multiple size="6">
+                <option disabled>-- Selecciona códigos --</option>
+                <option th:each="planta : ${plantas}" 
+                        th:value="${planta.codigo}" 
+                        th:text="${planta.codigo}"
+                        th:selected="${codigoPlanta != null and #lists.contains(codigoPlanta, planta.codigo)}">
+                </option>
+            </select>
+            
+            <!-- Mostrar el botón de filtrado -->
+            <button type="submit">Filtrar</button>
+        </div>
+    </form>
 
-		<form th:action="@{/ejemplares/ejemplaresTipoPlanta}" method="get">
-			<div>
-				<label for="codigoPlanta">Filtrar por código de planta:</label> <select
-					id="codigoPlanta" name="codigo">
+    <!-- Mensaje de filtro -->
+    <div th:if="${mensajeFiltro != null}" style="margin-top: 1rem; font-weight: bold;">
+        <p th:text="${mensajeFiltro}"></p>
+    </div>
 
-					<option value="" th:selected="${codigoPlanta == null}">Seleccionar
-						código</option>
+    <!-- Tabla de Ejemplares -->
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Código de Planta</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="ejemplar : ${ejemplares}">
+                <td th:text="${ejemplar.id}">ID</td>
+                <td th:text="${ejemplar.nombre}">Nombre</td>
+                <td th:text="${ejemplar.planta.codigo}">Código</td>
+            </tr>
+        </tbody>
+    </table>
 
-					<option th:each="planta : ${plantas}" th:value="${planta.codigo}"
-						th:text="${planta.codigo}"></option>
-				</select>
-				<button type="submit">Filtrar</button>
-			</div>
-		</form>
+    <!-- Botón para volver a la gestión de ejemplares -->
+    <div class="boton-container">
+        <a href="/ejemplares/GestiondeEjemplares" class="boton">Volver a Gestión de Ejemplares</a>
+    </div>
+</div>
 
-
-		<table>
-			<thead>
-				<tr>
-					<th>Id</th>
-					<th>Nombre</th>
-					<th>Planta</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="ejemplar : ${ejemplares}">
-					<td th:text="${ejemplar.id}"></td>
-					<td th:text="${ejemplar.nombre}"></td>
-					<td th:text="${ejemplar.planta.codigo}"></td>
-				</tr>
-			</tbody>
-		</table>
-
-		<div class="boton-container">
-			<a href="/ejemplares/GestiondeEjemplares" class="boton">Volver a Gestion de
-				Ejemplares</a>
-		</div>
-	</div>
 </body>
 </html>

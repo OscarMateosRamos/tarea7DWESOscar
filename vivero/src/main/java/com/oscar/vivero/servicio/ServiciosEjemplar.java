@@ -1,7 +1,6 @@
 package com.oscar.vivero.servicio;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,13 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.oscar.vivero.modelo.Ejemplar;
-import com.oscar.vivero.modelo.Mensaje;
-import com.oscar.vivero.modelo.Persona;
-import com.oscar.vivero.modelo.Planta;
 import com.oscar.vivero.repository.EjemplarRepository;
 import com.oscar.vivero.repository.PlantaRepository;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -45,9 +40,10 @@ public class ServiciosEjemplar {
 	}
 
 	@Transactional
-	public List<Ejemplar> listaejemplaresPorTipoPlanta(String codigo) {
-		return ejemplarrepo.ejemplaresPorTipoPlanta(codigo);
+	public List<Ejemplar> listaejemplaresPorTipoPlanta(List<String> codigos) {
+	    return ejemplarrepo.ejemplaresPorTiposPlanta(codigos);
 	}
+
 
 	@Transactional
 	public void modificarEjemplar(Ejemplar ej) {
@@ -112,4 +108,6 @@ public class ServiciosEjemplar {
 
 		return ejemplarrepo.findAll();
 	}
+
+	
 }

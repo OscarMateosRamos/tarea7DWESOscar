@@ -1,4 +1,4 @@
-
+/* Estilos para el body */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -14,8 +14,10 @@ body {
     background-size: cover;
     background-position: center;
 }
+
+/* Estilos para el header */
 header {
-    background-color: #333;
+    background-color: rgba(51, 51, 51, 0.8); /* Agregado opacidad para un efecto más suave */
     color: white;
     text-align: center;
     padding: 20px;
@@ -25,62 +27,70 @@ header {
     top: 0; 
     left: 0;
     right: 0;
+    z-index: 1; /* Asegura que el header esté por encima de otros elementos */
 }
-
 
 h1 {
     margin: 0;
+    font-size: 28px; /* Aumentar tamaño de texto del header */
 }
 
-
+/* Estilos para el contenedor principal */
 .container {
     text-align: center;
-    margin-top: 100px; 
+    margin-top: 150px; /* Ajuste de margen para dejar espacio entre el header y el contenido */
     width: 80%;
 }
 
-
-
+/* Estilos para el formulario de filtro */
 .filter-form {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 .filter-form label {
     margin-right: 10px;
-    font-size: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
 }
 
 .filter-form select {
-    padding: 5px;
+    padding: 8px;
     font-size: 16px;
     margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 200px; /* Ajustar el ancho */
 }
 
 .filter-form button {
     padding: 10px 20px;
-    font-size: 20px;
+    font-size: 18px;
     background-color: #4CAF50;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease; /* Transición para el cambio de color */
 }
 
 .filter-form button:hover {
     background-color: #45a049;
 }
 
-
+/* Estilos para la tabla */
 table {
-    width: 70%;
+    width: 80%;
     margin: 20px auto;
     border-collapse: collapse;
     background-color: #fff;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px; /* Bordes redondeados */
+    overflow: hidden; /* Asegura que los bordes redondeados sean visibles */
 }
 
 th, td {
-    padding: 12px;
+    padding: 15px;
     text-align: left;
     border: 1px solid #ddd;
 }
@@ -88,6 +98,13 @@ th, td {
 th {
     background-color: #333;
     color: white;
+    font-size: 18px;
+}
+
+td {
+    background-color: #fafafa;
+    font-size: 16px;
+    color: #333;
 }
 
 tr:nth-child(even) {
@@ -95,29 +112,25 @@ tr:nth-child(even) {
 }
 
 tr:hover {
-    background-color: #e2e2e2; 
+    background-color: #e2e2e2;
 }
 
-
+/* Estilos para el botón de volver */
 .boton-container {
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 .boton {
     background-color: #333;
     color: white;
-    padding: 10px 20px;
+    padding: 12px 25px;
     text-decoration: none;
     border-radius: 5px;
     font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 .boton:hover {
     background-color: #444;
 }
 
-
-table td {
-    color: #333;
-    background-color: white;
-}

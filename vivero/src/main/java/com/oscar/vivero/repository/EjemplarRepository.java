@@ -14,8 +14,8 @@ import com.oscar.vivero.modelo.Planta;
 @Repository
 public interface EjemplarRepository extends JpaRepository<Ejemplar, Long> {
 
-	@Query("SELECT e FROM Ejemplar e WHERE e.planta.codigo = :codigoPlanta")
-	List<Ejemplar> ejemplaresPorTipoPlanta(@Param("codigoPlanta") String codigoPlanta);
+	@Query("SELECT e FROM Ejemplar e WHERE e.planta.codigo = :codigo")
+	List<Ejemplar> ejemplaresPorTipoPlanta(@Param("codigo") String codigo);
 
 	Optional<Ejemplar> findByNombre(String nombre);
 
@@ -25,14 +25,11 @@ public interface EjemplarRepository extends JpaRepository<Ejemplar, Long> {
 	Ejemplar findByIdWithMensajes(@Param("id") Long id);
 
 	List<Ejemplar> findByPlantaCodigoAndDisponibleTrue(String codigoPlanta);
-	
-	
-	List<Ejemplar> findEjemplarById(Long ejemplarId) ;
+
+	List<Ejemplar> findEjemplarById(Long ejemplarId);
 
 	List<Ejemplar> findByPlanta(Planta planta);
-	
 
 	long countByPlantaAndDisponible(Planta planta, boolean b);
-	
-	
+
 }

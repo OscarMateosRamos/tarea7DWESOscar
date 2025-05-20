@@ -95,7 +95,7 @@ public class ServiciosMensaje {
 	@Transactional
 	public List<Mensaje> verMensajesRangoFechas(Date fechaInicio, Date fechaFin) {
 
-		return mensajerepo.filtrarMensajePorFechas(fechaInicio, fechaFin);
+		return mensajerepo.findByFechahoraBetween(fechaInicio, fechaFin);
 	}
 
 }

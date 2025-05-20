@@ -22,10 +22,11 @@ public interface MensajeRepository extends JpaRepository<Mensaje, Long> {
 
 	@Query("SELECT m FROM Mensaje m WHERE m.ejemplar.planta.codigo=:tipoPlanta ORDER BY ejemplar")
 	List<Mensaje> mensajesPorCodigoPlanta(@Param("tipoPlanta")String tipoPlanta);
+//	
+//	@Query("SELECT m FROM Mensaje m WHERE m.fechahora BETWEEN :fechaInicio AND :fechaFin ORDER BY m.fechahora DESC")
+//List<Mensaje> filtrarMensajePorFechas(@Param("fechaInicio")Date fechaInicio,@Param("fechaFin")Date fechaFin);
 	
-	@Query("SELECT m FROM Mensaje m WHERE m.fechahora BETWEEN :fechaInicio AND :fechaFin ORDER BY m.fechahora DESC")
-	List<Mensaje> filtrarMensajePorFechas(@Param("fechaInicio")Date fechaInicio,@Param("fechaFin")Date fechaFin);
-//	List<Mensaje> findByFechahoraBetween(Date startDate, Date endDate);
+	List<Mensaje> findByFechahoraBetween(Date startDate, Date endDate);
 
 //	@Query("SELECT m FROM Mensaje m WHERE m.fechahora BETWEEN fechaInicial and fechaFinal")
 //	List<Mensaje> mensajesPorFechas(String fechaInicial, String fechaFinal);
