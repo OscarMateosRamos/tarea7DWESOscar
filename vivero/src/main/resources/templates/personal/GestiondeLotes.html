@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/CSS/RealizarPedido.css">
+<title>Gestion de Lotes</title>
+</head>
+<body>
+
+	<h1>-Gestion de Lotes-</h1>
+
+	<div class="boton-container">
+		
+			<a href="/lote/mostrarCrearLote" class="boton"> Pedido Lote</a>
+		
+		
+	</div>
+
+
+
+	<div>
+		<a href="/lote/verLotes"> Ver Lotes</a>
+	</div>
+	
+			
+
+	<div>
+		<a th:href="@{/auth/redireccionar}">Volver</a>
+	</div>
+	
+	
+
+
+</body>
+</html>

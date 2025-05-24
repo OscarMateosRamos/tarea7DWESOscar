@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cesta de Compra</title>
+<link rel="stylesheet" type="text/css"
+	th:href="@{/CSS/estilosCestaCompra.css}">
+</head>
+<body>
+	<header>
+		<h1>Ver Contenido de Lotes</h1>
+	</header>
+
+	<div class="container">
+
+
+		<div th:if="${mensaje}">
+			<p th:text="${mensaje}"></p>
+		</div>
+
+		
+	
+			<table>
+				<thead>
+					<tr>
+						<th>Proveedor</th>
+						<th>CIF</th>
+						<th>Solicitado Por</th>
+						<th>Urgente</th>
+						<th>Fecha de Pedido</th>
+						<th>Acción</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item : ${lotesRecibidos}">
+						<td th:text="${item.proveedor.nombre}"></td>
+						<td th:text="${item.proveedor.cif}"></td>
+						<td th:text="${item.persona.nombre}"></td>
+						<td th:if="${item.urgente}" >SI</td>
+						<td th:unless="${item.urgente}" >NO</td>
+						<td th:text="${item.fechahora_peticion}" ></td>
+						<td><a th:href="@{/lote/retirarDeLote/{codigoProveedor}/{codigoPlanta}(codigoProveedor=${item.codigoProveedor}, codigoPlanta=${item.codigoPlanta})}" class="boton">Retirar</a>
+							<a th:href="@{/lote/confirmarLineaLote/{codigoProveedor}/{codigoPlanta}(codigoProveedor=${item.codigoProveedor}, codigoPlanta=${item.codigoPlanta})}" class="boton">Confirmar</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			
+
+			<table>
+				<thead>
+					<tr>
+						<th>Proveedor</th>
+						<th>CIF</th>
+						<th>Solicitado Por</th>
+						<th>Urgente</th>
+						<th>Fecha de Pedido</th>
+						<th>Acción</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item : ${lotesNoRecibidos}">
+						<td th:text="${item.proveedor.nombre}"></td>
+						<td th:text="${item.proveedor.cif}"></td>
+						<td th:text="${item.persona.nombre}"></td>
+						<td th:if="${item.urgente}" >SI</td>
+						<td th:unless="${item.urgente}" >NO</td>
+						<td th:text="${item.fechahora_peticion}" ></td>
+						<td><a th:href="@{/lote/retirarDeLote/{codigoProveedor}/{codigoPlanta}(codigoProveedor=${item.codigoProveedor}, codigoPlanta=${item.codigoPlanta})}" class="boton">Retirar</a>
+							<a th:href="@{/lote/confirmarLineaLote/{codigoProveedor}/{codigoPlanta}(codigoProveedor=${item.codigoProveedor}, codigoPlanta=${item.codigoPlanta})}" class="boton">Confirmar</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+
+
+			<div class="boton-container">
+				<a href="/personal/confirmarlote" class="boton">Realizar Pedido al Proveedor++++</a>
+			</div>
+		</div>
+
+		<div class="boton-container">
+		<a th:href="@{/lote/mostrarCrearLote}" class="boton">Seguir con Pedido de Lotes</a>
+		</div>
+
+
+
+		<div th:if="${lotesSession == null or lotesSession.isEmpty()}">
+			<p>No hay Lotes </p>
+		</div>
+
+	</div>
+</body>
+</html>

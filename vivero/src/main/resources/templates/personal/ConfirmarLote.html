@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" th:href="@{/CSS/estilosCestaCompra.css}">
+    <title>Confirmar Lote</title>
+</head>
+<body>
+    <h1>Confirmar Lote</h1>
+
+	 <div class="container">
+	<div  th:unless="${listaConfirmada == null or listaConfirmada.isEmpty()}">
+	
+	            <h2>Resumen del Pedido</h2>
+
+	            <table>
+	                <thead>
+	                    <tr>
+							<th>Proveedor</th>
+	                        <th>Planta</th>
+	                        <th>Cantidad</th>
+	                    </tr>
+	                </thead>
+	                <tbody>
+	                    <tr th:each="item : ${listaConfirmada}">
+							<td th:text="${item.codigoProveedor}"></td>
+	                        <td th:text="${item.codigoPlanta}"></td>
+	                        <td th:text="${item.cantidad}"></td>
+	                    </tr>
+	                </tbody>
+	            </table>
+				
+				<div class="boton-container">
+				     <form th:action="@{/lote/SolicitarLote}" method="post">
+				         <button type="submit" class="boton">Solicitar Lote</button>
+				     </form>
+				 </div>
+</div>	
+	</div>
+			
+<!--    <form action="/lote/guardarLote" method="post">-->
+<!--        <label for="urgente">¿Urgente?</label>-->
+<!--        <input type="checkbox" id="urgente" name="urgente" />-->
+
+<!--        <label for="proveedor">Proveedor:</label>-->
+<!--        <select name="codigoProveedor" required>-->
+<!--            <option value="">Seleccione un proveedor</option>-->
+<!--            <th:block th:each="prov : ${proveedores}">-->
+<!--                <option th:value="${prov.id}" th:text="${prov.nombre}"></option>-->
+<!--            </th:block>-->
+<!--        </select>-->
+
+<!--        <button type="submit">Confirmar Lote</button>-->
+<!--    </form>-->
+
+<!--    <br />-->
+    <a href="/lote/verLotes">Volver ....</a>
+</body>
+</html>

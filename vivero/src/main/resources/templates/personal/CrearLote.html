@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" th:href="@{/CSS/estilosFormularioCreacion.css}" />
+    <title>Crear Lote</title>
+</head>
+<body>
+<header>
+    <h1>Creación de Lote</h1>
+</header>
+
+<div class="container">
+
+    <!-- Mensajes de éxito o error -->
+    <p th:if="${exito}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${exito}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </p>
+
+    <p th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </p>
+
+    <!-- Formulario para seleccionar proveedor y urgencia -->
+    <form class="formulario" th:action="@{/lote/guardarDatosLote}" method="post">
+        <div class="container">
+            <label for="proveedorId">Proveedor:</label>
+            <select id="proveedorId" name="codigoProveedor" required>
+                <option value="">Seleccione un proveedor</option>
+                <th:block th:each="prov : ${proveedores}">
+                    <option th:value="${prov.id}" th:text="${prov.nombre}"
+                        th:selected="${prov.id} == ${proveedorSesion}"></option>
+                </th:block>
+            </select>
+        </div>
+        <div class="checkbox-container">
+            <input type="checkbox" id="urgente" name="urgente" th:checked="${urgenteSesion}" />
+            <label for="urgente">Urgente</label>
+        </div>
+        <button type="submit" class="boton">Aceptar Proveedor</button>
+    </form>
+
+    
+
+    
+    <br />
+    <div class="contenedor-boton">
+        <a href="/auth/redireccionar" class="boton">Volver</a>
+    </div>
+
+</div>
+</body>
+</html>

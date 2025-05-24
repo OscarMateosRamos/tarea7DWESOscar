@@ -7,151 +7,144 @@ import java.util.Objects;
 import jakarta.persistence.*;
 
 @Entity
-	@Table(name = "ejemplares")
-	public class Ejemplar implements Serializable {
-		private static final long serialVersionUID = 1L;
+@Table(name = "ejemplares")
+public class Ejemplar implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-		@Id
-		@GeneratedValue(strategy = GenerationType.IDENTITY)
-		private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-		@Column
-		private String nombre;
+	@Column
+	private String nombre;
 
-		@Column(nullable = false)
-		private boolean disponible = true;
-		
-		@Column
-		private long idPedido;
-		
-		@ManyToOne
-		@JoinColumn(name = "idplanta")
-		private Planta planta;
+	@Column(nullable = false)
+	private boolean disponible = true;
 
-		@OneToMany(cascade = CascadeType.ALL)
-		@JoinColumn(name = "idejemplar")
-		private List<Mensaje> mensajes;
+	@Column
+	private long idPedido;
 
-		@ManyToOne
-		@JoinColumn(name = "Pedido")
-		private Pedido pedido;
+	@ManyToOne
+	@JoinColumn(name = "idplanta")
+	private Planta planta;
 
-		
-		public Ejemplar() {
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "idejemplar")
+	private List<Mensaje> mensajes;
 
-		}
+	@ManyToOne
+	@JoinColumn(name = "Pedido")
+	private Pedido pedido;
 
+	@ManyToOne
+	@JoinColumn(name = "Lote")
+	private Lote lote;
 
-		public Ejemplar(Long id, String nombre, boolean disponible, long idPedido, Planta planta, List<Mensaje> mensajes,
-				Pedido pedido) {
-			super();
-			this.id = id;
-			this.nombre = nombre;
-			this.disponible = disponible;
-			this.idPedido = idPedido;
-			this.planta = planta;
-			this.mensajes = mensajes;
-			this.pedido = pedido;
-		}
+	public Ejemplar() {
 
+	}
 
-		public Long getId() {
-			return id;
-		}
+	public Ejemplar(Long id, String nombre, boolean disponible, long idPedido, Planta planta, List<Mensaje> mensajes,
+			Pedido pedido, Lote lote) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.disponible = disponible;
+		this.idPedido = idPedido;
+		this.planta = planta;
+		this.mensajes = mensajes;
+		this.pedido = pedido;
+		this.lote = lote;
+	}
 
+	public Long getId() {
+		return id;
+	}
 
-		public void setId(Long id) {
-			this.id = id;
-		}
+	public void setId(Long id) {
+		this.id = id;
+	}
 
+	public String getNombre() {
+		return nombre;
+	}
 
-		public String getNombre() {
-			return nombre;
-		}
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 
+	public boolean isDisponible() {
+		return disponible;
+	}
 
-		public void setNombre(String nombre) {
-			this.nombre = nombre;
-		}
+	public void setDisponible(boolean disponible) {
+		this.disponible = disponible;
+	}
 
+	public long getIdPedido() {
+		return idPedido;
+	}
 
-		public boolean isDisponible() {
-			return disponible;
-		}
+	public void setIdPedido(long idPedido) {
+		this.idPedido = idPedido;
+	}
 
+	public Planta getPlanta() {
+		return planta;
+	}
 
-		public void setDisponible(boolean disponible) {
-			this.disponible = disponible;
-		}
+	public void setPlanta(Planta planta) {
+		this.planta = planta;
+	}
 
+	public List<Mensaje> getMensajes() {
+		return mensajes;
+	}
 
-		public long getIdPedido() {
-			return idPedido;
-		}
+	public void setMensajes(List<Mensaje> mensajes) {
+		this.mensajes = mensajes;
+	}
 
+	public Pedido getPedido() {
+		return pedido;
+	}
 
-		public void setIdPedido(long idPedido) {
-			this.idPedido = idPedido;
-		}
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
+	}
 
+	public Lote getLote() {
+		return lote;
+	}
 
-		public Planta getPlanta() {
-			return planta;
-		}
+	public void setLote(Lote lote) {
+		this.lote = lote;
+	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(disponible, id, idPedido, lote, mensajes, nombre, pedido, planta);
+	}
 
-		public void setPlanta(Planta planta) {
-			this.planta = planta;
-		}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Ejemplar other = (Ejemplar) obj;
+		return disponible == other.disponible && Objects.equals(id, other.id) && idPedido == other.idPedido
+				&& Objects.equals(lote, other.lote) && Objects.equals(mensajes, other.mensajes)
+				&& Objects.equals(nombre, other.nombre) && Objects.equals(pedido, other.pedido)
+				&& Objects.equals(planta, other.planta);
+	}
 
+	@Override
+	public String toString() {
+		return "Ejemplar [id=" + id + ", nombre=" + nombre + ", disponible=" + disponible + ", idPedido=" + idPedido
+				+ ", planta=" + planta + ", mensajes=" + mensajes + ", pedido=" + pedido + ", lote=" + lote + "]";
+	}
 
-		public List<Mensaje> getMensajes() {
-			return mensajes;
-		}
-
-
-		public void setMensajes(List<Mensaje> mensajes) {
-			this.mensajes = mensajes;
-		}
-
-
-		public Pedido getPedido() {
-			return pedido;
-		}
-
-
-		public void setPedido(Pedido pedido) {
-			this.pedido = pedido;
-		}
-		
-		
-
-		@Override
-		public int hashCode() {
-			return Objects.hash(disponible, id, idPedido, mensajes, nombre, pedido, planta);
-		}
-
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			Ejemplar other = (Ejemplar) obj;
-			return disponible == other.disponible && Objects.equals(id, other.id) && idPedido == other.idPedido
-					&& Objects.equals(mensajes, other.mensajes) && Objects.equals(nombre, other.nombre)
-					&& Objects.equals(pedido, other.pedido) && Objects.equals(planta, other.planta);
-		}
-
-
-		@Override
-		public String toString() {
-			return "Ejemplar [id=" + id + ", nombre=" + nombre + ", disponible=" + disponible + ", idPedido=" + idPedido
-					+ ", planta=" + planta + ", mensajes=" + mensajes + ", pedido=" + pedido + "]";
-		}
-
-	
 }

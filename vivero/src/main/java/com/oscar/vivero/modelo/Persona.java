@@ -25,6 +25,10 @@ public class Persona {
 	@JoinColumn(name = "idpersona")
 	private List<Mensaje> mensajes;
 
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "idlote")
+	private List<Lote> lotes;
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "idcredencial")
 	private Credenciales credencial;
@@ -33,10 +37,14 @@ public class Persona {
 
 	}
 
-	public Persona(Long id, String nombre, String email, Credenciales credencial) {
+	public Persona(Long id, String nombre, String email, List<Mensaje> mensajes, List<Lote> lotes,
+			Credenciales credencial) {
+		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.email = email;
+		this.mensajes = mensajes;
+		this.lotes = lotes;
 		this.credencial = credencial;
 	}
 
@@ -64,12 +72,20 @@ public class Persona {
 		this.email = email;
 	}
 
-	public List<Mensaje> getMensaje() {
-		return getMensaje();
+	public List<Mensaje> getMensajes() {
+		return mensajes;
 	}
 
-	public void setMensaje(List<Mensaje> mensaje) {
-		this.mensajes = mensaje;
+	public void setMensajes(List<Mensaje> mensajes) {
+		this.mensajes = mensajes;
+	}
+
+	public List<Lote> getLotes() {
+		return lotes;
+	}
+
+	public void setLotes(List<Lote> lotes) {
+		this.lotes = lotes;
 	}
 
 	public Credenciales getCredencial() {
@@ -81,28 +97,9 @@ public class Persona {
 	}
 
 	@Override
-	public int hashCode() {
-		return Objects.hash(credencial, email, id, mensajes, nombre);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Persona other = (Persona) obj;
-		return Objects.equals(credencial, other.credencial) && Objects.equals(email, other.email)
-				&& Objects.equals(id, other.id) && Objects.equals(mensajes, other.mensajes)
-				&& Objects.equals(nombre, other.nombre);
-	}
-
-	@Override
 	public String toString() {
-		return "Persona [id=" + id + ", nombre=" + nombre + ", email=" + email + ", mensaje=" + mensajes
-				+ ", credencial=" + credencial + "]";
+		return "Persona [id=" + id + ", nombre=" + nombre + ", email=" + email + ", mensajes=" + mensajes + ", lotes="
+				+ lotes + ", credencial=" + credencial + "]";
 	}
 
 }

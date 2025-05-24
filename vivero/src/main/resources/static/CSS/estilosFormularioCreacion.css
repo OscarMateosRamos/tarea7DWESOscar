@@ -153,3 +153,16 @@ input[type="text"]:focus {
         width: 90%;
     }
 }
+
+.checbox-container{
+	display:flex;
+	align-items: center;
+}
+
+.checkbox-container input[type="checkbox"]{
+	margin-right:20px;
+}
+
+.checkbox-container label{
+	margin:0;
+}

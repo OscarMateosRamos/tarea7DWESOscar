@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/CSS/estilosFormularioCreacion.css}" />
+    <title>Crear Persona</title>
+</head>
+<body>
+    <header>
+        <h1>  Creación de Proveedor</h1>
+    </header>
+
+  
+    <div class="container">
+		<p th:if="${exito}" class="alert alert-success alert-dismissible fade show" role="alert">
+				  			    <span th:text="${exito}"></span>
+				  			    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+				  			</p>
+
+
+				  			<p th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+				  			    <span th:text="${error}"></span>
+				  			    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+				  			</p>
+							
+							
+							
+        <form class="formulario" th:action="@{/proveedor/CamposProveedor}" th:object="${proveedor}" method="post">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" th:field="*{nombre}" required />
+
+            <label for="cif">CIF:</label>
+            <input type="text" id="cif" name="cif" th:field="*{cif}" required />
+
+            
+            <button type="submit" class="boton">Crear Proveedor</button>
+        </form>
+
+        <br>
+        <div class="contenedor-boton">
+            <a href="/auth/redireccionar" class="boton"> Volver</a>
+        </div>
+    </div>
+</body>
+</html>

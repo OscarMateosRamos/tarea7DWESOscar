@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" th:href="@{/CSS/estilosFormularioCreacion.css}" />
+    <title>Crear Lote</title>
+</head>
+<body>
+<header>
+    <h1>Creación de Lote 2</h1>
+</header>
+
+<div class="container">
+
+    <!-- Mensajes de éxito o error -->
+    <p th:if="${exito}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${exito}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </p>
+
+    <p th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </p>
+
+	<h1 th:text="${codigoProveedor}"></h1>
+
+    <!-- Tabla con plantas y formulario para añadirlas -->
+    <table>
+        <thead>
+            <tr>
+                <th>Planta</th>
+                <th>Cantidad a Pedir</th>
+                <th>Añadir al lote</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="planta : ${plantas}">
+                <td th:text="${planta.nombrecomun}"></td>
+                <td>
+                    <form th:action="@{/lote/añadirALote}" method="POST">
+                        <input type="hidden" name="codigo" th:value="${planta.codigo}" />
+                        <input type="hidden" name="urgente" th:value="${urgenteSesion}" />
+
+                        <input type="number" name="cantidad" min="1" max="50" step="1" value="1" required />
+                        <button type="submit">Añadir</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+
+    <!-- Botón para guardar el lote completo -->
+    <form th:action="@{/lote/guardarLote}" method="post">
+        <button type="submit" class="boton">Guardar Lote</button>
+    </form>
+
+    <br />
+    <div class="contenedor-boton">
+        <a href="/auth/redireccionar" class="boton">Volver</a>
+    </div>
+
+</div>
+</body>
+</html>
