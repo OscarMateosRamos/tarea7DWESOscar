@@ -289,7 +289,7 @@ public class LoteController {
 		for (LineaLote item : lineas) {
 			LineaLote nl = new LineaLote();
 
-			nl.setIdLote(idLote);
+			nl.setLote( loteServ.buscarLotesPorId(idLote).get());
 			nl.setCodigoPlanta(item.getCodigoPlanta());
 			nl.setCantidad(item.getCantidad());
 			nl.setCodigoProveedor(item.getCodigoProveedor());

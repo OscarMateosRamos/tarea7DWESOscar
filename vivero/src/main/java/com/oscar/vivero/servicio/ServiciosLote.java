@@ -2,6 +2,7 @@ package com.oscar.vivero.servicio;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.hibernate.mapping.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,11 @@ public class ServiciosLote {
 
 	public ArrayList<Lote> buscarLotesNoRecibidos() {
 		return loteRepo.findByFecharecepcionIsNull();
+
+	}
+
+	public Optional<Lote> buscarLotesPorId(Long id) {
+		return loteRepo.findById(id);
 
 	}
 

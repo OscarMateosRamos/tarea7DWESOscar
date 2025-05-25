@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cesta de Compra</title>
-<link rel="stylesheet" type="text/css"
-	th:href="@{/CSS/estilosCestaCompra.css}">
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Ver Contenido de Lotes</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/CSS/estilosCestaCompra.css}" />
 </head>
 <body>
 	<header>
@@ -14,13 +13,9 @@
 
 	<div class="container">
 
-
-		<div th:if="${mensaje}">
-			<p th:text="${mensaje}"></p>
-		</div>
-
-		
-	
+		<!-- Lotes Recibidos -->
+		<div th:unless="${lotesRecibidos == null or lotesRecibidos.isEmpty()}">
+			<h2>Lotes Recibidos</h2>
 			<table>
 				<thead>
 					<tr>
@@ -34,21 +29,46 @@
 				</thead>
 				<tbody>
 					<tr th:each="item : ${lotesRecibidos}">
-						<td th:text="${item.proveedor.nombre}"></td>
-						<td th:text="${item.proveedor.cif}"></td>
-						<td th:text="${item.persona.nombre}"></td>
-						<td th:if="${item.urgente}" >SI</td>
-						<td th:unless="${item.urgente}" >NO</td>
-						<td th:text="${item.fechahora_peticion}" ></td>
-						<td><a th:href="@{/lote/retirarDeLote/{codigoProveedor}/{codigoPlanta}(codigoProveedor=${item.codigoProveedor}, codigoPlanta=${item.codigoPlanta})}" class="boton">Retirar</a>
-							<a th:href="@{/lote/confirmarLineaLote/{codigoProveedor}/{codigoPlanta}(codigoProveedor=${item.codigoProveedor}, codigoPlanta=${item.codigoPlanta})}" class="boton">Confirmar</a>
+						<td th:text="${item.proveedor.nombre}">Proveedor</td>
+						<td th:text="${item.proveedor.cif}">CIF</td>
+						<td th:text="${item.persona.nombre}">Persona</td>
+						<td th:text="${item.urgente ? 'SI' : 'NO'}">Urgente</td>
+						<td th:text="${item.fechapeticion}">Fecha</td>
+						<td>
+							<a th:href="@{/lote/retirarDeLote/{idLote}/{idProveedor}(idLote=${item.id},idProveedor=${item.proveedor.id})}" class="boton">Retirar</a>
+							<a th:href="@{/lote/confirmarLineaLote/{idLote}/{idProveedor}(idLote=${item.id},idProveedor=${item.proveedor.id})}" class="boton">Confirmar</a>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="6">
+							<table class="table-lineas">
+								<thead>
+									<tr>
+										<th>Código Planta</th>
+										<th>Cantidad</th>
+										<th>Urgente</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="linea : ${item.lineasLote}">
+										<td th:text="${linea.codigoPlanta}">Código Planta</td>
+										<td th:text="${linea.cantidad}">Cantidad</td>
+										<td th:text="${linea.urgente ? 'SI' : 'NO'}">Urgente</td>
+									</tr>
+								</tbody>
+							</table>
 						</td>
 					</tr>
 				</tbody>
 			</table>
-			
-			
+		</div>
+		<div th:if="${lotesRecibidos == null or lotesRecibidos.isEmpty()}">
+			<p>No hay lotes recibidos.</p>
+		</div>
 
+		<!-- Lotes No Recibidos -->
+		<div th:unless="${lotesNoRecibidos == null or lotesNoRecibidos.isEmpty()}">
+			<h2>Lotes No Recibidos</h2>
 			<table>
 				<thead>
 					<tr>
@@ -57,39 +77,71 @@
 						<th>Solicitado Por</th>
 						<th>Urgente</th>
 						<th>Fecha de Pedido</th>
+						<th>Solicitud</th>
 						<th>Acción</th>
+												
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="item : ${lotesNoRecibidos}">
-						<td th:text="${item.proveedor.nombre}"></td>
-						<td th:text="${item.proveedor.cif}"></td>
-						<td th:text="${item.persona.nombre}"></td>
-						<td th:if="${item.urgente}" >SI</td>
-						<td th:unless="${item.urgente}" >NO</td>
-						<td th:text="${item.fechahora_peticion}" ></td>
-						<td><a th:href="@{/lote/retirarDeLote/{codigoProveedor}/{codigoPlanta}(codigoProveedor=${item.codigoProveedor}, codigoPlanta=${item.codigoPlanta})}" class="boton">Retirar</a>
-							<a th:href="@{/lote/confirmarLineaLote/{codigoProveedor}/{codigoPlanta}(codigoProveedor=${item.codigoProveedor}, codigoPlanta=${item.codigoPlanta})}" class="boton">Confirmar</a>
+						<td th:text="${item.proveedor.nombre}">Proveedor</td>
+						<td th:text="${item.proveedor.cif}">CIF</td>
+						<td th:text="${item.persona.nombre}">Persona</td>
+						<td th:text="${item.urgente ? 'SI' : 'NO'}">Urgente</td>
+						<td th:text="${item.fechapeticion}">Fecha</td>
+						<td>
+							<a th:if= "'Productos ' +${item.lineasLote.size()>0 }" > 
+							<a th:each="linea :${item.lineasLote}">
+								<li th:text="${linea.cantidad} + ' de '+${linea.codigoPlanta}"></li>
+								</a>
+							</a>
+<!--							<ul>-->
+<!--								<li th:each="linea :${item.lineasLote}">-->
+<!--								<span th:text="${linea.cantidad}">cantidad</span>-->
+<!--								<span th:text="${linea.codigoPlanta}">Planta</span>-->
+								
+<!--								</li>-->
+<!--							</ul>-->
+			
 						</td>
+						<td>
+
+							<a th:href="@{/lote/confirmarLineaLote/{idLote}/{idProveedor}(idLote=${item.id},idProveedor=${item.proveedor.id})}" class="boton">Recibido +++</a>
+						</td>
+						
+						
+<!--						<tr>-->
+<!--							<td colspan="6">-->
+<!--								<table class="table-lineas">-->
+<!--									<thead>-->
+<!--										<tr>-->
+<!--											<th>Código Planta</th>-->
+<!--											<th>Cantidad</th>-->
+<!--											<th>Urgente</th>-->
+<!--										</tr>-->
+<!--									</thead>-->
+<!--									<tbody>-->
+<!--										<tr th:each="linea : ${item.lineasLote}">-->
+<!--											<td th:text="${linea.codigoPlanta}">Código Planta</td>-->
+<!--											<td th:text="${linea.cantidad}">Cantidad</td>-->
+<!--											<td th:text="${linea.urgente ? 'SI' : 'NO'}">Urgente</td>-->
+<!--										</tr>-->
+<!--									</tbody>-->
+<!--								</table>-->
+<!--							</td>-->
+<!--						</tr>-->
+						
 					</tr>
+					
 				</tbody>
 			</table>
-			
-
-
-			<div class="boton-container">
-				<a href="/personal/confirmarlote" class="boton">Realizar Pedido al Proveedor++++</a>
-			</div>
+		</div>
+		<div th:if="${lotesNoRecibidos == null or lotesNoRecibidos.isEmpty()}">
+			<p>No hay lotes no recibidos.</p>
 		</div>
 
 		<div class="boton-container">
-		<a th:href="@{/lote/mostrarCrearLote}" class="boton">Seguir con Pedido de Lotes</a>
-		</div>
-
-
-
-		<div th:if="${lotesSession == null or lotesSession.isEmpty()}">
-			<p>No hay Lotes </p>
+			<a th:href="@{/lote/mostrarCrearLote}" class="boton">Seguir con Pedido de Lotes</a>
 		</div>
 
 	</div>

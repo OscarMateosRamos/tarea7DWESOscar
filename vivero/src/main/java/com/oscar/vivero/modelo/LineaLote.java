@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -17,8 +19,9 @@ public class LineaLote implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column
-	private long idLote;
+	@ManyToOne
+	@JoinColumn(name = "idLote")
+	private Lote lote;
 
 	@Column
 	private long codigoProveedor;
@@ -36,10 +39,10 @@ public class LineaLote implements Serializable {
 		super();
 	}
 
-	public LineaLote(Long id, long idLote, long codigoProveedor, String codigoPlanta, int cantidad, boolean urgente) {
+	public LineaLote(Long id, Lote lote, long codigoProveedor, String codigoPlanta, int cantidad, boolean urgente) {
 		super();
 		this.id = id;
-		this.idLote = idLote;
+		this.lote = lote;
 		this.codigoProveedor = codigoProveedor;
 		this.codigoPlanta = codigoPlanta;
 		this.cantidad = cantidad;
@@ -54,12 +57,12 @@ public class LineaLote implements Serializable {
 		this.id = id;
 	}
 
-	public long getIdLote() {
-		return idLote;
+	public Lote getLote() {
+		return lote;
 	}
 
-	public void setIdLote(long idLote) {
-		this.idLote = idLote;
+	public void setLote(Lote lote) {
+		this.lote = lote;
 	}
 
 	public long getCodigoProveedor() {
@@ -96,8 +99,8 @@ public class LineaLote implements Serializable {
 
 	@Override
 	public String toString() {
-		return "LineaLote [id=" + id + ", idLote=" + idLote + ", codigoProveedor=" + codigoProveedor + ", codigoPlanta="
-				+ codigoPlanta + ", cantidad=" + cantidad + ", urgente=" + urgente + "]";
+		return "LineaLote [id=" + id + ", lote=" + (lote != null ? lote.getId() : null) + ", codigoProveedor="
+				+ codigoProveedor + ", codigoPlanta=" + codigoPlanta + ", cantidad=" + cantidad + ", urgente=" + urgente
+				+ "]";
 	}
-
 }

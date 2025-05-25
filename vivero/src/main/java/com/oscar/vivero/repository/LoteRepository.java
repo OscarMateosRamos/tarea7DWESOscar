@@ -1,6 +1,7 @@
 package com.oscar.vivero.repository;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -12,5 +13,7 @@ public interface LoteRepository extends JpaRepository<Lote, Long> {
 	ArrayList<Lote> findByFecharecepcionIsNull();
 
 	ArrayList<Lote> findByFecharecepcionIsNotNull();
+	
+	Optional<Lote> findById(Long id);
 
 }

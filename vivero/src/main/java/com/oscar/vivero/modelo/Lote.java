@@ -6,6 +6,7 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -43,12 +44,15 @@ public class Lote {
 	@JoinColumn(name = "Persona")
 	private Persona persona;
 
+	@OneToMany(mappedBy = "lote", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<LineaLote> lineasLote;
+
 	public Lote() {
 		super();
 	}
 
 	public Lote(Long id, boolean urgente, LocalDateTime fechapeticion, LocalDateTime fecharecepcion,
-			List<Ejemplar> ejemplares, Proveedor proveedor, Persona persona) {
+			List<Ejemplar> ejemplares, Proveedor proveedor, Persona persona, List<LineaLote> lineasLote) {
 		super();
 		this.id = id;
 		this.urgente = urgente;
@@ -57,6 +61,7 @@ public class Lote {
 		this.ejemplares = ejemplares;
 		this.proveedor = proveedor;
 		this.persona = persona;
+		this.lineasLote = lineasLote;
 	}
 
 	public Long getId() {
@@ -115,11 +120,18 @@ public class Lote {
 		this.persona = persona;
 	}
 
+	public List<LineaLote> getLineasLote() {
+		return lineasLote;
+	}
+
+	public void setLineasLote(List<LineaLote> lineasLote) {
+		this.lineasLote = lineasLote;
+	}
+
 	@Override
 	public String toString() {
 		return "Lote [id=" + id + ", urgente=" + urgente + ", fechapeticion=" + fechapeticion + ", fecharecepcion="
 				+ fecharecepcion + ", ejemplares=" + ejemplares + ", proveedor=" + proveedor + ", persona=" + persona
-				+ "]";
+				+ ", lineasLote=" + lineasLote + "]";
 	}
-
 }
