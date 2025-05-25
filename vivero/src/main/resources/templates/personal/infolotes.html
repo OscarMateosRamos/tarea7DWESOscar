@@ -24,7 +24,10 @@
 						<th>Solicitado Por</th>
 						<th>Urgente</th>
 						<th>Fecha de Pedido</th>
-						<th>Acción</th>
+						<th>Recepcionado Por </th>
+						<th>Fecha Recepcion </th>
+						<th>Ejemplares </th>
+						
 					</tr>
 				</thead>
 				<tbody>
@@ -34,9 +37,17 @@
 						<td th:text="${item.persona.nombre}">Persona</td>
 						<td th:text="${item.urgente ? 'SI' : 'NO'}">Urgente</td>
 						<td th:text="${item.fechapeticion}">Fecha</td>
+						<td th:text="${item.recepcionista.nombre}">Recepcionista</td>
+						<td th:text="${item.fecharecepcion}">Fecha</td>
 						<td>
-							+++
+	 
+								<a th:each="ej :${ejemplares}">
+									<a th:if="${ej.lote.id}==${item.id}">
+									<li th:text="${ej.nombre}"></li>
+									</a>
+									</a>				
 						</td>
+						
 					</tr>
 					
 				</tbody>

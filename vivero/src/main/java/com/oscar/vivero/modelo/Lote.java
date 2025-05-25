@@ -44,6 +44,10 @@ public class Lote {
 	@JoinColumn(name = "Persona")
 	private Persona persona;
 
+	@ManyToOne
+	@JoinColumn(name = "Recepciona")
+	private Persona recepcionista;
+
 	@OneToMany(mappedBy = "lote", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<LineaLote> lineasLote;
 
@@ -52,7 +56,8 @@ public class Lote {
 	}
 
 	public Lote(Long id, boolean urgente, LocalDateTime fechapeticion, LocalDateTime fecharecepcion,
-			List<Ejemplar> ejemplares, Proveedor proveedor, Persona persona, List<LineaLote> lineasLote) {
+			List<Ejemplar> ejemplares, Proveedor proveedor, Persona persona, Persona recepcionista,
+			List<LineaLote> lineasLote) {
 		super();
 		this.id = id;
 		this.urgente = urgente;
@@ -61,6 +66,7 @@ public class Lote {
 		this.ejemplares = ejemplares;
 		this.proveedor = proveedor;
 		this.persona = persona;
+		this.recepcionista = recepcionista;
 		this.lineasLote = lineasLote;
 	}
 
@@ -120,6 +126,14 @@ public class Lote {
 		this.persona = persona;
 	}
 
+	public Persona getRecepcionista() {
+		return recepcionista;
+	}
+
+	public void setRecepcionista(Persona recepcionista) {
+		this.recepcionista = recepcionista;
+	}
+
 	public List<LineaLote> getLineasLote() {
 		return lineasLote;
 	}
@@ -132,6 +146,7 @@ public class Lote {
 	public String toString() {
 		return "Lote [id=" + id + ", urgente=" + urgente + ", fechapeticion=" + fechapeticion + ", fecharecepcion="
 				+ fecharecepcion + ", ejemplares=" + ejemplares + ", proveedor=" + proveedor + ", persona=" + persona
-				+ ", lineasLote=" + lineasLote + "]";
+				+ ", recepcionista=" + recepcionista + ", lineasLote=" + lineasLote + "]";
 	}
+
 }

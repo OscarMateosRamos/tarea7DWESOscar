@@ -1,7 +1,6 @@
 package com.oscar.vivero.controlador;
 
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -59,6 +58,7 @@ public class RecepcionController {
 
 		ArrayList<Lote> lotesRecibidos = servlote.buscarLotesRecibidos();
 		ArrayList<Lote> lotesNoRecibidos = servlote.buscarLotesNoRecibidos();
+		ArrayList<Ejemplar> ejemplares = (ArrayList<Ejemplar>) servEjemplar.vertodosEjemplares();
 
 		lotesRecibidos.forEach(l -> {
 			if (l.getLineasLote() != null)
@@ -72,6 +72,7 @@ public class RecepcionController {
 		System.out.println("++++++Lotes recibidos+++++ " + lotesRecibidos.size());
 		System.out.println("++++++Lotes no recibidos+++++ " + lotesNoRecibidos.size());
 
+		model.addAttribute("ejemplares", ejemplares);
 		model.addAttribute("lotesRecibidos", lotesRecibidos);
 		model.addAttribute("lotesNoRecibidos", lotesNoRecibidos);
 
@@ -82,7 +83,6 @@ public class RecepcionController {
 	@GetMapping("/recepcionLote/{idLote}/")
 	public String recepcionLote(@PathVariable("idLote") Long idLote, HttpSession session) {
 		Optional<Lote> loteOpt = servlote.buscarLotesPorId(idLote);
-
 		if (loteOpt.isEmpty()) {
 			return "redirect:/recepcion/info?error=LoteNoEncontrado";
 		}
@@ -102,25 +102,25 @@ public class RecepcionController {
 
 				Ejemplar ej = new Ejemplar();
 				ej.setNombre(nuevoNombre);
-
 				Mensaje mensaje = new Mensaje();
-
 				DateTimeFormatter formatoLocalDate = DateTimeFormatter.ofPattern("dd:MM:YYYY hh:mm:ss");
-
-				mensaje.setMensaje("Ejemplar " + nuevoNombre + " recibido el "
-						+ LocalDateTime.now().format(formatoLocalDate) + " en el lote " + lote.getId() + " del proveedor "
-						+ lote.getProveedor().getNombre() + " solicitado por " + lote.getPersona().getNombre()
-						+ " y confirmado por " + usuario);
-
+				mensaje.setMensaje(
+						"Ejemplar " + nuevoNombre + " recibido el " + LocalDateTime.now().format(formatoLocalDate)
+								+ " en el lote " + lote.getId() + " del proveedor " + lote.getProveedor().getNombre()
+								+ " solicitado por " + lote.getPersona().getNombre() + " y confirmado por " + usuario);
 				mensaje.setFechahora(Date.valueOf(LocalDate.now()));
 
 				for (Persona p : personaRepo.findAll()) {
 					if (p.getCredencial().getId().equals(servCred.buscarCredencialPorUsuario(usuario).get().getId())) {
 						System.out.println("Econtrado el id persona y el id Credencial");
 						mensaje.setPersona(p);
+						lote.setRecepcionista(p);
+
 					}
 				}
 
+				ej.setLote(lote);
+				ej.setPlanta(servPlanta.buscarPlantaPorCodigo(linea.getCodigoPlanta()));
 				ej.setMensajes(new ArrayList<>());
 				ej.getMensajes().add(mensaje);
 
