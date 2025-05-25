@@ -35,30 +35,10 @@
 						<td th:text="${item.urgente ? 'SI' : 'NO'}">Urgente</td>
 						<td th:text="${item.fechapeticion}">Fecha</td>
 						<td>
-							<a th:href="@{/lote/retirarDeLote/{idLote}/{idProveedor}(idLote=${item.id},idProveedor=${item.proveedor.id})}" class="boton">Retirar</a>
-							<a th:href="@{/lote/confirmarLineaLote/{idLote}/{idProveedor}(idLote=${item.id},idProveedor=${item.proveedor.id})}" class="boton">Confirmar</a>
+							+++
 						</td>
 					</tr>
-					<tr>
-						<td colspan="6">
-							<table class="table-lineas">
-								<thead>
-									<tr>
-										<th>Código Planta</th>
-										<th>Cantidad</th>
-										<th>Urgente</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr th:each="linea : ${item.lineasLote}">
-										<td th:text="${linea.codigoPlanta}">Código Planta</td>
-										<td th:text="${linea.cantidad}">Cantidad</td>
-										<td th:text="${linea.urgente ? 'SI' : 'NO'}">Urgente</td>
-									</tr>
-								</tbody>
-							</table>
-						</td>
-					</tr>
+					
 				</tbody>
 			</table>
 		</div>
@@ -83,7 +63,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="item : ${lotesNoRecibidos}">
+					<tr th:each="item : ${lotesNoRecibidos}">			
 						<td th:text="${item.proveedor.nombre}">Proveedor</td>
 						<td th:text="${item.proveedor.cif}">CIF</td>
 						<td th:text="${item.persona.nombre}">Persona</td>
@@ -95,41 +75,12 @@
 								<li th:text="${linea.cantidad} + ' de '+${linea.codigoPlanta}"></li>
 								</a>
 							</a>
-<!--							<ul>-->
-<!--								<li th:each="linea :${item.lineasLote}">-->
-<!--								<span th:text="${linea.cantidad}">cantidad</span>-->
-<!--								<span th:text="${linea.codigoPlanta}">Planta</span>-->
-								
-<!--								</li>-->
-<!--							</ul>-->
-			
+							
 						</td>
 						<td>
-
-							<a th:href="@{/lote/confirmarLineaLote/{idLote}/{idProveedor}(idLote=${item.id},idProveedor=${item.proveedor.id})}" class="boton">Recibido +++</a>
+							<a th:href="@{/recepcion/recepcionLote/{idLote}/(idLote=${item.id})}" class="boton">Recepción</a>
 						</td>
-						
-						
-<!--						<tr>-->
-<!--							<td colspan="6">-->
-<!--								<table class="table-lineas">-->
-<!--									<thead>-->
-<!--										<tr>-->
-<!--											<th>Código Planta</th>-->
-<!--											<th>Cantidad</th>-->
-<!--											<th>Urgente</th>-->
-<!--										</tr>-->
-<!--									</thead>-->
-<!--									<tbody>-->
-<!--										<tr th:each="linea : ${item.lineasLote}">-->
-<!--											<td th:text="${linea.codigoPlanta}">Código Planta</td>-->
-<!--											<td th:text="${linea.cantidad}">Cantidad</td>-->
-<!--											<td th:text="${linea.urgente ? 'SI' : 'NO'}">Urgente</td>-->
-<!--										</tr>-->
-<!--									</tbody>-->
-<!--								</table>-->
-<!--							</td>-->
-<!--						</tr>-->
+											
 						
 					</tr>
 					
@@ -141,7 +92,7 @@
 		</div>
 
 		<div class="boton-container">
-			<a th:href="@{/lote/mostrarCrearLote}" class="boton">Seguir con Pedido de Lotes</a>
+			<a th:href="@{/inicio}" class="boton">Volver</a>
 		</div>
 
 	</div>
