@@ -6,6 +6,8 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,6 +34,10 @@ public class Lote {
 	@Column(name = "fechahora_recepcion")
 	private LocalDateTime fecharecepcion = null;
 
+	@Column(name = "estado")
+	@Enumerated(EnumType.STRING)
+	private Estado estado;
+
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "idejemplar")
 	private List<Ejemplar> ejemplares;
@@ -55,7 +61,7 @@ public class Lote {
 		super();
 	}
 
-	public Lote(Long id, boolean urgente, LocalDateTime fechapeticion, LocalDateTime fecharecepcion,
+	public Lote(Long id, boolean urgente, LocalDateTime fechapeticion, LocalDateTime fecharecepcion, Estado estado,
 			List<Ejemplar> ejemplares, Proveedor proveedor, Persona persona, Persona recepcionista,
 			List<LineaLote> lineasLote) {
 		super();
@@ -63,6 +69,7 @@ public class Lote {
 		this.urgente = urgente;
 		this.fechapeticion = fechapeticion;
 		this.fecharecepcion = fecharecepcion;
+		this.estado = estado;
 		this.ejemplares = ejemplares;
 		this.proveedor = proveedor;
 		this.persona = persona;
@@ -100,6 +107,14 @@ public class Lote {
 
 	public void setFecharecepcion(LocalDateTime fecharecepcion) {
 		this.fecharecepcion = fecharecepcion;
+	}
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
 	}
 
 	public List<Ejemplar> getEjemplares() {
@@ -145,8 +160,8 @@ public class Lote {
 	@Override
 	public String toString() {
 		return "Lote [id=" + id + ", urgente=" + urgente + ", fechapeticion=" + fechapeticion + ", fecharecepcion="
-				+ fecharecepcion + ", ejemplares=" + ejemplares + ", proveedor=" + proveedor + ", persona=" + persona
-				+ ", recepcionista=" + recepcionista + ", lineasLote=" + lineasLote + "]";
+				+ fecharecepcion + ", estado=" + estado + ", ejemplares=" + ejemplares + ", proveedor=" + proveedor
+				+ ", persona=" + persona + ", recepcionista=" + recepcionista + ", lineasLote=" + lineasLote + "]";
 	}
 
 }

@@ -22,10 +22,11 @@
 		
 
 		<div th:unless="${lotesSession == null or lotesSession.isEmpty()}">
+			<h2 th:text="'Proveedor:' +${nombreProveedor}"></h2>
 			<table>
 				<thead>
 					<tr>
-						<th>Proveedor</th>
+						
 						<th>Planta</th>
 						<th>Cantidad</th>
 						<th>Urgente</th>
@@ -34,7 +35,6 @@
 				</thead>
 				<tbody>
 					<tr th:each="item : ${lotesSession}">
-						<td th:text="${item.codigoProveedor}"></td>
 						<td th:text="${item.codigoPlanta}"></td>
 						<td th:text="${item.cantidad}"></td>
 						<td th:if="${item.urgente}" >SI</td>
@@ -48,9 +48,17 @@
 
 
 			<div class="boton-container">
-				<a href="/personal/confirmarlote" class="boton">Realizar Pedido al Proveedor++++</a>
+				<a href="/lote/confirmarlote" class="boton">Confirmar Todo</a>
 			</div>
 		</div>
+		
+
+			<div class="boton-container">
+				<a href="/personal/confirmarlote" class="boton">Borrar Todo</a>
+			</div>
+		</div>
+		
+		
 
 		<div class="boton-container">
 		<a th:href="@{/lote/mostrarCrearLote}" class="boton">Seguir con Pedido de Lotes</a>

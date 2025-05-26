@@ -69,7 +69,10 @@ public class ServiciosLote {
 
 	public Optional<Lote> buscarLotesPorId(Long id) {
 		return loteRepo.findById(id);
+	}
 
+	public Optional<Lote> buscarLotesPorProveedor(Proveedor p) {
+		return loteRepo.findByProveedor(p);
 	}
 
 }

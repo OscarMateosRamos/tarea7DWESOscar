@@ -15,5 +15,7 @@ public interface ProveedorRepository extends JpaRepository<Proveedor, Long> {
 
 	Optional<Proveedor> findByCredencial_Usuario(String usuario);
 
+	Optional<Proveedor> findByCredencialId(Long id);
+
 
 }

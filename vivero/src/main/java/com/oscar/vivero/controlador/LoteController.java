@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.oscar.vivero.modelo.Estado;
 import com.oscar.vivero.modelo.LineaLote;
 import com.oscar.vivero.modelo.Lote;
 import com.oscar.vivero.modelo.Proveedor;
@@ -85,10 +86,14 @@ public class LoteController {
 	public String guardarDatosLote(@RequestParam("codigoProveedor") long codigoProveedor,
 			@RequestParam(value = "urgente", required = false) boolean urgente, HttpSession session, Model model) {
 
+		Optional<Proveedor> p = proveedorServ.buscarProveedorPorId(codigoProveedor);
+
 		session.setAttribute("codigoProveedor", codigoProveedor);
+		session.setAttribute("proveedor", p);
 		session.setAttribute("urgente", urgente);
 
 		model.addAttribute("codigoProveedor", codigoProveedor);
+		model.addAttribute("nombreProveedor", p.get().getNombre());
 		// model.addAttribute("urgente", urgente);)
 		model.addAttribute("plantas", plantaRepo.findAll());
 		return "/personal/LineasLote";
@@ -213,6 +218,8 @@ public class LoteController {
 			session.setAttribute("lista", lista);
 		}
 
+		Proveedor p = (Proveedor) session.getAttribute("proveedor");
+		model.addAttribute("nombreProveedor", p.getNombre());
 		model.addAttribute("lotesSession", lista);
 		return "/personal/verLotes";
 
@@ -256,6 +263,10 @@ public class LoteController {
 
 		List<LineaLote> lineas = (List<LineaLote>) session.getAttribute("lotesSession");
 
+		Proveedor p = (Proveedor) session.getAttribute("proveedor");
+		model.addAttribute("nombreProveedor", p.getNombre());
+		
+		
 		if (lineas == null || lineas.isEmpty()) {
 			model.addAttribute("mensaje", "NO hay lotes.");
 		} else {
@@ -282,6 +293,8 @@ public class LoteController {
 
 		lote.setProveedor(p.get());
 
+		lote.setEstado(Estado.NUEVO);
+
 		loteServ.insertarLote(lote);
 
 		Long idLote = lote.getId();
@@ -289,7 +302,7 @@ public class LoteController {
 		for (LineaLote item : lineas) {
 			LineaLote nl = new LineaLote();
 
-			nl.setLote( loteServ.buscarLotesPorId(idLote).get());
+			nl.setLote(loteServ.buscarLotesPorId(idLote).get());
 			nl.setCodigoPlanta(item.getCodigoPlanta());
 			nl.setCantidad(item.getCantidad());
 			nl.setCodigoProveedor(item.getCodigoProveedor());

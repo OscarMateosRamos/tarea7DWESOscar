@@ -60,5 +60,10 @@ public class ServiciosProveedor {
 		return proveedorrepo.findById(id);
 
 	}
+	
+	public Optional<Proveedor> buscarProveedorPorIdCredencial(Long id) {
+		return proveedorrepo.findByCredencialId(id);
+
+	}
 
 }

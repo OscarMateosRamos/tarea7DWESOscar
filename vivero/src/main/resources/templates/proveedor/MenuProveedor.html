@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menú Personal</title>
+<link rel="stylesheet" href="/CSS/estilos.MenuPersonal.css">
+</head>
+<body>
+	<header>
+		<h1>-Menú Proveedor-</h1>
+	</header>
+
+	<div class="menu-container">
+		<ul class="menu">
+			<li><a th:href="@{/lotesproveedor/verLotesProveedor}" >Ver mis Lotes</a></li>
+			
+			<li><a  th:href="@{/auth/logout}">Cerrar Sesión</a></li>
+		</ul>
+	</div>
+</body>
+</html>

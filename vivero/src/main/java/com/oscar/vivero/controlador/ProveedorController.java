@@ -3,7 +3,6 @@ package com.oscar.vivero.controlador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,8 +13,6 @@ import com.oscar.vivero.modelo.Credenciales;
 import com.oscar.vivero.modelo.Proveedor;
 import com.oscar.vivero.servicio.ServiciosCredenciales;
 import com.oscar.vivero.servicio.ServiciosProveedor;
-
-import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/proveedor")
@@ -36,23 +33,43 @@ public class ProveedorController {
 		return "/proveedor/CrearProveedor";
 	}
 
-	@PostMapping("/CamposProveedor")
-	public String crearProveedor(@Valid @ModelAttribute Proveedor proveedor, BindingResult result, Model model) {
+	@PostMapping("/CamposProveedor") // Nuevo Proveedor
+	public String crearProveedor(@ModelAttribute Proveedor CrearProveedor, Model model) {
 
-		if (result.hasErrors()) {
-			return "/proveedor/CrearProveedor";
-		}
-
-		if (!proveedorServ.validarProveedor(proveedor)) {
+		if (!proveedorServ.validarProveedor(CrearProveedor)) {
 			model.addAttribute("error", "El CIF o el usuario ya existen.");
 			return "/proveedor/CrearProveedor";
 		}
-
 		
-		proveedor.getCredencial().setRol("PROVEEDOR");
-
 		
-		proveedorServ.insertarProveedor(proveedor);
+		String usuario = CrearProveedor.getCredencial().getUsuario();
+		String password = CrearProveedor.getCredencial().getPassword();
+
+		System.out.println("Usuario: " + usuario);
+		System.out.println("Password: " + password);
+
+		Credenciales cr = new Credenciales();
+
+		cr.setUsuario(usuario);
+		cr.setPassword(password);
+		cr.setRol("PROVEEDOR");
+		credencialesServ.insertarCredencial(cr);
+
+		Proveedor p = new Proveedor();
+
+		p.setCif(CrearProveedor.getCif());
+		p.setNombre(CrearProveedor.getNombre());
+		// p.setCredencial(cr);
+
+		proveedorServ.insertarProveedor(p);
+
+		p.setCredencial(cr);
+		proveedorServ.insertarProveedor(p);
+
+		System.out.println("Usuario: " + usuario);
+		System.out.println("Password: " + password);
+		System.out.println("Proveedor: " + p);
+		System.out.println("Credencial: " + cr);
 
 		model.addAttribute("exito", "Proveedor creado correctamente.");
 		model.addAttribute("proveedor", new Proveedor());

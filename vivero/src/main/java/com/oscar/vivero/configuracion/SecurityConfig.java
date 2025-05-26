@@ -21,11 +21,12 @@ public class SecurityConfig {
             	    .requestMatchers("/CSS/**", "/imagenes/**").permitAll()
             	    .requestMatchers("/auth/**", "/cliente/Registro", "/cliente/CamposCliente", "/plantas/plantasInvitado").permitAll()
             	    .requestMatchers("/inicio", "/auth/leerlogin").permitAll()
-            	    .requestMatchers("/plantas/plantasPersonal","/lote/**").hasRole("PERSONAL")
+            	    .requestMatchers("/plantas/plantasPersonal","/lote/**","/MenuPersonal").hasRole("PERSONAL")
             	    .requestMatchers("/clientes/**").hasRole("CLIENTE")
-            	    .requestMatchers("/personas/**", "/plantas/**").hasRole("ADMIN")
+            	    .requestMatchers("/lotesproveedor/verLotesProveedor").hasRole("PROVEEDOR")
+            	    .requestMatchers("/personas/**","/admin/**", "/plantas/**", "/proveedor/**","/GestiondePlantas","/GestionPlantasMenuAdmin","/GestiondePersonas","/GestionPersonasMenuAdmin").hasRole("ADMIN")
             	    .requestMatchers("/mensajes/**", "/ejemplares/**","/recepcion/**").hasAnyRole("ADMIN", "PERSONAL")
-           	    .anyRequest().authenticated()
+        	    .anyRequest().authenticated()
             	)
 
             .formLogin(form -> form
