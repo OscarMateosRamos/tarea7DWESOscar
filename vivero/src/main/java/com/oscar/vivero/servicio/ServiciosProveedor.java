@@ -1,6 +1,5 @@
 package com.oscar.vivero.servicio;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +36,20 @@ public class ServiciosProveedor {
 			return false;
 		}
 
-		if (!proveedorrepo.findByCif(p.getCif()).isEmpty()) {
-			System.out.println("El CIF ya existe...");
+		if (p.getCredencial().getUsuario() == null || p.getCredencial().getUsuario().isEmpty()
+				|| p.getCredencial().getUsuario().contains(" ")) {
+			System.out.println("El usuario no puede ser vacío ni contener espacios");
+			return false;
+		}
+
+		if (p.getCredencial().getPassword() == null || p.getCredencial().getPassword().isEmpty()
+				|| p.getCredencial().getPassword().contains(" ")) {
+			System.out.println("La contraseña no puede ser vacía ni contener espacios");
+			return false;
+		}
+
+		if (!proveedorrepo.findByCredencial_Usuario(p.getCredencial().getUsuario()).isEmpty()) {
+			System.out.println("El usuario ya existe...");
 			return false;
 		}
 

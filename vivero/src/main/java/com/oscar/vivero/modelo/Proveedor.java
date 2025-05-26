@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -32,16 +33,21 @@ public class Proveedor {
 	@JoinColumn(name = "idlote")
 	private List<Lote> lotes;
 
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "idcredencial")
+	private Credenciales credencial;
+
 	public Proveedor() {
 		super();
 	}
 
-	public Proveedor(Long id, String nombre, String cif, List<Lote> lotes) {
+	public Proveedor(Long id, String nombre, String cif, List<Lote> lotes, Credenciales credencial) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.cif = cif;
 		this.lotes = lotes;
+		this.credencial = credencial;
 	}
 
 	public Long getId() {
@@ -76,9 +82,18 @@ public class Proveedor {
 		this.lotes = lotes;
 	}
 
+	public Credenciales getCredencial() {
+		return credencial;
+	}
+
+	public void setCredencial(Credenciales credencial) {
+		this.credencial = credencial;
+	}
+
 	@Override
 	public String toString() {
-		return "Proveedor [id=" + id + ", nombre=" + nombre + ", cif=" + cif + ", lotes=" + lotes + "]";
+		return "Proveedor [id=" + id + ", nombre=" + nombre + ", cif=" + cif + ", lotes=" + lotes + ", credencial="
+				+ credencial + "]";
 	}
 
 }
