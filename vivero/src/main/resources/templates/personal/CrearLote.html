@@ -1,56 +1,95 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" th:href="@{/CSS/estilosFormularioCreacion.css}" />
-    <title>Crear Lote</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+	<link rel="stylesheet" th:href="@{/CSS/styles.css}">
+
+
+	<!--    <link rel="stylesheet" th:href="@{/CSS/estilosFormularioCreacion.css}" />-->
+	<title>Crear Lote</title>
 </head>
+
 <body>
-<header>
-    <h1>Creación de Lote</h1>
-</header>
+	<header>		
+			<div class="mb-4">
+				<h1>Creación de Lote</h1>
+				<h2>Selección del Proveedor</h2>
+			</div>
+	</header>
 
-<div class="container">
+	<div class="container">
 
-    <!-- Mensajes de éxito o error -->
-    <p th:if="${exito}" class="alert alert-success alert-dismissible fade show" role="alert">
-        <span th:text="${exito}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-    </p>
+		<!--     Mensajes de éxito o error -->
+		<p th:if="${exito}" class="alert alert-success alert-dismissible fade show" role="alert">
+			<span th:text="${exito}"></span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+		</p>
 
-    <p th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-        <span th:text="${error}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-    </p>
+		<p th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+			<span th:text="${error}"></span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+		</p>
 
-    <!-- Formulario para seleccionar proveedor y urgencia -->
-    <form class="formulario" th:action="@{/lote/guardarDatosLote}" method="post">
-        <div class="container">
-            <label for="proveedorId">Proveedor:</label>
-            <select id="proveedorId" name="codigoProveedor" required>
-                <option value="">Seleccione un proveedor</option>
-                <th:block th:each="prov : ${proveedores}">
-                    <option th:value="${prov.id}" th:text="${prov.nombre}"
-                        th:selected="${prov.id} == ${proveedorSesion}"></option>
-                </th:block>
-            </select>
-        </div>
-        <div class="checkbox-container">
-            <input type="checkbox" id="urgente" name="urgente" th:checked="${urgenteSesion}" />
-            <label for="urgente">Urgente</label>
-        </div>
-        <button type="submit" class="boton">Aceptar Proveedor</button>
-    </form>
+		
+		
+		<!--     Formulario para seleccionar proveedor y urgencia -->
+		<form th:action="@{/lote/guardarDatosLote}" th:object="${loteFormulario}" method="post">
+		    <div class="row">
+		        <div class="col-md-6">
+		            <select name="codigoProveedor" class="form-control" required>
+		                <option value="">Seleccione un proveedor</option>
+		                <option th:each="prov : ${proveedores}"
+		                        th:value="${prov.id}"
+		                        th:text="${prov.nombre}">
+		                </option>
+		            </select>
+		        </div>
+		        <div class="col-md-2">
+		            <input type="checkbox" th:field="*{urgente}" /> <label>Urgente</label>
+		        </div>
+		    </div>
 
-    
+		    <table class="table table-bordered">
+		        <thead>
+		            <tr>
+		                <th>Planta</th>
+		                <th>Cantidad</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+					<tr th:each="linea, iterStat : *{lineas}">
+					    <td>
+					        <span th:text="${plantas[__${iterStat.index}__].nombrecomun}"></span>
+					        <input type="hidden" th:field="*{lineas[__${iterStat.index}__].codigoPlanta}" />
+					    </td>
+					    <td>
+					        <input type="number" min="0" max="50" th:field="*{lineas[__${iterStat.index}__].cantidad}" />
+					    </td>
+					</tr>
 
-    
-    <br />
-    <div class="contenedor-boton">
-        <a href="/auth/redireccionar" class="boton">Volver</a>
-    </div>
+		        </tbody>
+		    </table>
 
-</div>
+		    <button type="submit">Guardar lote</button>
+		</form>
+
+
+	<br />
+
+
+	<div class="buttons">
+		<button onclick="window.location.href='/auth/redireccionar'" type="button"
+			class="btn color-boton">VOLVER</button>
+	</div>
+
+
+	<script src="/webjars/jquery/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+	</div>
 </body>
+
 </html>

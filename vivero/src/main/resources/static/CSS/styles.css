@@ -1,0 +1,94 @@
+@charset "UTF-8";
+
+body {
+    text-align: center;
+    padding-top: 50px;
+	background-image:url("../img/fondo.jpg");
+	background-size: cover;
+}
+.icon-container {
+    background-color: #2f411f;
+    padding: 30px;
+    border-radius: 15px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 250px;
+    height: 250px;
+    margin: 0 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+.icon-container img {
+    width: 85px;
+    height: 85px;
+    margin-bottom: 25px;
+}
+
+.icon-container p {
+    font-size: 1.75rem;
+    text-align: center;
+}
+
+.icon-container a{
+	color:white;
+}
+
+.icon-container:hover {
+    transform: scale(1.05);
+}
+
+.section-container {
+    margin-top: 8rem;
+}
+
+.logout-container {
+    margin-top: 4rem;
+}
+
+.btn {
+    padding: 10px 20px;
+    margin: 5px;
+    margin-top:15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn:hover {
+	background-color: #5b7f5b;
+	color: white;
+}	
+
+.color-boton {
+    background-color: #337180;
+    color: white;
+}
+
+.registrar{
+	display:flex;
+	justify-content: center;
+	align-items: center;
+	text-align:center;
+
+}
+ 
+.ejemplares{
+	width:40%;
+	margin-top:2%;
+	display:inline-block;
+	
+}
+
+.btn-warning:hover{
+	background-color: #000000 !important;
+}
+
+th{
+    background-color: #5b7f5b !important;
+    color:#ffffff !important;
+}
+

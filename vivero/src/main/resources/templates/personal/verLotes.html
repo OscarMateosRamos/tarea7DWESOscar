@@ -40,19 +40,20 @@
 						<td th:if="${item.urgente}" >SI</td>
 						<td th:unless="${item.urgente}" >NO</td>
 						<td><a th:href="@{/lote/retirarDeLote/{codigoProveedor}/{codigoPlanta}(codigoProveedor=${item.codigoProveedor}, codigoPlanta=${item.codigoPlanta})}" class="boton">Retirar</a>
-							<a th:href="@{/lote/confirmarLineaLote/{codigoProveedor}/{codigoPlanta}(codigoProveedor=${item.codigoProveedor}, codigoPlanta=${item.codigoPlanta})}" class="boton">Confirmar</a>
+							
 						</td>
 					</tr>
 				</tbody>
 			</table>
 
-
-			<div class="boton-container">
-				<a href="/lote/confirmarlote" class="boton">Confirmar Todo</a>
-			</div>
-		</div>
+			
 		
-
+			<div class="boton-container">
+			     <form th:action="@{/lote/SolicitarLote}" method="post">
+			         <button type="submit" class="boton">Solicitar Lote</button>
+			     </form>
+			 </div>
+			 
 			<form th:action="@{/lote/borrarTodo}" method="post">
     			<button type="submit" class="boton">Borrar Todo</button>
 		</form>
@@ -61,7 +62,7 @@
 		
 
 		<div class="boton-container">
-		<a th:href="@{/lote/mostrarCrearLote}" class="boton">Seguir con Pedido de Lotes</a>
+		<a th:href="@{/lote/LineasLote}" class="boton">Seguir con Pedido de Lotes</a>
 		</div>
 
 

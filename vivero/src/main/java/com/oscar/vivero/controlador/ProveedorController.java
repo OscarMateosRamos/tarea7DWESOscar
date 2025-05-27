@@ -1,5 +1,7 @@
 package com.oscar.vivero.controlador;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.oscar.vivero.modelo.Credenciales;
+import com.oscar.vivero.modelo.Estado;
+import com.oscar.vivero.modelo.Lote;
 import com.oscar.vivero.modelo.Proveedor;
 import com.oscar.vivero.servicio.ServiciosCredenciales;
+import com.oscar.vivero.servicio.ServiciosLote;
 import com.oscar.vivero.servicio.ServiciosProveedor;
 
 @Controller
@@ -23,6 +28,9 @@ public class ProveedorController {
 
 	@Autowired
 	ServiciosCredenciales credencialesServ;
+
+	@Autowired
+	ServiciosLote lotesServ;
 
 	@GetMapping("/mostrarCrearProveedor")
 	public String mostrarFormulario(@RequestParam(value = "exito", required = false) String exito, Model model) {
@@ -40,8 +48,7 @@ public class ProveedorController {
 			model.addAttribute("error", "El CIF o el usuario ya existen.");
 			return "/proveedor/CrearProveedor";
 		}
-		
-		
+
 		String usuario = CrearProveedor.getCredencial().getUsuario();
 		String password = CrearProveedor.getCredencial().getPassword();
 

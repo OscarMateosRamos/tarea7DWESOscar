@@ -4,19 +4,23 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.oscar.vivero.modelo.Estado;
+import com.oscar.vivero.modelo.FormularioLote;
 import com.oscar.vivero.modelo.LineaLote;
 import com.oscar.vivero.modelo.Lote;
+import com.oscar.vivero.modelo.Planta;
 import com.oscar.vivero.modelo.Proveedor;
 import com.oscar.vivero.repository.PlantaRepository;
 import com.oscar.vivero.repository.ProveedorRepository;
@@ -54,47 +58,64 @@ public class LoteController {
 		return "/personal/GestiondeLotes";
 	}
 
-	// Mostrar formulario inicial: proveedor + urgente + listado de plantas
 	@GetMapping("/mostrarCrearLote")
 	public String mostrarFormularioLote(HttpSession session, Model model) {
-	    session.removeAttribute("proveedor"); // ✅ Limpieza adicional
-	    session.removeAttribute("codigoProveedor");
+		session.removeAttribute("proveedor");
+		session.removeAttribute("codigoProveedor");
 
-	    ArrayList<LineaLote> lotesSession = (ArrayList<LineaLote>) session.getAttribute("lotesSesion");
-	    if (lotesSession == null) {
-	        lotesSession = new ArrayList<>();
-	    }
+		List<Planta> plantas = plantaRepo.findAll();
+		List<Proveedor> proveedores = proveedorRepo.findAll();
 
-	    Long codigoProveedor = (Long) session.getAttribute("codigoProveedor");
+		List<LineaLote> lineas = plantas.stream().map(p -> {
+			LineaLote l = new LineaLote();
+			l.setCodigoPlanta(p.getCodigo());
+			return l;
+		}).collect(Collectors.toList());
 
-	    model.addAttribute("plantas", plantaRepo.findAll());
+		FormularioLote formulario = new FormularioLote();
+		formulario.setLineas(lineas);
 
-	    if (codigoProveedor == null) {
-	        model.addAttribute("proveedores", proveedorRepo.findAll());
-	        return "/personal/CrearLote";
-	    } else {
-	        model.addAttribute("codigoProveedor", codigoProveedor);
-	        return "/personal/LineasLote";
-	    }
+		model.addAttribute("loteFormulario", formulario);
+		model.addAttribute("plantas", plantas); // Para mostrar nombres en la vista
+		model.addAttribute("proveedores", proveedores);
+
+		return "/personal/CrearLote";
+
 	}
 
-
-	// Guardar proveedor y urgente en sesión
 	@PostMapping("/guardarDatosLote")
-	public String guardarDatosLote(@RequestParam("codigoProveedor") long codigoProveedor,
-			@RequestParam(value = "urgente", required = false) boolean urgente, HttpSession session, Model model) {
+	public String guardarLote(@ModelAttribute FormularioLote loteFormulario, HttpSession session, Model model) {
+		Long proveedorId = loteFormulario.getCodigoProveedor();
+		boolean urgente = loteFormulario.isUrgente();
 
-		Optional<Proveedor> p = proveedorServ.buscarProveedorPorId(codigoProveedor);
+		System.out.println("Codigo de Proveedor: " + proveedorId);
+		System.out.println("Urgente: " + urgente);
 
-		session.setAttribute("codigoProveedor", codigoProveedor);
-		session.setAttribute("proveedor", p);
-		session.setAttribute("urgente", urgente);
+		ArrayList<LineaLote> lotesSession = new ArrayList<LineaLote>();
 
-		model.addAttribute("codigoProveedor", codigoProveedor);
-		model.addAttribute("nombreProveedor", p.get().getNombre());
-		// model.addAttribute("urgente", urgente);)
-		model.addAttribute("plantas", plantaRepo.findAll());
-		return "/personal/LineasLote";
+		for (LineaLote linea : loteFormulario.getLineas()) {
+			if (linea.getCantidad() > 0) {
+				if (urgente) {
+					linea.setUrgente(urgente);
+				}
+				lotesSession.add(linea);
+				System.out
+						.println("Codigo de Planta: " + linea.getCodigoPlanta() + ", Cantidad: " + linea.getCantidad());
+				System.out.println("Urgente: " + linea.isUrgente());
+
+			}
+		}
+
+		session.setAttribute("codigoProveedor", proveedorId);
+		session.setAttribute("urgenteSesion", urgente);
+		session.setAttribute("lotesSession", lotesSession);
+
+		model.addAttribute("codigoProveedor", proveedorId);
+		model.addAttribute("nombreProveedor", proveedorServ.buscarProveedorPorId(proveedorId).get().getNombre());
+		model.addAttribute("lotesSession", lotesSession);
+		model.addAttribute("urgente", urgente);
+
+		return "/personal/verLotes";
 	}
 
 	// Añadir planta (línea lote) a la lista en sesión
@@ -154,7 +175,7 @@ public class LoteController {
 		if (listaConfirmada == null) {
 			listaConfirmada = new ArrayList<>();
 		}
-		// Cambio del lote a confirmada
+
 		if (lista != null) {
 			for (LineaLote item : lista) {
 				System.out.println("++++++1 añadir listaConfirmada ");
@@ -210,7 +231,7 @@ public class LoteController {
 		ArrayList<LineaLote> lista = (ArrayList<LineaLote>) session.getAttribute("lotesSession");
 
 		if (lista != null) {
-			// borra el item que coincida con ambos códigos
+
 			lista.removeIf(item -> item.getCodigoPlanta().equals(codigoPlanta)
 					&& String.valueOf(item.getCodigoProveedor()).equals(codigoProveedor));
 			session.setAttribute("lista", lista);
@@ -221,6 +242,12 @@ public class LoteController {
 		model.addAttribute("lotesSession", lista);
 		return "/personal/verLotes";
 
+	}
+
+	@GetMapping("/confirmarTodoLote")
+	public String confirmartodoellote(HttpSession session, Model model) {
+
+		return "/ConfirmarLote";
 	}
 
 	// Eliminar )
@@ -260,49 +287,50 @@ public class LoteController {
 
 	@GetMapping("/verLotes")
 	public String verlotes(HttpSession session, Model model) {
-	    List<LineaLote> lineas = (List<LineaLote>) session.getAttribute("lotesSession");
+		List<LineaLote> lineas = (List<LineaLote>) session.getAttribute("lotesSession");
 
-	    Object obj = session.getAttribute("proveedor");
-	    if (obj instanceof Proveedor p) {
-	        model.addAttribute("nombreProveedor", p.getNombre());
-	    } else {
-	        model.addAttribute("nombreProveedor", "Proveedor no disponible");
-	    }
+		Object obj = session.getAttribute("proveedor");
+		if (obj instanceof Proveedor p) {
+			model.addAttribute("nombreProveedor", p.getNombre());
+		} else {
+			model.addAttribute("nombreProveedor", "Proveedor no disponible");
+		}
 
-	    if (lineas == null || lineas.isEmpty()) {
-	        model.addAttribute("mensaje", "NO hay lotes.");
-	    } else {
-	        model.addAttribute("lotesSession", lineas);
-	    }
+		if (lineas == null || lineas.isEmpty()) {
+			model.addAttribute("mensaje", "NO hay lotes.");
+		} else {
+			model.addAttribute("lotesSession", lineas);
+		}
 
-	    return "/personal/verLotes";
+		return "/personal/verLotes";
 	}
-	
+
 	@PostMapping("/borrarTodo")
 	public String borrarTodo(HttpSession session) {
-	    session.removeAttribute("lotesSession");
-	    session.removeAttribute("proveedor");
-	    session.removeAttribute("codigoProveedor");
-	    session.removeAttribute("urgente");
-	    return "redirect:/lote/mostrarCrearLote";
+		session.removeAttribute("lotesSession");
+		session.removeAttribute("proveedor");
+		session.removeAttribute("codigoProveedor");
+		session.removeAttribute("urgente");
+		return "redirect:/lote/mostrarCrearLote";
 	}
-
 
 	@PostMapping("/SolicitarLote")
 	public String solicitarLote(HttpSession session, Model model) {
 
 		System.out.println("Solicitando lote...");
 
-		List<LineaLote> lineas = (List<LineaLote>) session.getAttribute("listaConfirmada");
+		List<LineaLote> lineas = (List<LineaLote>) session.getAttribute("lotesSession");
 
 		Lote lote = new Lote();
 
-		lote.setUrgente((boolean) session.getAttribute("urgente"));
+		lote.setUrgente((boolean) session.getAttribute("urgenteSesion"));
+
 		lote.setFechapeticion(LocalDateTime.now());
 		lote.setPersona(personaServ.buscarPersonaPorUsuarioCredencial((String) session.getAttribute("usuario")));
 
 		Optional<Proveedor> p = proveedorServ.buscarProveedorPorId((Long) session.getAttribute("codigoProveedor"));
 
+		System.out.println("Solicitando lote..." + p.get().getNombre());
 		lote.setProveedor(p.get());
 
 		lote.setEstado(Estado.NUEVO);
@@ -313,16 +341,18 @@ public class LoteController {
 
 		for (LineaLote item : lineas) {
 			LineaLote nl = new LineaLote();
-
 			nl.setLote(loteServ.buscarLotesPorId(idLote).get());
 			nl.setCodigoPlanta(item.getCodigoPlanta());
 			nl.setCantidad(item.getCantidad());
 			nl.setCodigoProveedor(item.getCodigoProveedor());
 
 			lineasLoteServ.insertarlinealote(nl);
-
 		}
-		System.out.println("Id del lote: " + lote.getId());
+		System.out.println("Id del nuevo lote: " + lote.getId());
+		session.removeAttribute("urgenteSesion");
+		session.removeAttribute("codigoProveedor");
+		session.removeAttribute("lotesSession");
+
 		return "/personal/MenuPersonal";
 	}
 

@@ -24,7 +24,7 @@ public class LineaLote implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	//SOBRA
+	
 	@ManyToOne
 	@JoinColumn(name = "idLote")
 	private Lote lote;

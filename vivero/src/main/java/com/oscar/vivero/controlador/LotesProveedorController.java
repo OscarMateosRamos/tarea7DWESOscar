@@ -7,10 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.oscar.vivero.modelo.Credenciales;
 import com.oscar.vivero.modelo.Ejemplar;
+import com.oscar.vivero.modelo.Estado;
 import com.oscar.vivero.modelo.Lote;
 import com.oscar.vivero.modelo.Proveedor;
 import com.oscar.vivero.servicio.ServiciosCredenciales;
@@ -36,6 +39,9 @@ public class LotesProveedorController {
 
 	@Autowired
 	ServiciosProveedor servProveedor;
+
+	@Autowired
+	ServiciosLote lotesServ;
 
 	@Transactional
 	@GetMapping("/verLotesProveedor")
@@ -84,8 +90,7 @@ public class LotesProveedorController {
 			if (l.getLineasLote() != null)
 				l.getLineasLote().size();
 		});
-		
-		
+
 		System.out.println("++++++Lotes no recibidos+++++ " + lotesNoRecibidosProveedor.size());
 		System.out.println("++++++Lotes  recibidos+++++ " + lotesRecibidosProveedor.size());
 
@@ -94,6 +99,20 @@ public class LotesProveedorController {
 		model.addAttribute("lotesNoRecibidos", lotesNoRecibidosProveedor);
 
 		return "/proveedor/lotesproveedor";
+	}
+
+	@PostMapping("/cancelar/{idLote}")
+	public String cancelarLote(@PathVariable("idLote") Long idLote, Model model) {
+		System.out.println("Cancelando lote: " + idLote);
+		Optional<Lote> l = lotesServ.buscarLotesPorId(idLote);
+
+		if (l.isPresent()) {
+			Lote lote = l.get();
+			lote.setEstado(Estado.CANCELADO);
+			lotesServ.insertarLote(lote);
+		}
+
+		return "redirect:/lotesproveedor/verLotesProveedor";
 	}
 
 }
