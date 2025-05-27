@@ -2,6 +2,7 @@ package com.oscar.vivero.servicio;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import java.text.ParseException;
@@ -93,9 +94,9 @@ public class ServiciosMensaje {
 	}
 
 	@Transactional
-	public List<Mensaje> verMensajesRangoFechas(Date fechaInicio, Date fechaFin) {
+	public List<Mensaje> verMensajesRangoFechas(LocalDateTime fechaInicioParsed, LocalDateTime fechaFinParsed) {
 
-		return mensajerepo.findByFechahoraBetween(fechaInicio, fechaFin);
+		return mensajerepo.findByFechahoraBetween(fechaInicioParsed, fechaFinParsed);
 	}
 
 	public List<Mensaje> verPorIdEjemplar(Long id) {

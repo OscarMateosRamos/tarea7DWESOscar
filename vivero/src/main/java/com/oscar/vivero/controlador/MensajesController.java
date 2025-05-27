@@ -167,47 +167,6 @@ public class MensajesController {
 		return "/personal/filtrarMensajePersona";
 	}
 
-//	@GetMapping("/filtrarMensajesPorFecha")
-//	public String filtrarMensajesPorFecha(@RequestParam(required = false) String fechaInicio,
-//			@RequestParam(value = "fechaFin", required = false)  fechaFin, Model model) {
-//			
-//		System.out.println("Fecha Inicio:"+fechaInicio);
-//		System.out.println("Fecha fin:"+fechaFin);
-//		if (fechaInicio == null || fechaFin == null || fechaInicio.isEmpty() || fechaFin.isEmpty()) {
-//			model.addAttribute("error", "Por favor, ingrese ambas fechas.");
-//			return "/personal/FiltrarMensajePorFechas";
-//		}
-//
-//		try {
-//
-//			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//
-//			LocalDate fechaInicioParsed = LocalDate.parse(fechaInicio, formatter);
-//			LocalDate fechaFinParsed = LocalDate.parse(fechaFin, formatter);
-//
-//			Date startDate = Date.valueOf(fechaInicioParsed);
-//			Date endDate = Date.valueOf(fechaFinParsed);
-//
-//			List<Mensaje> mensajesFiltrados = servMensaje.verMensajesRangoFechas(startDate, endDate);
-//
-//			if (mensajesFiltrados.isEmpty()) {
-//				model.addAttribute("error", "No se encontraron mensajes en el rango de fechas proporcionado.");
-//			} else {
-//				model.addAttribute("mensajes", mensajesFiltrados);
-//			}
-//
-//			return "/personal/FiltrarMensajePorFechas";
-//
-//		} catch (DateTimeParseException e) {
-//			model.addAttribute("error",
-//					"Las fechas proporcionadas no tienen el formato correcto. Use el formato yyyy-MM-dd.");
-//			return "/personal/FiltrarMensajePorFechas";
-//		} catch (Exception e) {
-//			model.addAttribute("error", "Ocurrió un error al procesar las fechas.");
-//			return "/personal/FiltrarMensajePorFechas";
-//		}
-//	}
-
 	@GetMapping("/filtrarMensajesCodigoPlanta")
 	public String filtrarMensajesPorCodigoPlanta(
 			@RequestParam(value = "tipoPlanta", required = false) String tipoPlanta, Model model) {
@@ -243,7 +202,6 @@ public class MensajesController {
 	@GetMapping("GestiondeMensajes")
 	public String GestiondePlantas() {
 		return "/personal/GestiondeMensajes";
-
 	}
 
 	@GetMapping("/GestionMensajesMenuAdmin")
