@@ -48,7 +48,7 @@
                     <td th:text="${mensaje.mensaje}"></td>
                     <td th:text="${mensaje.ejemplar.id}"></td>
                     <td th:text="${mensaje.ejemplar.nombre}"></td>
-                    <td th:text="${mensaje.persona.id}"></td>
+                    <td th:if="${mensaje.persona != null}" th:text="${mensaje.persona.id }"></td>
 					<td th:if="${mensaje.persona != null}" th:text="${mensaje.persona.nombre}"></td>
                 </tr>
             </tbody>

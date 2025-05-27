@@ -3,7 +3,6 @@ package com.oscar.vivero.controlador;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -95,10 +94,9 @@ public class MensajesController {
 		}
 
 		LocalDateTime localDateTime = LocalDateTime.now();
-		java.util.Date fechaHoraDate = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
 
 		Mensaje m = new Mensaje();
-		m.setFechahora(fechaHoraDate);
+		m.setFechahora(localDateTime);
 		m.setMensaje(mensaje);
 		m.setEjemplar(ej);
 		m.setPersona(p);
@@ -128,14 +126,12 @@ public class MensajesController {
 
 		try {
 
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			LocalDate fechaInicioParsed = LocalDate.parse(fechaInicio, formatter);
-			LocalDate fechaFinParsed = LocalDate.parse(fechaFin, formatter);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
-			Date startDate = Date.valueOf(fechaInicioParsed);
-			Date endDate = Date.valueOf(fechaFinParsed);
+			LocalDateTime fechaInicioParsed = LocalDateTime.parse(fechaInicio, formatter);
+			LocalDateTime fechaFinParsed = LocalDateTime.parse(fechaFin, formatter);
 
-			List<Mensaje> mensajesFiltrados = servMensaje.verMensajesRangoFechas(startDate, endDate);
+			List<Mensaje> mensajesFiltrados = servMensaje.verMensajesRangoFechas(fechaInicioParsed, fechaFinParsed);
 
 			if (mensajesFiltrados.isEmpty()) {
 				model.addAttribute("error", "No se encontraron mensajes en el rango de fechas proporcionado.");
@@ -144,7 +140,7 @@ public class MensajesController {
 			}
 
 		} catch (DateTimeParseException e) {
-			model.addAttribute("error", "Las fechas deben tener el formato yyyy-MM-dd.");
+			model.addAttribute("error", "Las fechas deben tener el formato yyyy-MM-dd'T'HH:mm.");
 		} catch (Exception e) {
 			model.addAttribute("error", "Error al filtrar mensajes por fecha.");
 		}

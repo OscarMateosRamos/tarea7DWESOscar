@@ -1,5 +1,6 @@
 package com.oscar.vivero.modelo;
 
+import java.io.Serializable;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -15,7 +16,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "proveedor")
-public class Proveedor {
+public class Proveedor  implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 

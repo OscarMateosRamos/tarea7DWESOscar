@@ -11,6 +11,11 @@ import jakarta.persistence.*;
 @Table(name = "plantas")
 public class Planta implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@Column(unique = true)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

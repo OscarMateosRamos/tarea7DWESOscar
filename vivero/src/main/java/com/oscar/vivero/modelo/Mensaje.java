@@ -1,13 +1,28 @@
 package com.oscar.vivero.modelo;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "mensajes")
-public class Mensaje {
+public class Mensaje implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +30,7 @@ public class Mensaje {
 	private Long id;
 
 	@Column(name = "fechahora")
-	private Date fechahora;
+	private LocalDateTime fechahora;
 
 	@Column(name = "mensaje")
 	private String mensaje;
@@ -35,7 +50,9 @@ public class Mensaje {
 	public Mensaje() {
 	}
 
-	public Mensaje(Long id, Date fechahora, String mensaje, Pedido pedido, Ejemplar ejemplar, Persona persona) {
+	
+	public Mensaje(Long id, LocalDateTime fechahora, String mensaje, Pedido pedido, Ejemplar ejemplar,
+			Persona persona) {
 		super();
 		this.id = id;
 		this.fechahora = fechahora;
@@ -45,6 +62,7 @@ public class Mensaje {
 		this.persona = persona;
 	}
 
+
 	public Long getId() {
 		return id;
 	}
@@ -53,13 +71,17 @@ public class Mensaje {
 		this.id = id;
 	}
 
-	public Date getFechahora() {
+	
+
+	public LocalDateTime getFechahora() {
 		return fechahora;
 	}
 
-	public void setFechahora(Date fechahora) {
+
+	public void setFechahora(LocalDateTime fechahora) {
 		this.fechahora = fechahora;
 	}
+
 
 	public String getMensaje() {
 		return mensaje;

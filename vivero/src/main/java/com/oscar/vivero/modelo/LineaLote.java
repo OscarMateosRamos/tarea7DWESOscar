@@ -15,10 +15,16 @@ import jakarta.persistence.Table;
 @Table(name = "lineaslote")
 public class LineaLote implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	//SOBRA
 	@ManyToOne
 	@JoinColumn(name = "idLote")
 	private Lote lote;

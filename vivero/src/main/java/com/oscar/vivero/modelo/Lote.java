@@ -1,5 +1,6 @@
 package com.oscar.vivero.modelo;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,7 +20,12 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "lote")
-public class Lote {
+public class Lote implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
