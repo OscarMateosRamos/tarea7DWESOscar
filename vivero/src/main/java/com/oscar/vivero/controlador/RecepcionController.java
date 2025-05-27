@@ -82,59 +82,65 @@ public class RecepcionController {
 	@Transactional
 	@GetMapping("/recepcionLote/{idLote}/")
 	public String recepcionLote(@PathVariable("idLote") Long idLote, HttpSession session) {
-		Optional<Lote> loteOpt = servlote.buscarLotesPorId(idLote);
-		if (loteOpt.isEmpty()) {
-			return "redirect:/recepcion/info?error=LoteNoEncontrado";
-		}
+	    Optional<Lote> loteOpt = servlote.buscarLotesPorId(idLote);
+	    if (loteOpt.isEmpty()) {
+	        return "redirect:/recepcion/info?error=LoteNoEncontrado";
+	    }
 
-		Lote lote = loteOpt.get();
-		lote.setFecharecepcion(LocalDateTime.now());
+	    Lote lote = loteOpt.get();
+	    LocalDateTime now = LocalDateTime.now();
+	    lote.setFecharecepcion(now);
 
-		String usuario = (String) session.getAttribute("usuario");
-		LocalDateTime now = LocalDateTime.now();
+	    String usuario = (String) session.getAttribute("usuario");
 
-		for (LineaLote linea : lote.getLineasLote()) {
-			for (int i = 0; i < linea.getCantidad(); i++) {
+	    for (LineaLote linea : lote.getLineasLote()) {
+	        for (int i = 0; i < linea.getCantidad(); i++) {
 
-				int numeroEjemplar = ejemplarRepo.findAll().size() + 1;
+	            int numeroEjemplar = ejemplarRepo.findAll().size() + 1;
 
-				String nuevoNombre = linea.getCodigoPlanta().toUpperCase() + "_" + numeroEjemplar;
+	            String nuevoNombre = linea.getCodigoPlanta().toUpperCase() + "_" + numeroEjemplar;
 
-				Ejemplar ej = new Ejemplar();
-				ej.setNombre(nuevoNombre);
-				Mensaje mensaje = new Mensaje();
-				DateTimeFormatter formatoLocalDate = DateTimeFormatter.ofPattern("dd:MM:YYYY hh:mm:ss");
-				mensaje.setMensaje(
-						"Ejemplar " + nuevoNombre + " recibido el " + LocalDateTime.now().format(formatoLocalDate)
-								+ " en el lote " + lote.getId() + " del proveedor " + lote.getProveedor().getNombre()
-								+ " solicitado por " + lote.getPersona().getNombre() + " y confirmado por " + usuario);
-				mensaje.setFechahora(Date.valueOf(LocalDate.now()));
+	            Ejemplar ej = new Ejemplar();
+	            ej.setNombre(nuevoNombre);
 
-				for (Persona p : personaRepo.findAll()) {
-					if (p.getCredencial().getId().equals(servCred.buscarCredencialPorUsuario(usuario).get().getId())) {
-						System.out.println("Econtrado el id persona y el id Credencial");
-						mensaje.setPersona(p);
-						lote.setRecepcionista(p);
+	            Mensaje mensaje = new Mensaje();
+	            DateTimeFormatter formatoLocalDate = DateTimeFormatter.ofPattern("dd:MM:yyyy HH:mm:ss");
 
-					}
-				}
+	            mensaje.setMensaje(
+	                "Ejemplar " + nuevoNombre + " recibido el " + now.format(formatoLocalDate)
+	                + " en el lote " + lote.getId()
+	                + " del proveedor " + lote.getProveedor().getNombre()
+	                + " solicitado por " + lote.getPersona().getNombre()
+	                + " y confirmado por " + usuario
+	            );
 
-				ej.setLote(lote);
-				ej.setPlanta(servPlanta.buscarPlantaPorCodigo(linea.getCodigoPlanta()));
-				ej.setMensajes(new ArrayList<>());
-				ej.getMensajes().add(mensaje);
+	            mensaje.setFechahora(now); 
 
-				servEjemplar.insertarEjemplar(ej);
+	            for (Persona p : personaRepo.findAll()) {
+	                if (p.getCredencial().getId().equals(servCred.buscarCredencialPorUsuario(usuario).get().getId())) {
+	                    System.out.println("Encontrado el id persona y el id Credencial");
+	                    mensaje.setPersona(p);
+	                    lote.setRecepcionista(p);
+	                }
+	            }
 
-				Planta planta = servPlanta.buscarPlantaPorCodigo(linea.getCodigoPlanta());
-				planta.setCantidadDisponible(planta.getCantidadDisponible() + 1);
-				servPlanta.modificarPlanta(planta);
-			}
-		}
+	            ej.setLote(lote);
+	            ej.setPlanta(servPlanta.buscarPlantaPorCodigo(linea.getCodigoPlanta()));
+	            ej.setMensajes(new ArrayList<>());
+	            ej.getMensajes().add(mensaje);
 
-		session.setAttribute("mensajeExito", "Lote " + lote.getId() + " recibido correctamente.");
+	            servEjemplar.insertarEjemplar(ej);
 
-		return "redirect:/recepcion/info";
+	            Planta planta = servPlanta.buscarPlantaPorCodigo(linea.getCodigoPlanta());
+	            planta.setCantidadDisponible(planta.getCantidadDisponible() + 1);
+	            servPlanta.modificarPlanta(planta);
+	        }
+	    }
+
+	    session.setAttribute("mensajeExito", "Lote " + lote.getId() + " recibido correctamente.");
+
+	    return "redirect:/recepcion/info";
 	}
+
 
 }
