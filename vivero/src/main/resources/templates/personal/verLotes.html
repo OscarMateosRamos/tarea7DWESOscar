@@ -53,10 +53,10 @@
 		</div>
 		
 
-			<div class="boton-container">
-				<a href="/personal/confirmarlote" class="boton">Borrar Todo</a>
-			</div>
-		</div>
+			<form th:action="@{/lote/borrarTodo}" method="post">
+    			<button type="submit" class="boton">Borrar Todo</button>
+		</form>
+			
 		
 		
 

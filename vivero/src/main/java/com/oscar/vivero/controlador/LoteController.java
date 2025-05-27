@@ -57,29 +57,27 @@ public class LoteController {
 	// Mostrar formulario inicial: proveedor + urgente + listado de plantas
 	@GetMapping("/mostrarCrearLote")
 	public String mostrarFormularioLote(HttpSession session, Model model) {
+	    session.removeAttribute("proveedor"); // ✅ Limpieza adicional
+	    session.removeAttribute("codigoProveedor");
 
-		ArrayList<LineaLote> lotesSession = (ArrayList<LineaLote>) session.getAttribute("lotesSesion");
-		if (lotesSession == null) {
-			lotesSession = new ArrayList<>();
-		}
+	    ArrayList<LineaLote> lotesSession = (ArrayList<LineaLote>) session.getAttribute("lotesSesion");
+	    if (lotesSession == null) {
+	        lotesSession = new ArrayList<>();
+	    }
 
-		Long codigoProveedor = (Long) session.getAttribute("codigoProveedor");
-		// System.out.println("++++++ codigoProveedor"+codigoProveedor);
+	    Long codigoProveedor = (Long) session.getAttribute("codigoProveedor");
 
-		model.addAttribute("plantas", plantaRepo.findAll());
+	    model.addAttribute("plantas", plantaRepo.findAll());
 
-		if (codigoProveedor == null) {
-
-			model.addAttribute("proveedores", proveedorRepo.findAll());
-			return "/personal/CrearLote";
-		} else {
-
-			model.addAttribute("codigoProveedor", codigoProveedor);
-
-			return "/personal/LineasLote";
-		}
-
+	    if (codigoProveedor == null) {
+	        model.addAttribute("proveedores", proveedorRepo.findAll());
+	        return "/personal/CrearLote";
+	    } else {
+	        model.addAttribute("codigoProveedor", codigoProveedor);
+	        return "/personal/LineasLote";
+	    }
 	}
+
 
 	// Guardar proveedor y urgente en sesión
 	@PostMapping("/guardarDatosLote")
@@ -238,43 +236,57 @@ public class LoteController {
 
 	// Guardar lote definitivo
 	@PostMapping("/guardarLote")
-	public String guardarLote(HttpSession session, Model model) {
-		List<LineaLote> lineas = (List<LineaLote>) session.getAttribute("lineasLote");
-		Long proveedor = (Long) session.getAttribute("codigoProveedor");
-		Boolean urgente = (Boolean) session.getAttribute("urgente");
+	public String guardarLote(@RequestParam("codigoProveedor") long codigoProveedor,
+			@RequestParam(value = "urgente", required = false) boolean urgente, HttpSession session, Model model) {
+		Optional<Proveedor> p = proveedorServ.buscarProveedorPorId(codigoProveedor);
 
-		if (lineas == null || lineas.isEmpty() || proveedor == null) {
-			model.addAttribute("error", "Información incompleta del lote.");
+		if (p.isEmpty()) {
+			model.addAttribute("error", "Proveedor no encontrado.");
 			return "redirect:/lote/mostrarCrearLote";
 		}
 
-		loteServ.crearLoteDesdeLineas(proveedor, urgente != null && urgente, (ArrayList<LineaLote>) lineas);
+		Proveedor proveedor = p.get();
 
-		session.removeAttribute("lineasLote");
-		session.removeAttribute("codigoProveedor");
-		session.removeAttribute("urgente");
+		session.setAttribute("codigoProveedor", codigoProveedor);
+		session.setAttribute("proveedor", proveedor);
+		session.setAttribute("urgente", urgente);
 
-		model.addAttribute("exito", "Lote guardado correctamente.");
-		return "redirect:/lote/mostrarCrearLote";
+		model.addAttribute("codigoProveedor", codigoProveedor);
+		model.addAttribute("nombreProveedor", proveedor.getNombre());
+		model.addAttribute("plantas", plantaRepo.findAll());
+
+		return "/personal/LineasLote";
 	}
 
 	@GetMapping("/verLotes")
 	public String verlotes(HttpSession session, Model model) {
+	    List<LineaLote> lineas = (List<LineaLote>) session.getAttribute("lotesSession");
 
-		List<LineaLote> lineas = (List<LineaLote>) session.getAttribute("lotesSession");
+	    Object obj = session.getAttribute("proveedor");
+	    if (obj instanceof Proveedor p) {
+	        model.addAttribute("nombreProveedor", p.getNombre());
+	    } else {
+	        model.addAttribute("nombreProveedor", "Proveedor no disponible");
+	    }
 
-		Proveedor p = (Proveedor) session.getAttribute("proveedor");
-		model.addAttribute("nombreProveedor", p.getNombre());
-		
-		
-		if (lineas == null || lineas.isEmpty()) {
-			model.addAttribute("mensaje", "NO hay lotes.");
-		} else {
-			model.addAttribute("lotesSession", lineas);
-		}
+	    if (lineas == null || lineas.isEmpty()) {
+	        model.addAttribute("mensaje", "NO hay lotes.");
+	    } else {
+	        model.addAttribute("lotesSession", lineas);
+	    }
 
-		return "/personal/verLotes";
+	    return "/personal/verLotes";
 	}
+	
+	@PostMapping("/borrarTodo")
+	public String borrarTodo(HttpSession session) {
+	    session.removeAttribute("lotesSession");
+	    session.removeAttribute("proveedor");
+	    session.removeAttribute("codigoProveedor");
+	    session.removeAttribute("urgente");
+	    return "redirect:/lote/mostrarCrearLote";
+	}
+
 
 	@PostMapping("/SolicitarLote")
 	public String solicitarLote(HttpSession session, Model model) {
