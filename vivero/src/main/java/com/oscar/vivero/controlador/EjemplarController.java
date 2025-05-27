@@ -1,9 +1,9 @@
 package com.oscar.vivero.controlador;
 
 import java.sql.Date;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,7 +88,7 @@ public class EjemplarController {
 			ej.setNombre(nuevoNombre);
 			System.out.println("nombre del ejemplar" + nuevoNombre);
 
-			Date fecha = Date.valueOf(LocalDate.now());
+			LocalDateTime fecha = LocalDateTime.now();
 
 			String usuario = (String) session.getAttribute("usuario");
 
@@ -180,42 +180,40 @@ public class EjemplarController {
 
 	@GetMapping("/ejemplaresTipoPlanta")
 	public String listarEjemplaresTipoPlanta(@RequestParam(name = "codigo", required = false) List<String> codigos,
-	                                         Model model) {
-	    List<Planta> plantas = servPlanta.vertodasPlantas();
-	    model.addAttribute("plantas", plantas);
-	    model.addAttribute("codigoSeleccionado", codigos);
+			Model model) {
+		List<Planta> plantas = servPlanta.vertodasPlantas();
+		model.addAttribute("plantas", plantas);
+		model.addAttribute("codigoSeleccionado", codigos);
 
-	    List<Ejemplar> ejemplaresFiltrados = new ArrayList<>();
-	    Map<Long, Integer> mensajeCounts = new HashMap<>();
-	    Map<Long, Date> ultimaFechaMensaje = new HashMap<>();
+		List<Ejemplar> ejemplaresFiltrados = new ArrayList<>();
+		Map<Long, Integer> mensajeCounts = new HashMap<>();
+		Map<Long, Date> ultimaFechaMensaje = new HashMap<>();
 
-	    if (codigos != null && !codigos.isEmpty()) {
-	        ejemplaresFiltrados = servEjemplar.findByPlantaCodigos(codigos);
+		if (codigos != null && !codigos.isEmpty()) {
+			ejemplaresFiltrados = servEjemplar.findByPlantaCodigos(codigos);
 
-	        for (Ejemplar ej : ejemplaresFiltrados) {
-	            List<Mensaje> mensajes = servMensaje.verPorIdEjemplar(ej.getId());
-	            mensajeCounts.put(ej.getId(), mensajes.size());
+			for (Ejemplar ej : ejemplaresFiltrados) {
+				List<Mensaje> mensajes = servMensaje.verPorIdEjemplar(ej.getId());
+				mensajeCounts.put(ej.getId(), mensajes.size());
 
-	            // Convertir Timestamp a Date y obtener la última fecha de mensaje
-	            mensajes.stream()
-	                    .map(Mensaje::getFechahora)  // Esto devuelve un Timestamp
-	                    .map(timestamp -> new Date(timestamp.getTime()))  // Convertir a Date
-	                    .max(Date::compareTo)  // Comparar las fechas
-	                    .ifPresent(fecha -> ultimaFechaMensaje.put(ej.getId(), fecha));
-	        }
-	    }
+				mensajes.stream().map(Mensaje::getFechahora).max(LocalDateTime::compareTo).ifPresent(fecha -> {
+					Date fechaComoDate = (Date) Date.from(fecha.atZone(ZoneId.systemDefault()).toInstant());
+					ultimaFechaMensaje.put(ej.getId(), fechaComoDate);
+				});
 
-	    model.addAttribute("ejemplares", ejemplaresFiltrados);
-	    model.addAttribute("mensajeCounts", mensajeCounts);
-	    model.addAttribute("ultimaFechaMensaje", ultimaFechaMensaje);
+			}
+		}
 
-	    if (ejemplaresFiltrados.isEmpty() && codigos != null && !codigos.isEmpty()) {
-	        model.addAttribute("mensajeFiltro", "No se encontraron ejemplares para los tipos de planta seleccionados.");
-	    }
+		model.addAttribute("ejemplares", ejemplaresFiltrados);
+		model.addAttribute("mensajeCounts", mensajeCounts);
+		model.addAttribute("ultimaFechaMensaje", ultimaFechaMensaje);
 
-	    return "/personal/listadoEjemplaresTipoPlanta";
+		if (ejemplaresFiltrados.isEmpty() && codigos != null && !codigos.isEmpty()) {
+			model.addAttribute("mensajeFiltro", "No se encontraron ejemplares para los tipos de planta seleccionados.");
+		}
+
+		return "/personal/listadoEjemplaresTipoPlanta";
 	}
-
 
 /////CORREGIR
 ////	Se ha implementado el CU5B: Filtrar ejemplares por tipo de planta. Un usuario 

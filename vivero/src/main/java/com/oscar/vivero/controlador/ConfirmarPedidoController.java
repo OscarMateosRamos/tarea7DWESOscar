@@ -1,7 +1,9 @@
 package com.oscar.vivero.controlador;
 
 import java.sql.Date;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -102,7 +104,7 @@ public class ConfirmarPedidoController {
 					ejemplarserv.modificarEjemplar(ej);
 					contador++;
 
-					Date fecha = Date.valueOf(LocalDate.now());
+					LocalDateTime fecha = LocalDateTime.now();
 					Mensaje anotacion = new Mensaje();
 					anotacion.setFechahora(fecha);
 					anotacion.setEjemplar(ej);
