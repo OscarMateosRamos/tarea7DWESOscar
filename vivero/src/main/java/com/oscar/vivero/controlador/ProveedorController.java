@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.oscar.vivero.modelo.Credenciales;
 import com.oscar.vivero.modelo.Proveedor;
+import com.oscar.vivero.repository.CredencialRepository;
 import com.oscar.vivero.repository.ProveedorRepository;
 import com.oscar.vivero.servicio.ServiciosCredenciales;
 import com.oscar.vivero.servicio.ServiciosLote;
@@ -29,6 +30,9 @@ public class ProveedorController {
 
 	@Autowired
 	ServiciosCredenciales credencialesServ;
+
+	@Autowired
+	CredencialRepository credencialesRepo;
 
 	@Autowired
 	ServiciosLote lotesServ;
@@ -57,7 +61,7 @@ public class ProveedorController {
 		String password = CrearProveedor.getCredencial().getPassword();
 		String cif = CrearProveedor.getCif();
 		String nombre = CrearProveedor.getNombre();
-
+		System.out.println("Creando ." + usuario + " " + nombre);
 		boolean validoOK = true;
 
 		if (!proveedorServ.validarNombreProveedor(CrearProveedor)) {
@@ -75,18 +79,9 @@ public class ProveedorController {
 			validoOK = false;
 		}
 
-		if (!proveedorrepo.findByCredencial_Usuario(CrearProveedor.getCredencial().getUsuario()).isEmpty()) {
-			errores.add("Usuario inválido.");
-			validoOK = false;
-		}
-//	}
-//		if (!proveedorServ.validarUsuario(CrearProveedor)) {
-//			errores.add("Usuario inválido.");
-//			validoOK = false;
-//		}
-
-		if (!proveedorServ.existeUsuario(CrearProveedor)) {
-			errores.add("El usuario ya existe.");
+		if (credencialesRepo.findByUsuario(usuario).isPresent()) {
+			System.out.println(" Usuario repetido ");
+			errores.add("Usuario repetido.");
 			validoOK = false;
 		}
 
@@ -99,33 +94,33 @@ public class ProveedorController {
 			model.addAttribute("errores", errores);
 			model.addAttribute("proveedor", CrearProveedor);
 			return "/proveedor/CrearProveedor";
+		} else {
+
+			try {
+				Credenciales cr = new Credenciales();
+				cr.setUsuario(usuario);
+				cr.setPassword(passwordencoder.encode(password));
+				cr.setRol("PROVEEDOR");
+
+				Proveedor p = new Proveedor();
+
+				p.setCif(cif);
+				p.setNombre(nombre);
+
+				proveedorServ.insertarProveedor(p);
+
+				p.setCredencial(cr);
+
+				proveedorServ.insertarProveedor(p);
+
+			} catch (Exception e) {
+				errores.add("Error al guardar el proveedor o las credenciales: " + e.getMessage());
+				e.printStackTrace();
+				model.addAttribute("errores", errores);
+				model.addAttribute("proveedor", CrearProveedor);
+				return "/proveedor/CrearProveedor";
+			}
 		}
-
-		try {
-			Credenciales cr = new Credenciales();
-			cr.setUsuario(usuario);
-			cr.setPassword(passwordencoder.encode(password));
-			cr.setRol("PROVEEDOR");
-
-			Proveedor p = new Proveedor();
-
-			p.setCif(cif);
-			p.setNombre(nombre);
-
-			proveedorServ.insertarProveedor(p);
-
-			p.setCredencial(cr);
-
-			proveedorServ.insertarProveedor(p);
-
-		} catch (Exception e) {
-			errores.add("Error al guardar el proveedor o las credenciales: " + e.getMessage());
-			e.printStackTrace();
-			model.addAttribute("errores", errores);
-			model.addAttribute("proveedor", CrearProveedor);
-			return "/proveedor/CrearProveedor";
-		}
-
 		model.addAttribute("exito", "Proveedor creado correctamente.");
 		model.addAttribute("proveedor", new Proveedor());
 

@@ -102,7 +102,6 @@ public class ServiciosProveedor {
 	    return errores;
 	}
 
-
 	public Optional<Proveedor> buscarProveedorPorId(Long id) {
 		return proveedorrepo.findById(id);
 
