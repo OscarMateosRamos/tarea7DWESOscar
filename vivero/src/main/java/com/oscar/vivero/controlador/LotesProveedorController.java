@@ -1,5 +1,6 @@
 package com.oscar.vivero.controlador;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.oscar.vivero.modelo.Credenciales;
 import com.oscar.vivero.modelo.Ejemplar;
@@ -101,8 +103,23 @@ public class LotesProveedorController {
 		return "/proveedor/lotesproveedor";
 	}
 
-	@PostMapping("/cancelar/{idLote}")
-	public String cancelarLote(@PathVariable("idLote") Long idLote, Model model) {
+//	@PostMapping("/cancelar")
+//	public String cancelarLote(@RequestParam(name = "idLote") Long idLote, Model model) {
+//		System.out.println("Cancelando lote: " + idLote);
+//		Optional<Lote> l = lotesServ.buscarLotesPorId(idLote);
+//
+//		if (l.isPresent()) {
+//			Lote lote = l.get();
+//			lote.setEstado(Estado.CANCELADO);
+//			lotesServ.insertarLote(lote);
+//		}
+//
+//		return "redirect:/lotesproveedor/verLotesProveedor";
+//	}
+
+	@Transactional
+	@GetMapping("/cancelar/{idLote}/")
+	public String recepcionLote(@PathVariable("idLote") Long idLote, HttpSession session) {
 		System.out.println("Cancelando lote: " + idLote);
 		Optional<Lote> l = lotesServ.buscarLotesPorId(idLote);
 
@@ -113,6 +130,7 @@ public class LotesProveedorController {
 		}
 
 		return "redirect:/lotesproveedor/verLotesProveedor";
+
 	}
 
 }

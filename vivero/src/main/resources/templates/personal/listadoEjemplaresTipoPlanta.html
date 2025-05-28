@@ -50,11 +50,9 @@
                 <td th:text="${ejemplar.nombre}">Nombre</td>
                 <td th:text="${ejemplar.planta.codigo}">Código</td>
                 
-               
-                <td th:text="${mensajeCounts[ejemplar.id]}">Número de Mensajes</td>
-
-               
-                <td th:text="${#dates.format(ultimaFechaMensaje[ejemplar.id], 'yyyy-MM-dd HH:mm:ss')}">Última Fecha de Mensaje</td>
+                <td th:text="${mensajeCounts[ejemplar.id]} ?: 0">Número de Mensajes</td>
+                
+                <td th:text="${ultimaFechaMensaje[ejemplar.id] != null ? #temporals.format(ultimaFechaMensaje[ejemplar.id], 'yyyy-MM-dd HH:mm:ss') : 'Sin mensajes'}">Última Fecha de Mensaje</td>
             </tr>
         </tbody>
     </table>

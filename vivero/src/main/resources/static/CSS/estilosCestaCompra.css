@@ -179,3 +179,8 @@ a {
         padding: 10px 20px;
     }
 }
+
+a.hidden {
+    display: none;
+}
+

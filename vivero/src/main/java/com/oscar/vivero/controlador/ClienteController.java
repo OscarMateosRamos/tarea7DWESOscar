@@ -46,6 +46,10 @@ public class ClienteController {
 			errores.add("Nombre inválido.");
 		}
 
+		if (!servcliente.validarNombre(nombre)) {
+			errores.add("Nombre inválido.");
+		}
+
 		if (!servcliente.validarEmail(email)) {
 			errores.add("Email inválido.");
 		}
@@ -101,10 +105,10 @@ public class ClienteController {
 			c.setTelefono(telefono);
 
 			servcliente.insertarCliente(c);
-			
+
 			c.setCredencial(cr);
 			servcliente.insertarCliente(c);
-			
+
 			model.addAttribute("exitoCliente", "Cliente añadido correctamente.");
 			model.addAttribute("cliente", new Cliente());
 

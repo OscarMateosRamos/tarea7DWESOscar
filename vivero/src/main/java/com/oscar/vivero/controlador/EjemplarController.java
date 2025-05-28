@@ -187,7 +187,7 @@ public class EjemplarController {
 
 		List<Ejemplar> ejemplaresFiltrados = new ArrayList<>();
 		Map<Long, Integer> mensajeCounts = new HashMap<>();
-		Map<Long, Date> ultimaFechaMensaje = new HashMap<>();
+		Map<Long, LocalDateTime> ultimaFechaMensaje = new HashMap<>();
 
 		if (codigos != null && !codigos.isEmpty()) {
 			ejemplaresFiltrados = servEjemplar.findByPlantaCodigos(codigos);
@@ -196,10 +196,8 @@ public class EjemplarController {
 				List<Mensaje> mensajes = servMensaje.verPorIdEjemplar(ej.getId());
 				mensajeCounts.put(ej.getId(), mensajes.size());
 
-				mensajes.stream().map(Mensaje::getFechahora).max(LocalDateTime::compareTo).ifPresent(fecha -> {
-					Date fechaComoDate = (Date) Date.from(fecha.atZone(ZoneId.systemDefault()).toInstant());
-					ultimaFechaMensaje.put(ej.getId(), fechaComoDate);
-				});
+				mensajes.stream().map(Mensaje::getFechahora).max(LocalDateTime::compareTo)
+						.ifPresent(fecha -> ultimaFechaMensaje.put(ej.getId(), fecha));
 
 			}
 		}

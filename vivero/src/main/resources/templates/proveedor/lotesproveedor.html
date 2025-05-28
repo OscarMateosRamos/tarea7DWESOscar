@@ -81,10 +81,16 @@
 								<li th:text="${linea.cantidad} + ' de '+${linea.codigoPlanta}"></li>
 								</a>
 							</a>
-							
 						</td>
 						<td>
-							<a th:href="@{/lotesproveedor/cancelar/{idLote}/(idLote=${item.id})}" class="boton">Cancelar</a>
+							
+							<a th:if="${item.estado == T(com.oscar.vivero.modelo.Estado).NUEVO}"
+							th:href="@{/lotesproveedor/cancelar/{idLote}/(idLote=${item.id})}"
+													class="boton">
+													Cancelar
+													</a>
+				
+
 						</td>
 											
 						

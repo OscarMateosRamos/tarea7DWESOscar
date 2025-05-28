@@ -68,6 +68,7 @@
 						<th>Solicitado Por</th>
 						<th>Urgente</th>
 						<th>Fecha de Pedido</th>
+						<th>Estado</th>
 						<th>Solicitud</th>
 						<th>Acción</th>
 												
@@ -80,6 +81,7 @@
 						<td th:text="${item.persona.nombre}">Persona</td>
 						<td th:text="${item.urgente ? 'SI' : 'NO'}">Urgente</td>
 						<td th:text="${item.fechapeticion}">Fecha</td>
+						<td th:text="${item.estado}">Estado</td>
 						<td>
 							<a th:if= "'Productos ' +${item.lineasLote.size()>0 }" > 
 							<a th:each="linea :${item.lineasLote}">
@@ -88,11 +90,20 @@
 							</a>
 							
 						</td>
-						<td>
-							<a th:href="@{/recepcion/recepcionLote/{idLote}/(idLote=${item.id})}" class="boton">Recepción</a>
+
+<td>
+
+						<a th:if="${item.estado == T(com.oscar.vivero.modelo.Estado).NUEVO}"
+						th:href="@{/recepcion/recepcionLote/{idLote}/(idLote=${item.id})}"
+						class="boton">
+						Recepción
+						</a>
 						</td>
-											
 						
+						
+
+											
+
 					</tr>
 					
 				</tbody>
