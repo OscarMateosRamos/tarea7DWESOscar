@@ -88,20 +88,22 @@ public class LoteController {
 		Long proveedorId = loteFormulario.getCodigoProveedor();
 		boolean urgente = loteFormulario.isUrgente();
 
-		System.out.println("Codigo de Proveedor: " + proveedorId);
-		System.out.println("Urgente: " + urgente);
+		System.out.println("--Codigo de Proveedor: " + proveedorId);
+		System.out.println("--Urgente: " + urgente);
 
 		ArrayList<LineaLote> lotesSession = new ArrayList<LineaLote>();
 
 		for (LineaLote linea : loteFormulario.getLineas()) {
 			if (linea.getCantidad() > 0) {
 				if (urgente) {
+					linea.setCodigoProveedor((Long) loteFormulario.getCodigoProveedor());
 					linea.setUrgente(urgente);
 				}
 				lotesSession.add(linea);
 				System.out
 						.println("Codigo de Planta: " + linea.getCodigoPlanta() + ", Cantidad: " + linea.getCantidad());
-				System.out.println("Urgente: " + linea.isUrgente());
+				System.out
+						.println("codigo Proveedor: " + linea.getCodigoProveedor() + "  Urgente: " + linea.isUrgente());
 
 			}
 		}
@@ -290,6 +292,7 @@ public class LoteController {
 		List<LineaLote> lineas = (List<LineaLote>) session.getAttribute("lotesSession");
 
 		Object obj = session.getAttribute("proveedor");
+
 		if (obj instanceof Proveedor p) {
 			model.addAttribute("nombreProveedor", p.getNombre());
 		} else {
