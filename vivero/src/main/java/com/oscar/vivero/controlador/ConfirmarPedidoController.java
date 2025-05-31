@@ -75,7 +75,7 @@ public class ConfirmarPedidoController {
 
 		Pedido pedido = new Pedido();
 		pedido.setIdCliente(cliente.getId());
-		pedido.setFecha(Date.valueOf(LocalDate.now()));
+		pedido.setFecha(LocalDateTime.now());
 		pedidoserv.insertar(pedido);
 
 		long idPedido = pedido.getId();

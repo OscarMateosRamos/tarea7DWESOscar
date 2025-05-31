@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.oscar.vivero.modelo.Ejemplar;
+import com.oscar.vivero.modelo.Mensaje;
 import com.oscar.vivero.modelo.Planta;
 
 @Repository
@@ -35,4 +36,8 @@ public interface EjemplarRepository extends JpaRepository<Ejemplar, Long> {
 	long countByPlantaAndDisponible(Planta planta, boolean b);
 
 	List<Ejemplar> findByPlantaCodigo(String codigo);
+	
+	@Query("SELECT MAX(CAST(SUBSTRING(e.nombre, LENGTH(:codigoPlanta) + 2) AS int)) FROM Ejemplar e WHERE e.nombre LIKE CONCAT(:codigoPlanta, '_%')")
+	Integer obtenerUltimoNumeroEjemplar(@Param("codigoPlanta") String codigoPlanta);
+	
 }

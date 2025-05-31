@@ -1,55 +1,49 @@
 package com.oscar.vivero.modelo;
 
+import jakarta.persistence.*;
 import java.io.Serializable;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "lineaslote")
 public class LineaLote implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	
 	@ManyToOne
-	@JoinColumn(name = "idLote")
+	@JoinColumn(name = "idLote", nullable = false)
 	private Lote lote;
 
-	@Column
-	private long codigoProveedor;
+	@Column(name = "codigoProveedor", nullable = false)
+	private Long codigoProveedor;
 
-	@Column
+	@ManyToOne
+	@JoinColumn(name = "codigoProveedor", referencedColumnName = "id", insertable = false, updatable = false)
+	private Proveedor proveedor;
+
+	@Column(nullable = false)
 	private String codigoPlanta;
 
-	@Column
+	@Column(nullable = false)
 	private int cantidad;
 
-	@Column
+	@Column(nullable = false)
 	private boolean urgente = false;
 
 	public LineaLote() {
 		super();
 	}
 
-	public LineaLote(Long id, Lote lote, long codigoProveedor, String codigoPlanta, int cantidad, boolean urgente) {
+	public LineaLote(Long id, Lote lote, Long codigoProveedor, Proveedor proveedor, String codigoPlanta, int cantidad,
+			boolean urgente) {
 		super();
 		this.id = id;
 		this.lote = lote;
 		this.codigoProveedor = codigoProveedor;
+		this.proveedor = proveedor;
 		this.codigoPlanta = codigoPlanta;
 		this.cantidad = cantidad;
 		this.urgente = urgente;
@@ -71,12 +65,20 @@ public class LineaLote implements Serializable {
 		this.lote = lote;
 	}
 
-	public long getCodigoProveedor() {
+	public Long getCodigoProveedor() {
 		return codigoProveedor;
 	}
 
-	public void setCodigoProveedor(long codigoProveedor) {
+	public void setCodigoProveedor(Long codigoProveedor) {
 		this.codigoProveedor = codigoProveedor;
+	}
+
+	public Proveedor getProveedor() {
+		return proveedor;
+	}
+
+	public void setProveedor(Proveedor proveedor) {
+		this.proveedor = proveedor;
 	}
 
 	public String getCodigoPlanta() {
@@ -105,8 +107,8 @@ public class LineaLote implements Serializable {
 
 	@Override
 	public String toString() {
-		return "LineaLote [id=" + id + ", lote=" + (lote != null ? lote.getId() : null) + ", codigoProveedor="
-				+ codigoProveedor + ", codigoPlanta=" + codigoPlanta + ", cantidad=" + cantidad + ", urgente=" + urgente
-				+ "]";
+		return "LineaLote{" + "id=" + id + ", lote=" + (lote != null ? lote.getId() : null) + ", codigoProveedor="
+				+ codigoProveedor + ", codigoPlanta='" + codigoPlanta + '\'' + ", cantidad=" + cantidad + ", urgente="
+				+ urgente + '}';
 	}
 }

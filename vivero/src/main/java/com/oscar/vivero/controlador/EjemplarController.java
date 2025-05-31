@@ -82,9 +82,10 @@ public class EjemplarController {
 				model.addAttribute("error", "La planta con el nombre " + codigoPlanta + " no fue encontrada.");
 				return "/personal/CrearEjemplar";
 			}
-			int numeroEjemplar = ejemplarrepo.findAll().size() + 1;
 
-			String nuevoNombre = codigoPlanta.toUpperCase() + "_" + numeroEjemplar;
+			Integer ultimoNumero = ejemplarrepo.obtenerUltimoNumeroEjemplar(codigoPlanta.toUpperCase());
+			int nuevoNumero = (ultimoNumero != null) ? ultimoNumero + 1 : 1;
+			String nuevoNombre = codigoPlanta.toUpperCase() + "_" + nuevoNumero;
 			ej.setNombre(nuevoNombre);
 			System.out.println("nombre del ejemplar" + nuevoNombre);
 
