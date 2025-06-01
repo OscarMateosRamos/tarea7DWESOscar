@@ -14,12 +14,11 @@
 
 	<div class="container">
 
-
 		<div th:if="${mensaje}">
 			<p th:text="${mensaje}"></p>
 		</div>
 
-		<div th:unless="${lotesSesion == null or lotesSesion.isEmpty()}">
+		<div th:unless="${session.lotesSesion == null or session.lotesSesion.isEmpty()}">
 			<table>
 				<thead>
 					<tr>
@@ -31,7 +30,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="item : ${lotesSesion}">
+					<tr th:each="item : ${session.lotesSesion}">
 						<td th:text="${item.proveedor.nombre}">  </td>
 						<td th:text="${item.codigoPlanta}"></td>
 						<td>
@@ -57,38 +56,38 @@
 					</tr>
 				</tbody>
 			</table>
-
+	
+			<div class="box">
 			
-		
+				
+			
+				
 			<div class="boton-container">
 			     <form th:action="@{/lote/SolicitarLote}" method="post">
 			         <button type="submit" class="boton">Solicitar Lote</button>
 			     </form>
-			 </div>
-			 
+			
+			 <br>
 			<form th:action="@{/lote/borrarTodo}" method="post">
     			<button type="submit" class="boton">Borrar Todo</button>
+		</div>
 		</form>
-			
+		</div>
 		
 	
 		<div class="boton-container">
 		<a th:href="@{/lote/mostrarCrearLote}" class="boton">Volver</a>
 		</div>
-</div>
+	</div>
 
-		<div th:if="${lotesSesion == null or lotesSesion.isEmpty()}">
-					
-			
+		<div th:if="${session.lotesSesion == null or session.lotesSesion.isEmpty()}">
+				<p>No hay lotes en la Sesion </p>	
 			<div class="boton-container">
 			<a th:href="@{/lote/GestiondeLotes}" class="boton">Volver</a>
 			</div>
 			
 		</div>
 
-
-
-		
 	</div>
 </body>
 </html>
